@@ -87,8 +87,6 @@
                             </div>
 
                             <div class="col-sm-6 mt-4">
-                                {{ $generalSettings }}
-
                                 <div class="dropzone-container">
                                     <label for="Favicon" class="logoFav">
                                         <img src="{{ $generaleSetting?->favicon ?? 'https://placehold.co/300x300/png' }}"
