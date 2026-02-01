@@ -19,8 +19,9 @@ class GeneraleSettingController extends Controller
     public function index()
     {
         $currencies = Currency::all();
+        $generalSettings = generaleSetting('setting');
 
-        return view('admin.generale-setting', compact('currencies'));
+        return view('admin.generale-setting', compact('currencies', 'generalSettings'));
     }
 
     /**
