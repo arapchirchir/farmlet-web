@@ -1,0 +1,98 @@
+name: Farmlet Deployment
+on:
+  push:
+    branches:
+      - master
+
+jobs:
+  deploy:
+    name: Deploy to Server
+    runs-on: ubuntu-latest
+    steps:
+      - name: Executing Deployments
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.SSH_HOST }}
+          username: ${{ secrets.SSH_USERNAME }}
+          key: ${{secrets.SSH_KEY}}
+          port: ${{ secrets.SSH_PORT }}
+          script: |
+            cd newken/web
+
+            php artisan down
+            echo "Application is down for maintenance!"
+
+            git fetch --all
+            echo "Git Fetch Completed!"
+
+            git reset --hard origin/master
+            echo "Git Reset to origin/master Completed!"
+
+            git clean -fd
+            echo "Removed untracked files and directories!"
+
+            rm -rf node_modules
+            echo "Removed node_modules!"
+
+            rm -rf package-lock.json
+            echo "Removed package-lock.json!"
+
+            php artisan optimize:clear
+            echo "Optimization Clear Completed!"
+
+
+            composer install --no-interaction --no-dev --prefer-dist
+            echo "Composer Install/Update Completed!"
+
+            composer dump-autoload -o
+            echo "Composer Dump Autoload Completed!"
+
+            # php artisan migrate:rollback --force
+
+            # cp .env.example .env
+
+            # php artisan migrate:rollback --force
+            # echo "Migration Rollback Completed!"
+
+            php artisan migrate --force
+
+            # php artisan db:seed --class=SuperadminStaffSeeder --force
+            # echo "Migrations Completed!"
+
+            # Sync AllGroups records (COMPLETED - Groups synced successfully on 2026-01-05)
+            # php artisan groups:sync-all
+            # echo "AllGroups Sync Completed!"
+
+            php artisan optimize:clear
+            echo "Optimization Clear Completed!"
+
+            php artisan optimize
+            echo "Optimization Completed!"
+
+            rm -rf node_modules
+            echo "Removed node_modules!"
+
+            # Restart Server
+            php artisan up
+            echo "Application is live!"
+
+            # Restart Nginx
+            sudo systemctl reload nginx
+            echo "Nginx Reloaded!"
+
+            # Restart Nginx
+            sudo service nginx reload
+            echo "Nginx Reloaded!"
+
+            # Reload PM2 Socket.IO Server (using NVM path)
+            # /home/social/.nvm/versions/node/v22.20.0/bin/pm2 reload kdc-socket-server
+            # echo "PM2 Socket.IO Server Reloaded!"
+
+            # php artisan queue:restart
+            # echo "Queue Restarted!"
+
+            # Restart social-queue
+            # sudo systemctl restart social-queue
+            # echo "Social Queue Restarted!"
+
+            echo "Deployment Completed!"
