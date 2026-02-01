@@ -135,7 +135,7 @@ class MasterController extends Controller
             'payment_gateways' => PaymentGatewayResource::collection($paymentGateways),
             'multi_vendor' => (bool) ($shopType == 'multi' ? true : false),
             'mobile' => $generaleSetting?->footer_phone ?? '+880123456789',
-            'address' => $generaleSetting?->address ?? 'Dhaka, Bangladesh',
+            'address' => $generaleSetting?->address ?? 'Nairobi, Kenya',
             'web_show_footer' => (bool) ($generaleSetting?->show_footer ?? true),
             'web_footer_text' => $generaleSetting?->footer_text ?? 'All right reserved by company',
             'web_logo' => $generaleSetting?->logo ?? asset('assets/logo.png'),
