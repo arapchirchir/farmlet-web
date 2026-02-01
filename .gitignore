@@ -42,7 +42,7 @@ yarn-error.log
 .env.production
 .env.testing
 .env.staging
-.env.example
+# .env.example
 /public/hot
 /public/build
 /public/mix-manifest.json
