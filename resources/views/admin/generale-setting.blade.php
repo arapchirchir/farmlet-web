@@ -38,6 +38,8 @@
                                 </div>
                                 <x-select name="currency">
                                     <!-- Add Currency Modal -->
+
+                                    @section('modals')
                                     <div class="modal fade" id="addCurrencyModal" tabindex="-1" aria-labelledby="addCurrencyModalLabel" aria-hidden="true">
                                         <div class="modal-dialog">
                                             <div class="modal-content">
@@ -73,6 +75,7 @@
                                             </div>
                                         </div>
                                     </div>
+                                    @endsection
                                     <option value="">
                                         {{ __('Select Currency') }}
                                     </option>
