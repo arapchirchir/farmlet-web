@@ -30,7 +30,49 @@
 
                         <div class="row mt-4">
                             <div class="col-sm-6">
-                                <x-select label="Default Currency" name="currency">
+                                <div class="d-flex align-items-center justify-content-between">
+                                    <label class="form-label">{{ __('Default Currency') }}</label>
+                                    <button type="button" class="btn btn-success btn-sm ms-2" data-bs-toggle="modal" data-bs-target="#addCurrencyModal">
+                                        <i class="bi bi-plus"></i> {{ __('Add Currency') }}
+                                    </button>
+                                </div>
+                                <x-select name="currency">
+                                    <!-- Add Currency Modal -->
+                                    <div class="modal fade" id="addCurrencyModal" tabindex="-1" aria-labelledby="addCurrencyModalLabel" aria-hidden="true">
+                                        <div class="modal-dialog">
+                                            <div class="modal-content">
+                                                <form action="{{ route('admin.currency.store') }}" method="POST">
+                                                    @csrf
+                                                    <div class="modal-header">
+                                                        <h5 class="modal-title" id="addCurrencyModalLabel">{{ __('Add New Currency') }}</h5>
+                                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                                    </div>
+                                                    <div class="modal-body">
+                                                        <div class="mb-3">
+                                                            <label for="currency_name" class="form-label">{{ __('Currency Name') }}</label>
+                                                            <input type="text" class="form-control" id="currency_name" name="name" required>
+                                                        </div>
+                                                        <div class="mb-3">
+                                                            <label for="currency_code" class="form-label">{{ __('Currency Code') }}</label>
+                                                            <input type="text" class="form-control" id="currency_code" name="code" required>
+                                                        </div>
+                                                        <div class="mb-3">
+                                                            <label for="currency_symbol" class="form-label">{{ __('Currency Symbol') }}</label>
+                                                            <input type="text" class="form-control" id="currency_symbol" name="symbol" required>
+                                                        </div>
+                                                        <div class="mb-3">
+                                                            <label for="currency_rate" class="form-label">{{ __('Exchange Rate') }}</label>
+                                                            <input type="number" step="0.0001" class="form-control" id="currency_rate" name="rate" value="1" required>
+                                                        </div>
+                                                    </div>
+                                                    <div class="modal-footer">
+                                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">{{ __('Close') }}</button>
+                                                        <button type="submit" class="btn btn-primary">{{ __('Add Currency') }}</button>
+                                                    </div>
+                                                </form>
+                                            </div>
+                                        </div>
+                                    </div>
                                     <option value="">
                                         {{ __('Select Currency') }}
                                     </option>
