@@ -87,6 +87,7 @@
                             </div>
 
                             <div class="col-sm-6 mt-4">
+                                {{ $generalSettings }}
 
                                 <div class="dropzone-container">
                                     <label for="Favicon" class="logoFav">
