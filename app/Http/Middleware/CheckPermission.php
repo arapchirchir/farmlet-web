@@ -74,6 +74,7 @@ class CheckPermission
         }
 
         if (in_array('admin.generale-setting.update', $rolePermissions) || in_array('admin.generale-setting.update', $userPermissions)) {
+            $customPermissions[] = 'admin.currency.create';
             $customPermissions[] = 'admin.currency.store';
         }
 
