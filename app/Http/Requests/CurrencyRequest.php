@@ -22,7 +22,7 @@ class CurrencyRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'name' => 'required|string|max:5',
+            'name' => 'required|string|max:50',
             'code' => 'nullable|string|max:10',
             'symbol' => 'required|string|max:10',
             'rate' => 'required|numeric|min:0',

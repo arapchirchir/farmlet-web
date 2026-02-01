@@ -224,14 +224,18 @@ if (! function_exists('currencyData')) {
      *
      * @param  float  $amount
      */
-    function currencyData($id)
+    function currencyData($id = null)
     {
-        $currency = Currency::find($id);
+        $currency = $id ? Currency::find($id) : null;
 
-        return  [
-            'id' => $currency->id,
-            'symbol' => $currency->symbol,
-            'rate' => $currency->rate
+        if (! $currency) {
+            $currency = generaleSetting('defaultCurrency') ?? Currency::where('is_default', 1)->first() ?? Currency::first();
+        }
+
+        return [
+            'id' => $currency?->id,
+            'symbol' => $currency?->symbol ?? '$',
+            'rate' => $currency?->rate ?? 1,
         ];
     }
 }

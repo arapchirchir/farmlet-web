@@ -73,6 +73,10 @@ class CheckPermission
             $customPermissions[] = 'admin.business-setting.withdraw';
         }
 
+        if (in_array('admin.generale-setting.update', $rolePermissions) || in_array('admin.generale-setting.update', $userPermissions)) {
+            $customPermissions[] = 'admin.currency.store';
+        }
+
         $allPermissions = array_merge($userPermissions, $rolePermissions, $customPermissions);
         $allPermissions = array_unique($allPermissions);
 
