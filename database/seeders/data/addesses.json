@@ -1,0 +1,3227 @@
+{
+    "data": [
+        {
+            "county_name": "MOMBASA",
+            "county_code": "001",
+            "subcounties": [
+                {
+                    "name": "CHANGAMWE",
+                    "wards": [
+                        "PORT REITZ",
+                        "KIPEVU",
+                        "AIRPORT",
+                        "CHANGAMWE",
+                        "CHAANI"
+                    ]
+                },
+                {
+                    "name": "JOMVU",
+                    "wards": [
+                        "JOMVU KUU",
+                        "MIRITINI",
+                        "MIKINDANI"
+                    ]
+                },
+                {
+                    "name": "KISAUNI",
+                    "wards": [
+                        "MJAMBERE",
+                        "JUNDA",
+                        "BAMBURI",
+                        "MWAKIRUNGE",
+                        "MTOPANGA",
+                        "MAGOGONI",
+                        "SHANZU"
+                    ]
+                },
+                {
+                    "name": "NYALI",
+                    "wards": [
+                        "FRERE TOWN",
+                        "ZIWA LA NG'OMBE",
+                        "MKOMANI",
+                        "KONGOWEA",
+                        "KADZANDANI"
+                    ]
+                },
+                {
+                    "name": "LIKONI",
+                    "wards": [
+                        "MTONGWE",
+                        "SHIKA ADABU",
+                        "BOFU",
+                        "LIKONI",
+                        "TIMBWANI"
+                    ]
+                },
+                {
+                    "name": "MVITA",
+                    "wards": [
+                        "MJI WA KALE\/MAKADARA",
+                        "TUDOR",
+                        "TONONOKA",
+                        "SHIMANZI\/GANJONI",
+                        "MAJENGO"
+                    ]
+                }
+            ]
+        },
+        {
+            "county_name": "KWALE",
+            "county_code": "002",
+            "subcounties": [
+                {
+                    "name": "MSAMBWENI",
+                    "wards": [
+                        "GOMBATO BONGWE",
+                        "UKUNDA",
+                        "KINONDO",
+                        "RAMISI"
+                    ]
+                },
+                {
+                    "name": "LUNGALUNGA",
+                    "wards": [
+                        "PONGWE\/KIKONENI",
+                        "DZOMBO",
+                        "MWERENI",
+                        "VANGA"
+                    ]
+                },
+                {
+                    "name": "MATUGA",
+                    "wards": [
+                        "TSIMBA GOLINI",
+                        "WAA",
+                        "TIWI",
+                        "KUBO SOUTH",
+                        "MKONGANI"
+                    ]
+                },
+                {
+                    "name": "KINANGO",
+                    "wards": [
+                        "NDAVAYA",
+                        "PUMA",
+                        "KINANGO",
+                        "MACKINNON ROAD",
+                        "CHENGONI\/SAMBURU",
+                        "MWAVUMBO",
+                        "KASEMENI"
+                    ]
+                }
+            ]
+        },
+        {
+            "county_name": "KILIFI",
+            "county_code": "003",
+            "subcounties": [
+                {
+                    "name": "KILIFI NORTH",
+                    "wards": [
+                        "TEZO",
+                        "SOKONI",
+                        "KIBARANI",
+                        "DABASO",
+                        "MATSANGONI",
+                        "WATAMU",
+                        "MNARANI"
+                    ]
+                },
+                {
+                    "name": "KILIFI SOUTH",
+                    "wards": [
+                        "JUNJU",
+                        "MWARAKAYA",
+                        "SHIMO LA TEWA",
+                        "CHASIMBA",
+                        "MTEPENI"
+                    ]
+                },
+                {
+                    "name": "KALOLENI",
+                    "wards": [
+                        "MARIAKANI",
+                        "KAYAFUNGO",
+                        "KALOLENI",
+                        "MWANAMWINGA"
+                    ]
+                },
+                {
+                    "name": "RABAI",
+                    "wards": [
+                        "MWAWESA",
+                        "RURUMA",
+                        "KAMBE\/RIBE",
+                        "RABAI\/KISURUTINI"
+                    ]
+                },
+                {
+                    "name": "GANZE",
+                    "wards": [
+                        "GANZE",
+                        "BAMBA",
+                        "JARIBUNI",
+                        "SOKOKE"
+                    ]
+                },
+                {
+                    "name": "MALINDI",
+                    "wards": [
+                        "JILORE",
+                        "KAKUYUNI",
+                        "GANDA",
+                        "MALINDI TOWN",
+                        "SHELLA"
+                    ]
+                },
+                {
+                    "name": "MAGARINI",
+                    "wards": [
+                        "MARAFA",
+                        "MAGARINI",
+                        "GONGONI",
+                        "ADU",
+                        "GARASHI",
+                        "SABAKI"
+                    ]
+                }
+            ]
+        },
+        {
+            "county_name": "TANA RIVER",
+            "county_code": "004",
+            "subcounties": [
+                {
+                    "name": "GARSEN",
+                    "wards": [
+                        "KIPINI EAST",
+                        "GARSEN SOUTH",
+                        "KIPINI WEST",
+                        "GARSEN CENTRAL",
+                        "GARSEN WEST",
+                        "GARSEN NORTH"
+                    ]
+                },
+                {
+                    "name": "GALOLE",
+                    "wards": [
+                        "KINAKOMBA",
+                        "MIKINDUNI",
+                        "CHEWANI",
+                        "WAYU"
+                    ]
+                },
+                {
+                    "name": "BURA",
+                    "wards": [
+                        "CHEWELE",
+                        "HIRIMANI",
+                        "BANGALE",
+                        "SALA",
+                        "MADOGO"
+                    ]
+                }
+            ]
+        },
+        {
+            "county_name": "LAMU",
+            "county_code": "005",
+            "subcounties": [
+                {
+                    "name": "LAMU EAST",
+                    "wards": [
+                        "FAZA",
+                        "KIUNGA",
+                        "BASUBA"
+                    ]
+                },
+                {
+                    "name": "LAMU WEST",
+                    "wards": [
+                        "SHELLA",
+                        "MKOMANI",
+                        "HINDI",
+                        "MKUNUMBI",
+                        "HONGWE",
+                        "WITU",
+                        "BAHARI"
+                    ]
+                }
+            ]
+        },
+        {
+            "county_name": "TAITA TAVETA",
+            "county_code": "006",
+            "subcounties": [
+                {
+                    "name": "TAVETA",
+                    "wards": [
+                        "CHALA",
+                        "MAHOO",
+                        "BOMANI",
+                        "MBOGHONI",
+                        "MATA"
+                    ]
+                },
+                {
+                    "name": "WUNDANYI",
+                    "wards": [
+                        "WUNDANYI\/MBALE",
+                        "WERUGHA",
+                        "WUMINGU\/KISHUSHE",
+                        "MWANDA\/MGANGE"
+                    ]
+                },
+                {
+                    "name": "MWATATE",
+                    "wards": [
+                        "RONG'E",
+                        "MWATATE",
+                        "BURA",
+                        "CHAWIA",
+                        "WUSI\/KISHAMBA"
+                    ]
+                },
+                {
+                    "name": "VOI",
+                    "wards": [
+                        "MBOLOLO",
+                        "SAGALLA",
+                        "KALOLENI",
+                        "MARUNGU",
+                        "KASIGAU",
+                        "NGOLIA"
+                    ]
+                }
+            ]
+        },
+        {
+            "county_name": "GARISSA",
+            "county_code": "007",
+            "subcounties": [
+                {
+                    "name": "GARISSA TOWNSHIP",
+                    "wards": [
+                        "WABERI",
+                        "GALBET",
+                        "TOWNSHIP",
+                        "IFTIN"
+                    ]
+                },
+                {
+                    "name": "BALAMBALA",
+                    "wards": [
+                        "BALAMBALA",
+                        "DANYERE",
+                        "JARA JARA",
+                        "SAKA",
+                        "SANKURI"
+                    ]
+                },
+                {
+                    "name": "LAGDERA",
+                    "wards": [
+                        "MODOGASHE",
+                        "BENANE",
+                        "GOREALE",
+                        "MAALIMIN",
+                        "SABENA",
+                        "BARAKI"
+                    ]
+                },
+                {
+                    "name": "DADAAB",
+                    "wards": [
+                        "DERTU",
+                        "DADAAB",
+                        "LABASIGALE",
+                        "DAMAJALE",
+                        "LIBOI",
+                        "ABAKAILE"
+                    ]
+                },
+                {
+                    "name": "FAFI",
+                    "wards": [
+                        "BURA",
+                        "DEKAHARIA",
+                        "JARAJILA",
+                        "FAFI",
+                        "NANIGHI"
+                    ]
+                },
+                {
+                    "name": "IJARA",
+                    "wards": [
+                        "HULUGHO",
+                        "SANGAILU",
+                        "IJARA",
+                        "MASALANI"
+                    ]
+                }
+            ]
+        },
+        {
+            "county_name": "WAJIR",
+            "county_code": "008",
+            "subcounties": [
+                {
+                    "name": "WAJIR NORTH",
+                    "wards": [
+                        "GURAR",
+                        "BUTE",
+                        "KORONDILE",
+                        "MALKAGUFU",
+                        "BATALU",
+                        "DANABA",
+                        "GODOMA"
+                    ]
+                },
+                {
+                    "name": "WAJIR EAST",
+                    "wards": [
+                        "WAGBERI",
+                        "TOWNSHIP",
+                        "BARWAGO",
+                        "KHOROF\/HARAR"
+                    ]
+                },
+                {
+                    "name": "TARBAJ",
+                    "wards": [
+                        "ELBEN",
+                        "SARMAN",
+                        "TARBAJ",
+                        "WARGADUD"
+                    ]
+                },
+                {
+                    "name": "WAJIR WEST",
+                    "wards": [
+                        "ARBAJAHAN",
+                        "HADADO\/ATHIBOHOL",
+                        "ADAMASAJIDE",
+                        "GANYURE\/WAGALLA"
+                    ]
+                },
+                {
+                    "name": "ELDAS",
+                    "wards": [
+                        "ELDAS",
+                        "DELLA",
+                        "LAKOLEY SOUTH\/BASIR",
+                        "ELNUR\/TULA TULA"
+                    ]
+                },
+                {
+                    "name": "WAJIR SOUTH",
+                    "wards": [
+                        "BENANE",
+                        "BURDER",
+                        "DADAJA BULLA",
+                        "HABASSWEIN",
+                        "LAGBOGHOL SOUTH",
+                        "IBRAHIM URE",
+                        "DIIF"
+                    ]
+                }
+            ]
+        },
+        {
+            "county_name": "MANDERA",
+            "county_code": "009",
+            "subcounties": [
+                {
+                    "name": "MANDERA WEST",
+                    "wards": [
+                        "TAKABA SOUTH",
+                        "TAKABA",
+                        "LAGSURE",
+                        "DANDU",
+                        "GITHER"
+                    ]
+                },
+                {
+                    "name": "BANISSA",
+                    "wards": [
+                        "BANISSA",
+                        "DERKHALE",
+                        "GUBA",
+                        "MALKAMARI",
+                        "KILIWEHIRI"
+                    ]
+                },
+                {
+                    "name": "MANDERA NORTH",
+                    "wards": [
+                        "ASHABITO",
+                        "GUTICHA",
+                        "MOROTHILE",
+                        "RHAMU",
+                        "RHAMU-DIMTU"
+                    ]
+                },
+                {
+                    "name": "MANDERA SOUTH",
+                    "wards": [
+                        "WARGADUD",
+                        "KUTULO",
+                        "ELWAK SOUTH",
+                        "ELWAK NORTH",
+                        "SHIMBIR FATUMA"
+                    ]
+                },
+                {
+                    "name": "MANDERA EAST",
+                    "wards": [
+                        "ARABIA",
+                        "TOWNSHIP",
+                        "NEBOI",
+                        "KHALALIO",
+                        "LIBEHIA"
+                    ]
+                },
+                {
+                    "name": "LAFEY",
+                    "wards": [
+                        "SALA",
+                        "FINO",
+                        "LAFEY",
+                        "WARANQARA",
+                        "ALANGO GOF"
+                    ]
+                }
+            ]
+        },
+        {
+            "county_name": "MARSABIT",
+            "county_code": "010",
+            "subcounties": [
+                {
+                    "name": "MOYALE",
+                    "wards": [
+                        "BUTIYE",
+                        "SOLOLO",
+                        "HEILLU\/MANYATTA",
+                        "GOLBO",
+                        "MOYALE TOWNSHIP",
+                        "URAN",
+                        "OBBU"
+                    ]
+                },
+                {
+                    "name": "NORTH HORR",
+                    "wards": [
+                        "DUKANA",
+                        "MAIKONA",
+                        "TURBI",
+                        "NORTH HORR",
+                        "ILLERET"
+                    ]
+                },
+                {
+                    "name": "SAKU",
+                    "wards": [
+                        "SAGANTE\/JALDESA",
+                        "KARARE",
+                        "MARSABIT CENTRAL"
+                    ]
+                },
+                {
+                    "name": "LAISAMIS",
+                    "wards": [
+                        "LOIYANGALANI",
+                        "KARGI\/SOUTH HORR",
+                        "KORR\/NGURUNIT",
+                        "LOGO LOGO",
+                        "LAISAMIS"
+                    ]
+                }
+            ]
+        },
+        {
+            "county_name": "ISIOLO",
+            "county_code": "011",
+            "subcounties": [
+                {
+                    "name": "ISIOLO NORTH",
+                    "wards": [
+                        "WABERA",
+                        "BULLA PESA",
+                        "CHARI",
+                        "CHERAB",
+                        "NGARE MARA",
+                        "BURAT",
+                        "OLDO\/NYIRO"
+                    ]
+                },
+                {
+                    "name": "ISIOLO SOUTH",
+                    "wards": [
+                        "GARBATULLA",
+                        "KINNA",
+                        "SERICHO"
+                    ]
+                }
+            ]
+        },
+        {
+            "county_name": "MERU",
+            "county_code": "012",
+            "subcounties": [
+                {
+                    "name": "IGEMBE SOUTH",
+                    "wards": [
+                        "MAUA",
+                        "KIEGOI\/ANTUBOCHIU",
+                        "ATHIRU GAITI",
+                        "AKACHIU",
+                        "KANUNI"
+                    ]
+                },
+                {
+                    "name": "IGEMBE CENTRAL",
+                    "wards": [
+                        "AKIRANG'ONDU",
+                        "ATHIRU RUUJINE",
+                        "IGEMBE EAST",
+                        "NJIA",
+                        "KANGETA"
+                    ]
+                },
+                {
+                    "name": "IGEMBE NORTH",
+                    "wards": [
+                        "ANTUAMBUI",
+                        "NTUNENE",
+                        "ANTUBETWE KIONGO",
+                        "NAATHU",
+                        "AMWATHI"
+                    ]
+                },
+                {
+                    "name": "TIGANIA WEST",
+                    "wards": [
+                        "ATHWANA",
+                        "AKITHII",
+                        "KIANJAI",
+                        "NKOMO",
+                        "MBEU"
+                    ]
+                },
+                {
+                    "name": "TIGANIA EAST",
+                    "wards": [
+                        "THANGATHA",
+                        "MIKINDURI",
+                        "KIGUCHWA",
+                        "MUTHARA",
+                        "KARAMA"
+                    ]
+                },
+                {
+                    "name": "NORTH IMENTI",
+                    "wards": [
+                        "MUNICIPALITY",
+                        "NTIMA EAST",
+                        "NTIMA WEST",
+                        "NYAKI WEST",
+                        "NYAKI EAST"
+                    ]
+                },
+                {
+                    "name": "BUURI",
+                    "wards": [
+                        "TIMAU",
+                        "KISIMA",
+                        "KIIRUA\/NAARI",
+                        "RUIRI\/RWARERA",
+                        "KIBIRICHIA"
+                    ]
+                },
+                {
+                    "name": "CENTRAL IMENTI",
+                    "wards": [
+                        "MWANGANTHIA",
+                        "ABOTHUGUCHI CENTRAL",
+                        "ABOTHUGUCHI WEST",
+                        "KIAGU"
+                    ]
+                },
+                {
+                    "name": "SOUTH IMENTI",
+                    "wards": [
+                        "MITUNGUU",
+                        "IGOJI EAST",
+                        "IGOJI WEST",
+                        "ABOGETA EAST",
+                        "ABOGETA WEST",
+                        "NKUENE"
+                    ]
+                }
+            ]
+        },
+        {
+            "county_name": "THARAKA - NITHI",
+            "county_code": "013",
+            "subcounties": [
+                {
+                    "name": "MAARA",
+                    "wards": [
+                        "MITHERU",
+                        "MUTHAMBI",
+                        "MWIMBI",
+                        "GANGA",
+                        "CHOGORIA"
+                    ]
+                },
+                {
+                    "name": "CHUKA\/IGAMBANG'OMBE",
+                    "wards": [
+                        "MARIANI",
+                        "KARINGANI",
+                        "MAGUMONI",
+                        "MUGWE",
+                        "IGAMBANG'OMBE"
+                    ]
+                },
+                {
+                    "name": "THARAKA",
+                    "wards": [
+                        "GATUNGA",
+                        "MUKOTHIMA",
+                        "NKONDI",
+                        "CHIAKARIGA",
+                        "MARIMANTI"
+                    ]
+                }
+            ]
+        },
+        {
+            "county_name": "EMBU",
+            "county_code": "014",
+            "subcounties": [
+                {
+                    "name": "MANYATTA",
+                    "wards": [
+                        "RUGURU\/NGANDORI",
+                        "KITHIMU",
+                        "NGINDA",
+                        "MBETI NORTH",
+                        "KIRIMARI",
+                        "GATURI SOUTH"
+                    ]
+                },
+                {
+                    "name": "RUNYENJES",
+                    "wards": [
+                        "GATURI NORTH",
+                        "KAGAARI SOUTH",
+                        "CENTRAL WARD",
+                        "KAGAARI NORTH",
+                        "KYENI NORTH",
+                        "KYENI SOUTH"
+                    ]
+                },
+                {
+                    "name": "MBEERE SOUTH",
+                    "wards": [
+                        "MWEA",
+                        "MAKIMA",
+                        "MBETI SOUTH",
+                        "MAVURIA",
+                        "KIAMBERE"
+                    ]
+                },
+                {
+                    "name": "MBEERE NORTH",
+                    "wards": [
+                        "NTHAWA",
+                        "MUMINJI",
+                        "EVURORE"
+                    ]
+                }
+            ]
+        },
+        {
+            "county_name": "KITUI",
+            "county_code": "015",
+            "subcounties": [
+                {
+                    "name": "MWINGI NORTH",
+                    "wards": [
+                        "NGOMENI",
+                        "KYUSO",
+                        "MUMONI",
+                        "TSEIKURU",
+                        "THARAKA"
+                    ]
+                },
+                {
+                    "name": "MWINGI WEST",
+                    "wards": [
+                        "KYOME\/THAANA",
+                        "NGUUTANI",
+                        "MIGWANI",
+                        "KIOMO\/KYETHANI"
+                    ]
+                },
+                {
+                    "name": "MWINGI CENTRAL",
+                    "wards": [
+                        "CENTRAL",
+                        "KIVOU",
+                        "NGUNI",
+                        "NUU",
+                        "MUI",
+                        "WAITA"
+                    ]
+                },
+                {
+                    "name": "KITUI WEST",
+                    "wards": [
+                        "MUTONGUNI",
+                        "KAUWI",
+                        "MATINYANI",
+                        "KWA MUTONGA\/KITHUMULA"
+                    ]
+                },
+                {
+                    "name": "KITUI RURAL",
+                    "wards": [
+                        "KISASI",
+                        "MBITINI",
+                        "KWAVONZA\/YATTA",
+                        "KANYANGI"
+                    ]
+                },
+                {
+                    "name": "KITUI CENTRAL",
+                    "wards": [
+                        "MIAMBANI",
+                        "TOWNSHIP",
+                        "KYANGWITHYA WEST",
+                        "MULANGO",
+                        "KYANGWITHYA EAST"
+                    ]
+                },
+                {
+                    "name": "KITUI EAST",
+                    "wards": [
+                        "ZOMBE\/MWITIKA",
+                        "NZAMBANI",
+                        "CHULUNI",
+                        "VOO\/KYAMATU",
+                        "ENDAU\/MALALANI",
+                        "MUTITO\/KALIKU"
+                    ]
+                },
+                {
+                    "name": "KITUI SOUTH",
+                    "wards": [
+                        "IKANGA\/KYATUNE",
+                        "MUTOMO",
+                        "MUTHA",
+                        "IKUTHA",
+                        "KANZIKO",
+                        "ATHI"
+                    ]
+                }
+            ]
+        },
+        {
+            "county_name": "MACHAKOS",
+            "county_code": "016",
+            "subcounties": [
+                {
+                    "name": "MASINGA",
+                    "wards": [
+                        "KIVAA",
+                        "MASINGA CENTRAL",
+                        "EKALAKALA",
+                        "MUTHESYA",
+                        "NDITHINI"
+                    ]
+                },
+                {
+                    "name": "YATTA",
+                    "wards": [
+                        "NDALANI",
+                        "MATUU",
+                        "KITHIMANI",
+                        "IKOMBE",
+                        "KATANGI"
+                    ]
+                },
+                {
+                    "name": "KANGUNDO",
+                    "wards": [
+                        "KANGUNDO NORTH",
+                        "KANGUNDO CENTRAL",
+                        "KANGUNDO EAST",
+                        "KANGUNDO WEST"
+                    ]
+                },
+                {
+                    "name": "MATUNGULU",
+                    "wards": [
+                        "TALA",
+                        "MATUNGULU NORTH",
+                        "MATUNGULU EAST",
+                        "MATUNGULU WEST",
+                        "KYELENI"
+                    ]
+                },
+                {
+                    "name": "KATHIANI",
+                    "wards": [
+                        "MITABONI",
+                        "KATHIANI CENTRAL",
+                        "UPPER KAEWA\/IVETI",
+                        "LOWER KAEWA\/KAANI"
+                    ]
+                },
+                {
+                    "name": "MAVOKO",
+                    "wards": [
+                        "ATHI RIVER",
+                        "KINANIE",
+                        "MUTHWANI",
+                        "SYOKIMAU\/MULOLONGO"
+                    ]
+                },
+                {
+                    "name": "MACHAKOS TOWN",
+                    "wards": [
+                        "KALAMA",
+                        "MUA",
+                        "MUTITUNI",
+                        "MACHAKOS CENTRAL",
+                        "MUMBUNI NORTH",
+                        "MUVUTI\/KIIMA-KIMWE",
+                        "KOLA"
+                    ]
+                },
+                {
+                    "name": "MWALA",
+                    "wards": [
+                        "MBIUNI",
+                        "MAKUTANO\/ MWALA",
+                        "MASII",
+                        "MUTHETHENI",
+                        "WAMUNYU",
+                        "KIBAUNI"
+                    ]
+                }
+            ]
+        },
+        {
+            "county_name": "MAKUENI",
+            "county_code": "017",
+            "subcounties": [
+                {
+                    "name": "MBOONI",
+                    "wards": [
+                        "TULIMANI",
+                        "MBOONI",
+                        "KITHUNGO\/KITUNDU",
+                        "KITETA\/KISAU",
+                        "WAIA-KAKO",
+                        "KALAWA"
+                    ]
+                },
+                {
+                    "name": "KILOME",
+                    "wards": [
+                        "KASIKEU",
+                        "MUKAA",
+                        "KIIMA KIU\/KALANZONI"
+                    ]
+                },
+                {
+                    "name": "KAITI",
+                    "wards": [
+                        "UKIA",
+                        "KEE",
+                        "KILUNGU",
+                        "ILIMA"
+                    ]
+                },
+                {
+                    "name": "MAKUENI",
+                    "wards": [
+                        "WOTE",
+                        "MUVAU\/KIKUUMINI",
+                        "MAVINDINI",
+                        "KITISE\/KITHUKI",
+                        "KATHONZWENI",
+                        "NZAUI\/KILILI\/KALAMBA",
+                        "MBITINI"
+                    ]
+                },
+                {
+                    "name": "KIBWEZI WEST",
+                    "wards": [
+                        "MAKINDU",
+                        "NGUUMO",
+                        "KIKUMBULYU NORTH",
+                        "KIKUMBULYU SOUTH",
+                        "NGUU\/MASUMBA",
+                        "EMALI\/MULALA"
+                    ]
+                },
+                {
+                    "name": "KIBWEZI EAST",
+                    "wards": [
+                        "MASONGALENI",
+                        "MTITO ANDEI",
+                        "THANGE",
+                        "IVINGONI\/NZAMBANI"
+                    ]
+                }
+            ]
+        },
+        {
+            "county_name": "NYANDARUA",
+            "county_code": "018",
+            "subcounties": [
+                {
+                    "name": "KINANGOP",
+                    "wards": [
+                        "ENGINEER",
+                        "GATHARA",
+                        "NORTH KINANGOP",
+                        "MURUNGARU",
+                        "NJABINI\\KIBURU",
+                        "NYAKIO",
+                        "GITHABAI",
+                        "MAGUMU"
+                    ]
+                },
+                {
+                    "name": "KIPIPIRI",
+                    "wards": [
+                        "WANJOHI",
+                        "KIPIPIRI",
+                        "GETA",
+                        "GITHIORO"
+                    ]
+                },
+                {
+                    "name": "OL KALOU",
+                    "wards": [
+                        "KARAU",
+                        "KANJUIRI RANGE",
+                        "MIRANGINE",
+                        "KAIMBAGA",
+                        "RURII"
+                    ]
+                },
+                {
+                    "name": "OL JOROK",
+                    "wards": [
+                        "GATHANJI",
+                        "GATIMU",
+                        "WERU",
+                        "CHARAGITA"
+                    ]
+                },
+                {
+                    "name": "NDARAGWA",
+                    "wards": [
+                        "LESHAU\/PONDO",
+                        "KIRIITA",
+                        "CENTRAL",
+                        "SHAMATA"
+                    ]
+                }
+            ]
+        },
+        {
+            "county_name": "NYERI",
+            "county_code": "019",
+            "subcounties": [
+                {
+                    "name": "TETU",
+                    "wards": [
+                        "DEDAN KIMANTHI",
+                        "WAMAGANA",
+                        "AGUTHI-GAAKI"
+                    ]
+                },
+                {
+                    "name": "KIENI",
+                    "wards": [
+                        "MWEIGA",
+                        "NAROMORU KIAMATHAGA",
+                        "MWIYOGO\/ENDARASHA",
+                        "MUGUNDA",
+                        "GATARAKWA",
+                        "THEGU RIVER",
+                        "KABARU",
+                        "GAKAWA"
+                    ]
+                },
+                {
+                    "name": "MATHIRA",
+                    "wards": [
+                        "RUGURU",
+                        "MAGUTU",
+                        "IRIAINI",
+                        "KONYU",
+                        "KIRIMUKUYU",
+                        "KARATINA TOWN"
+                    ]
+                },
+                {
+                    "name": "OTHAYA",
+                    "wards": [
+                        "MAHIGA",
+                        "IRIA-INI",
+                        "CHINGA",
+                        "KARIMA"
+                    ]
+                },
+                {
+                    "name": "MUKURWEINI",
+                    "wards": [
+                        "GIKONDI",
+                        "RUGI",
+                        "MUKURWE-INI WEST",
+                        "MUKURWE-INI CENTRAL"
+                    ]
+                },
+                {
+                    "name": "NYERI TOWN",
+                    "wards": [
+                        "KIGANJO\/MATHARI",
+                        "RWARE",
+                        "GATITU\/MURUGURU",
+                        "RURING'U",
+                        "KAMAKWA\/MUKARO"
+                    ]
+                }
+            ]
+        },
+        {
+            "county_name": "KIRINYAGA",
+            "county_code": "020",
+            "subcounties": [
+                {
+                    "name": "MWEA",
+                    "wards": [
+                        "MUTITHI",
+                        "KANGAI",
+                        "THIBA",
+                        "WAMUMU",
+                        "NYANGATI",
+                        "MURINDUKO",
+                        "GATHIGIRIRI",
+                        "TEBERE"
+                    ]
+                },
+                {
+                    "name": "GICHUGU",
+                    "wards": [
+                        "KABARE",
+                        "BARAGWI",
+                        "NJUKIINI",
+                        "NGARIAMA",
+                        "KARUMANDI"
+                    ]
+                },
+                {
+                    "name": "NDIA",
+                    "wards": [
+                        "MUKURE",
+                        "KIINE",
+                        "KARITI"
+                    ]
+                },
+                {
+                    "name": "KIRINYAGA CENTRAL",
+                    "wards": [
+                        "MUTIRA",
+                        "KANYEKINI",
+                        "KERUGOYA",
+                        "INOI"
+                    ]
+                }
+            ]
+        },
+        {
+            "county_name": "MURANG'A",
+            "county_code": "021",
+            "subcounties": [
+                {
+                    "name": "KANGEMA",
+                    "wards": [
+                        "KANYENYA-INI",
+                        "MUGURU",
+                        "RWATHIA"
+                    ]
+                },
+                {
+                    "name": "MATHIOYA",
+                    "wards": [
+                        "GITUGI",
+                        "KIRU",
+                        "KAMACHARIA"
+                    ]
+                },
+                {
+                    "name": "KIHARU",
+                    "wards": [
+                        "WANGU",
+                        "MUGOIRI",
+                        "MBIRI",
+                        "TOWNSHIP",
+                        "MURARANDIA",
+                        "GATURI"
+                    ]
+                },
+                {
+                    "name": "KIGUMO",
+                    "wards": [
+                        "KAHUMBU",
+                        "MUTHITHI",
+                        "KIGUMO",
+                        "KANGARI",
+                        "KINYONA"
+                    ]
+                },
+                {
+                    "name": "MARAGWA",
+                    "wards": [
+                        "KIMORORI\/WEMPA",
+                        "MAKUYU",
+                        "KAMBITI",
+                        "KAMAHUHA",
+                        "ICHAGAKI",
+                        "NGINDA"
+                    ]
+                },
+                {
+                    "name": "KANDARA",
+                    "wards": [
+                        "NG'ARARIA",
+                        "MURUKA",
+                        "KAGUNDU-INI",
+                        "GAICHANJIRU",
+                        "ITHIRU",
+                        "RUCHU"
+                    ]
+                },
+                {
+                    "name": "GATANGA",
+                    "wards": [
+                        "ITHANGA",
+                        "KAKUZI\/MITUBIRI",
+                        "MUGUMO-INI",
+                        "KIHUMBU-INI",
+                        "GATANGA",
+                        "KARIARA"
+                    ]
+                }
+            ]
+        },
+        {
+            "county_name": "KIAMBU",
+            "county_code": "022",
+            "subcounties": [
+                {
+                    "name": "GATUNDU SOUTH",
+                    "wards": [
+                        "KIAMWANGI",
+                        "KIGANJO",
+                        "NDARUGU",
+                        "NGENDA"
+                    ]
+                },
+                {
+                    "name": "GATUNDU NORTH",
+                    "wards": [
+                        "GITUAMBA",
+                        "GITHOBOKONI",
+                        "CHANIA",
+                        "MANG'U"
+                    ]
+                },
+                {
+                    "name": "JUJA",
+                    "wards": [
+                        "MURERA",
+                        "THETA",
+                        "JUJA",
+                        "WITEITHIE",
+                        "KALIMONI"
+                    ]
+                },
+                {
+                    "name": "THIKA TOWN",
+                    "wards": [
+                        "TOWNSHIP",
+                        "KAMENU",
+                        "HOSPITAL",
+                        "GATUANYAGA",
+                        "NGOLIBA"
+                    ]
+                },
+                {
+                    "name": "RUIRU",
+                    "wards": [
+                        "GITOTHUA",
+                        "BIASHARA",
+                        "GATONGORA",
+                        "KAHAWA SUKARI",
+                        "KAHAWA WENDANI",
+                        "KIUU",
+                        "MWIKI",
+                        "MWIHOKO"
+                    ]
+                },
+                {
+                    "name": "GITHUNGURI",
+                    "wards": [
+                        "GITHUNGURI",
+                        "GITHIGA",
+                        "IKINU",
+                        "NGEWA",
+                        "KOMOTHAI"
+                    ]
+                },
+                {
+                    "name": "KIAMBU",
+                    "wards": [
+                        "TING'ANG'A",
+                        "NDUMBERI",
+                        "RIABAI",
+                        "TOWNSHIP"
+                    ]
+                },
+                {
+                    "name": "KIAMBAA",
+                    "wards": [
+                        "CIANDA",
+                        "KARURI",
+                        "NDENDERU",
+                        "MUCHATHA",
+                        "KIHARA"
+                    ]
+                },
+                {
+                    "name": "KABETE",
+                    "wards": [
+                        "GITARU",
+                        "MUGUGA",
+                        "NYADHUNA",
+                        "KABETE",
+                        "UTHIRU"
+                    ]
+                },
+                {
+                    "name": "KIKUYU",
+                    "wards": [
+                        "KARAI",
+                        "NACHU",
+                        "SIGONA",
+                        "KIKUYU",
+                        "KINOO"
+                    ]
+                },
+                {
+                    "name": "LIMURU",
+                    "wards": [
+                        "BIBIRIONI",
+                        "LIMURU CENTRAL",
+                        "NDEIYA",
+                        "LIMURU EAST",
+                        "NGECHA TIGONI"
+                    ]
+                },
+                {
+                    "name": "LARI",
+                    "wards": [
+                        "KINALE",
+                        "KIJABE",
+                        "NYANDUMA",
+                        "KAMBURU",
+                        "LARI\/KIRENGA"
+                    ]
+                }
+            ]
+        },
+        {
+            "county_name": "TURKANA",
+            "county_code": "023",
+            "subcounties": [
+                {
+                    "name": "TURKANA NORTH",
+                    "wards": [
+                        "KAERIS",
+                        "LAKE ZONE",
+                        "LAPUR",
+                        "KAALENG\/KAIKOR",
+                        "KIBISH",
+                        "NAKALALE"
+                    ]
+                },
+                {
+                    "name": "TURKANA WEST",
+                    "wards": [
+                        "KAKUMA",
+                        "LOPUR",
+                        "LETEA",
+                        "SONGOT",
+                        "KALOBEYEI",
+                        "LOKICHOGGIO",
+                        "NANAAM"
+                    ]
+                },
+                {
+                    "name": "TURKANA CENTRAL",
+                    "wards": [
+                        "KERIO DELTA",
+                        "KANG'ATOTHA",
+                        "KALOKOL",
+                        "LODWAR TOWNSHIP",
+                        "KANAMKEMER"
+                    ]
+                },
+                {
+                    "name": "LOIMA",
+                    "wards": [
+                        "KOTARUK\/LOBEI",
+                        "TURKWEL",
+                        "LOIMA",
+                        "LOKIRIAMA\/LORENGIPPI"
+                    ]
+                },
+                {
+                    "name": "TURKANA SOUTH",
+                    "wards": [
+                        "KAPUTIR",
+                        "KATILU",
+                        "LOBOKAT",
+                        "KALAPATA",
+                        "LOKICHAR"
+                    ]
+                },
+                {
+                    "name": "TURKANA EAST",
+                    "wards": [
+                        "KAPEDO\/NAPEITOM",
+                        "KATILIA",
+                        "LOKORI\/KOCHODIN"
+                    ]
+                }
+            ]
+        },
+        {
+            "county_name": "WEST POKOT",
+            "county_code": "024",
+            "subcounties": [
+                {
+                    "name": "KAPENGURIA",
+                    "wards": [
+                        "RIWO",
+                        "KAPENGURIA",
+                        "MNAGEI",
+                        "SIYOI",
+                        "ENDUGH",
+                        "SOOK"
+                    ]
+                },
+                {
+                    "name": "SIGOR",
+                    "wards": [
+                        "SEKERR",
+                        "MASOOL",
+                        "LOMUT",
+                        "WEIWEI"
+                    ]
+                },
+                {
+                    "name": "KACHELIBA",
+                    "wards": [
+                        "SUAM",
+                        "KODICH",
+                        "KASEI",
+                        "KAPCHOK",
+                        "KIWAWA",
+                        "ALALE"
+                    ]
+                },
+                {
+                    "name": "POKOT SOUTH",
+                    "wards": [
+                        "CHEPARERIA",
+                        "BATEI",
+                        "LELAN",
+                        "TAPACH"
+                    ]
+                }
+            ]
+        },
+        {
+            "county_name": "SAMBURU",
+            "county_code": "025",
+            "subcounties": [
+                {
+                    "name": "SAMBURU WEST",
+                    "wards": [
+                        "LODOKEJEK",
+                        "SUGUTA MARMAR",
+                        "MARALAL",
+                        "LOOSUK",
+                        "PORO"
+                    ]
+                },
+                {
+                    "name": "SAMBURU NORTH",
+                    "wards": [
+                        "EL-BARTA",
+                        "NACHOLA",
+                        "NDOTO",
+                        "NYIRO",
+                        "ANGATA NANYOKIE",
+                        "BAAWA"
+                    ]
+                },
+                {
+                    "name": "SAMBURU EAST",
+                    "wards": [
+                        "WASO",
+                        "WAMBA WEST",
+                        "WAMBA EAST",
+                        "WAMBA NORTH"
+                    ]
+                }
+            ]
+        },
+        {
+            "county_name": "TRANS NZOIA",
+            "county_code": "026",
+            "subcounties": [
+                {
+                    "name": "KWANZA",
+                    "wards": [
+                        "KAPOMBOI",
+                        "KWANZA",
+                        "KEIYO",
+                        "BIDII"
+                    ]
+                },
+                {
+                    "name": "ENDEBESS",
+                    "wards": [
+                        "CHEPCHOINA",
+                        "ENDEBESS",
+                        "MATUMBEI"
+                    ]
+                },
+                {
+                    "name": "SABOTI",
+                    "wards": [
+                        "KINYORO",
+                        "MATISI",
+                        "TUWANI",
+                        "SABOTI",
+                        "MACHEWA"
+                    ]
+                },
+                {
+                    "name": "KIMININI",
+                    "wards": [
+                        "KIMININI",
+                        "WAITALUK",
+                        "SIRENDE",
+                        "HOSPITAL",
+                        "SIKHENDU",
+                        "NABISWA"
+                    ]
+                },
+                {
+                    "name": "CHERANGANY",
+                    "wards": [
+                        "SINYERERE",
+                        "MAKUTANO",
+                        "KAPLAMAI",
+                        "MOTOSIET",
+                        "CHERANGANY\/SUWERWA",
+                        "CHEPSIRO\/KIPTOROR",
+                        "SITATUNGA"
+                    ]
+                }
+            ]
+        },
+        {
+            "county_name": "UASIN GISHU",
+            "county_code": "027",
+            "subcounties": [
+                {
+                    "name": "SOY",
+                    "wards": [
+                        "MOI'S BRIDGE",
+                        "KAPKURES",
+                        "ZIWA",
+                        "SEGERO\/BARSOMBE",
+                        "KIPSOMBA",
+                        "SOY",
+                        "KUINET\/KAPSUSWA"
+                    ]
+                },
+                {
+                    "name": "TURBO",
+                    "wards": [
+                        "NGENYILEL",
+                        "TAPSAGOI",
+                        "KAMAGUT",
+                        "KIPLOMBE",
+                        "KAPSAOS",
+                        "HURUMA"
+                    ]
+                },
+                {
+                    "name": "MOIBEN",
+                    "wards": [
+                        "TEMBELIO",
+                        "SERGOIT",
+                        "KARUNA\/MEIBEKI",
+                        "MOIBEN",
+                        "KIMUMU"
+                    ]
+                },
+                {
+                    "name": "AINABKOI",
+                    "wards": [
+                        "KAPSOYA",
+                        "KAPTAGAT",
+                        "AINABKOI\/OLARE"
+                    ]
+                },
+                {
+                    "name": "KAPSERET",
+                    "wards": [
+                        "SIMAT\/KAPSERET",
+                        "KIPKENYO",
+                        "NGERIA",
+                        "MEGUN",
+                        "LANGAS"
+                    ]
+                },
+                {
+                    "name": "KESSES",
+                    "wards": [
+                        "RACECOURSE",
+                        "CHEPTIRET\/KIPCHAMO",
+                        "TULWET\/CHUIYAT",
+                        "TARAKWA"
+                    ]
+                }
+            ]
+        },
+        {
+            "county_name": "ELGEYO\/MARAKWET",
+            "county_code": "028",
+            "subcounties": [
+                {
+                    "name": "MARAKWET EAST",
+                    "wards": [
+                        "KAPYEGO",
+                        "SAMBIRIR",
+                        "ENDO",
+                        "EMBOBUT \/ EMBULOT"
+                    ]
+                },
+                {
+                    "name": "MARAKWET WEST",
+                    "wards": [
+                        "LELAN",
+                        "SENGWER",
+                        "CHERANG'ANY\/CHEBORORWA",
+                        "MOIBEN\/KUSERWO",
+                        "KAPSOWAR",
+                        "ARROR"
+                    ]
+                },
+                {
+                    "name": "KEIYO NORTH",
+                    "wards": [
+                        "EMSOO",
+                        "KAMARINY",
+                        "KAPCHEMUTWA",
+                        "TAMBACH"
+                    ]
+                },
+                {
+                    "name": "KEIYO SOUTH",
+                    "wards": [
+                        "KAPTARAKWA",
+                        "CHEPKORIO",
+                        "SOY NORTH",
+                        "SOY SOUTH",
+                        "KABIEMIT",
+                        "METKEI"
+                    ]
+                }
+            ]
+        },
+        {
+            "county_name": "NANDI",
+            "county_code": "029",
+            "subcounties": [
+                {
+                    "name": "TINDERET",
+                    "wards": [
+                        "SONGHOR\/SOBA",
+                        "TINDIRET",
+                        "CHEMELIL\/CHEMASE",
+                        "KAPSIMOTWO"
+                    ]
+                },
+                {
+                    "name": "ALDAI",
+                    "wards": [
+                        "KABWARENG",
+                        "TERIK",
+                        "KEMELOI-MARABA",
+                        "KOBUJOI",
+                        "KAPTUMO-KABOI",
+                        "KOYO-NDURIO"
+                    ]
+                },
+                {
+                    "name": "NANDI HILLS",
+                    "wards": [
+                        "NANDI HILLS",
+                        "CHEPKUNYUK",
+                        "OL'LESSOS",
+                        "KAPCHORUA"
+                    ]
+                },
+                {
+                    "name": "CHESUMEI",
+                    "wards": [
+                        "CHEMUNDU\/KAPNG'ETUNY",
+                        "KOSIRAI",
+                        "LELMOKWO\/NGECHEK",
+                        "KAPTEL\/KAMOIYWO",
+                        "KIPTUYA"
+                    ]
+                },
+                {
+                    "name": "EMGWEN",
+                    "wards": [
+                        "CHEPKUMIA",
+                        "KAPKANGANI",
+                        "KAPSABET",
+                        "KILIBWONI"
+                    ]
+                },
+                {
+                    "name": "MOSOP",
+                    "wards": [
+                        "CHEPTERWAI",
+                        "KIPKAREN",
+                        "KURGUNG\/SURUNGAI",
+                        "KABIYET",
+                        "NDALAT",
+                        "KABISAGA",
+                        "SANGALO\/KEBULONIK"
+                    ]
+                }
+            ]
+        },
+        {
+            "county_name": "BARINGO",
+            "county_code": "030",
+            "subcounties": [
+                {
+                    "name": "TIATY",
+                    "wards": [
+                        "TIRIOKO",
+                        "KOLOWA",
+                        "RIBKWO",
+                        "SILALE",
+                        "LOIYAMOROCK",
+                        "TANGULBEI\/KOROSSI",
+                        "CHURO\/AMAYA"
+                    ]
+                },
+                {
+                    "name": "BARINGO NORTH",
+                    "wards": [
+                        "BARWESSA",
+                        "KABARTONJO",
+                        "SAIMO\/KIPSARAMAN",
+                        "SAIMO\/SOI",
+                        "BARTABWA"
+                    ]
+                },
+                {
+                    "name": "BARINGO CENTRAL",
+                    "wards": [
+                        "KABARNET",
+                        "SACHO",
+                        "TENGES",
+                        "EWALEL\/CHAPCHAP",
+                        "KAPROPITA"
+                    ]
+                },
+                {
+                    "name": "BARINGO SOUTH",
+                    "wards": [
+                        "MARIGAT",
+                        "ILCHAMUS",
+                        "MOCHONGOI",
+                        "MUKUTANI"
+                    ]
+                },
+                {
+                    "name": "MOGOTIO",
+                    "wards": [
+                        "MOGOTIO",
+                        "EMINING",
+                        "KISANANA"
+                    ]
+                },
+                {
+                    "name": "ELDAMA RAVINE",
+                    "wards": [
+                        "LEMBUS",
+                        "LEMBUS KWEN",
+                        "RAVINE",
+                        "MUMBERES\/MAJI MAZURI",
+                        "LEMBUS\/PERKERRA",
+                        "KOIBATEK"
+                    ]
+                }
+            ]
+        },
+        {
+            "county_name": "LAIKIPIA",
+            "county_code": "031",
+            "subcounties": [
+                {
+                    "name": "LAIKIPIA WEST",
+                    "wards": [
+                        "OL-MORAN",
+                        "RUMURUTI TOWNSHIP",
+                        "GITHIGA",
+                        "MARMANET",
+                        "IGWAMITI",
+                        "SALAMA"
+                    ]
+                },
+                {
+                    "name": "LAIKIPIA EAST",
+                    "wards": [
+                        "NGOBIT",
+                        "TIGITHI",
+                        "THINGITHU",
+                        "NANYUKI",
+                        "UMANDE"
+                    ]
+                },
+                {
+                    "name": "LAIKIPIA NORTH",
+                    "wards": [
+                        "SOSIAN",
+                        "SEGERA",
+                        "MUGOGODO WEST",
+                        "MUGOGODO EAST"
+                    ]
+                }
+            ]
+        },
+        {
+            "county_name": "NAKURU",
+            "county_code": "032",
+            "subcounties": [
+                {
+                    "name": "MOLO",
+                    "wards": [
+                        "MARIASHONI",
+                        "ELBURGON",
+                        "TURI",
+                        "MOLO"
+                    ]
+                },
+                {
+                    "name": "NJORO",
+                    "wards": [
+                        "MAU NAROK",
+                        "MAUCHE",
+                        "KIHINGO",
+                        "NESSUIT",
+                        "LARE",
+                        "NJORO"
+                    ]
+                },
+                {
+                    "name": "NAIVASHA",
+                    "wards": [
+                        "BIASHARA",
+                        "HELLS GATE",
+                        "LAKE VIEW",
+                        "MAI MAHIU",
+                        "MAIELLA",
+                        "OLKARIA",
+                        "NAIVASHA EAST",
+                        "VIWANDANI"
+                    ]
+                },
+                {
+                    "name": "GILGIL",
+                    "wards": [
+                        "GILGIL",
+                        "ELEMENTAITA",
+                        "MBARUK\/EBURU",
+                        "MALEWA WEST",
+                        "MURINDATI"
+                    ]
+                },
+                {
+                    "name": "KURESOI SOUTH",
+                    "wards": [
+                        "AMALO",
+                        "KERINGET",
+                        "KIPTAGICH",
+                        "TINET"
+                    ]
+                },
+                {
+                    "name": "KURESOI NORTH",
+                    "wards": [
+                        "KIPTORORO",
+                        "NYOTA",
+                        "SIRIKWA",
+                        "KAMARA"
+                    ]
+                },
+                {
+                    "name": "SUBUKIA",
+                    "wards": [
+                        "SUBUKIA",
+                        "WASEGES",
+                        "KABAZI"
+                    ]
+                },
+                {
+                    "name": "RONGAI",
+                    "wards": [
+                        "MENENGAI WEST",
+                        "SOIN",
+                        "VISOI",
+                        "MOSOP",
+                        "SOLAI"
+                    ]
+                },
+                {
+                    "name": "BAHATI",
+                    "wards": [
+                        "DUNDORI",
+                        "KABATINI",
+                        "KIAMAINA",
+                        "LANET\/UMOJA",
+                        "BAHATI"
+                    ]
+                },
+                {
+                    "name": "NAKURU TOWN WEST",
+                    "wards": [
+                        "BARUT",
+                        "LONDON",
+                        "KAPTEMBWO",
+                        "KAPKURES",
+                        "RHODA",
+                        "SHAABAB"
+                    ]
+                },
+                {
+                    "name": "NAKURU TOWN EAST",
+                    "wards": [
+                        "BIASHARA",
+                        "KIVUMBINI",
+                        "FLAMINGO",
+                        "MENENGAI",
+                        "NAKURU EAST"
+                    ]
+                }
+            ]
+        },
+        {
+            "county_name": "NAROK",
+            "county_code": "033",
+            "subcounties": [
+                {
+                    "name": "KILGORIS",
+                    "wards": [
+                        "KILGORIS CENTRAL",
+                        "KEYIAN",
+                        "ANGATA BARIKOI",
+                        "SHANKOE",
+                        "KIMINTET",
+                        "LOLGORIAN"
+                    ]
+                },
+                {
+                    "name": "EMURUA DIKIRR",
+                    "wards": [
+                        "ILKERIN",
+                        "OLOLMASANI",
+                        "MOGONDO",
+                        "KAPSASIAN"
+                    ]
+                },
+                {
+                    "name": "NAROK NORTH",
+                    "wards": [
+                        "OLPUSIMORU",
+                        "OLOKURTO",
+                        "NAROK TOWN",
+                        "NKARETA",
+                        "OLORROPIL",
+                        "MELILI"
+                    ]
+                },
+                {
+                    "name": "NAROK EAST",
+                    "wards": [
+                        "MOSIRO",
+                        "ILDAMAT",
+                        "KEEKONYOKIE",
+                        "SUSWA"
+                    ]
+                },
+                {
+                    "name": "NAROK SOUTH",
+                    "wards": [
+                        "MAJIMOTO\/NAROOSURA",
+                        "OLOLULUNG'A",
+                        "MELELO",
+                        "LOITA",
+                        "SOGOO",
+                        "SAGAMIAN"
+                    ]
+                },
+                {
+                    "name": "NAROK WEST",
+                    "wards": [
+                        "ILMOTIOK",
+                        "MARA",
+                        "SIANA",
+                        "NAIKARRA"
+                    ]
+                },
+                {
+                    "name": "EMBAKASI EAST",
+                    "wards": [
+                        "LOWER SAVANNAH"
+                    ]
+                }
+            ]
+        },
+        {
+            "county_name": "KAJIADO",
+            "county_code": "034",
+            "subcounties": [
+                {
+                    "name": "KAJIADO NORTH",
+                    "wards": [
+                        "OLKERI",
+                        "ONGATA RONGAI",
+                        "NKAIMURUNYA",
+                        "OLOOLUA",
+                        "NGONG"
+                    ]
+                },
+                {
+                    "name": "KAJIADO CENTRAL",
+                    "wards": [
+                        "PURKO",
+                        "ILDAMAT",
+                        "DALALEKUTUK",
+                        "MATAPATO NORTH",
+                        "MATAPATO SOUTH"
+                    ]
+                },
+                {
+                    "name": "KAJIADO EAST",
+                    "wards": [
+                        "KAPUTIEI NORTH",
+                        "KITENGELA",
+                        "OLOOSIRKON\/SHOLINKE",
+                        "KENYAWA-POKA",
+                        "IMARORO"
+                    ]
+                },
+                {
+                    "name": "KAJIADO WEST",
+                    "wards": [
+                        "KEEKONYOKIE",
+                        "ILOODOKILANI",
+                        "MAGADI",
+                        "EWUASO OONKIDONG'I",
+                        "MOSIRO"
+                    ]
+                },
+                {
+                    "name": "KAJIADO SOUTH",
+                    "wards": [
+                        "ENTONET\/LENKISIM",
+                        "MBIRIKANI\/ESELENKEI",
+                        "KUKU",
+                        "ROMBO",
+                        "KIMANA"
+                    ]
+                }
+            ]
+        },
+        {
+            "county_name": "KERICHO",
+            "county_code": "035",
+            "subcounties": [
+                {
+                    "name": "KIPKELION EAST",
+                    "wards": [
+                        "LONDIANI",
+                        "KEDOWA\/KIMUGUL",
+                        "CHEPSEON",
+                        "TENDENO\/SORGET"
+                    ]
+                },
+                {
+                    "name": "KIPKELION WEST",
+                    "wards": [
+                        "KUNYAK",
+                        "KAMASIAN",
+                        "KIPKELION",
+                        "CHILCHILA"
+                    ]
+                },
+                {
+                    "name": "AINAMOI",
+                    "wards": [
+                        "KAPSOIT",
+                        "AINAMOI",
+                        "KAPKUGERWET",
+                        "KIPCHEBOR",
+                        "KIPCHIMCHIM",
+                        "KAPSAOS"
+                    ]
+                },
+                {
+                    "name": "BURETI",
+                    "wards": [
+                        "KISIARA",
+                        "TEBESONIK",
+                        "CHEBOIN",
+                        "CHEMOSOT",
+                        "LITEIN",
+                        "CHEPLANGET",
+                        "KAPKATET"
+                    ]
+                },
+                {
+                    "name": "BELGUT",
+                    "wards": [
+                        "WALDAI",
+                        "KABIANGA",
+                        "CHEPTORORIET\/SERETUT",
+                        "CHAIK",
+                        "KAPSUSER"
+                    ]
+                },
+                {
+                    "name": "SIGOWET\/SOIN",
+                    "wards": [
+                        "SIGOWET",
+                        "KAPLELARTET",
+                        "SOLIAT",
+                        "SOIN"
+                    ]
+                }
+            ]
+        },
+        {
+            "county_name": "BOMET",
+            "county_code": "036",
+            "subcounties": [
+                {
+                    "name": "SOTIK",
+                    "wards": [
+                        "NDANAI\/ABOSI",
+                        "CHEMAGEL",
+                        "KIPSONOI",
+                        "KAPLETUNDO",
+                        "RONGENA\/MANARET"
+                    ]
+                },
+                {
+                    "name": "CHEPALUNGU",
+                    "wards": [
+                        "KONG'ASIS",
+                        "NYANGORES",
+                        "SIGOR",
+                        "CHEBUNYO",
+                        "SIONGIROI"
+                    ]
+                },
+                {
+                    "name": "BOMET EAST",
+                    "wards": [
+                        "MERIGI",
+                        "KEMBU",
+                        "LONGISA",
+                        "KIPRERES",
+                        "CHEMANER"
+                    ]
+                },
+                {
+                    "name": "BOMET CENTRAL",
+                    "wards": [
+                        "SILIBWET TOWNSHIP",
+                        "NDARAWETA",
+                        "SINGORWET",
+                        "CHESOEN",
+                        "MUTARAKWA"
+                    ]
+                },
+                {
+                    "name": "KONOIN",
+                    "wards": [
+                        "CHEPCHABAS",
+                        "KIMULOT",
+                        "MOGOGOSIEK",
+                        "BOITO",
+                        "EMBOMOS"
+                    ]
+                }
+            ]
+        },
+        {
+            "county_name": "KAKAMEGA",
+            "county_code": "037",
+            "subcounties": [
+                {
+                    "name": "LUGARI",
+                    "wards": [
+                        "MAUTUMA",
+                        "LUGARI",
+                        "LUMAKANDA",
+                        "CHEKALINI",
+                        "CHEVAYWA",
+                        "LWANDETI"
+                    ]
+                },
+                {
+                    "name": "LIKUYANI",
+                    "wards": [
+                        "LIKUYANI",
+                        "SANGO",
+                        "KONGONI",
+                        "NZOIA",
+                        "SINOKO"
+                    ]
+                },
+                {
+                    "name": "MALAVA",
+                    "wards": [
+                        "WEST KABRAS",
+                        "CHEMUCHE",
+                        "EAST KABRAS",
+                        "BUTALI\/CHEGULO",
+                        "MANDA-SHIVANGA",
+                        "SHIRUGU-MUGAI",
+                        "SOUTH KABRAS"
+                    ]
+                },
+                {
+                    "name": "LURAMBI",
+                    "wards": [
+                        "BUTSOTSO EAST",
+                        "BUTSOTSO SOUTH",
+                        "BUTSOTSO CENTRAL",
+                        "SHEYWE",
+                        "MAHIAKALO",
+                        "SHIRERE"
+                    ]
+                },
+                {
+                    "name": "NAVAKHOLO",
+                    "wards": [
+                        "INGOSTSE-MATHIA",
+                        "SHINOYI-SHIKOMARI-ESUMEYIA",
+                        "BUNYALA WEST",
+                        "BUNYALA EAST",
+                        "BUNYALA CENTRAL"
+                    ]
+                },
+                {
+                    "name": "MUMIAS WEST",
+                    "wards": [
+                        "MUMIAS CENTRAL",
+                        "MUMIAS NORTH",
+                        "ETENJE",
+                        "MUSANDA"
+                    ]
+                },
+                {
+                    "name": "MUMIAS EAST",
+                    "wards": [
+                        "LUSHEYA\/LUBINU",
+                        "MALAHA\/ISONGO\/MAKUNGA",
+                        "EAST WANGA"
+                    ]
+                },
+                {
+                    "name": "MATUNGU",
+                    "wards": [
+                        "KOYONZO",
+                        "KHOLERA",
+                        "KHALABA",
+                        "MAYONI",
+                        "NAMAMALI"
+                    ]
+                },
+                {
+                    "name": "BUTERE",
+                    "wards": [
+                        "MARAMA WEST",
+                        "MARAMA CENTRAL",
+                        "MARENYO - SHIANDA",
+                        "MARAMA NORTH",
+                        "MARAMA SOUTH"
+                    ]
+                },
+                {
+                    "name": "KHWISERO",
+                    "wards": [
+                        "KISA NORTH",
+                        "KISA EAST",
+                        "KISA WEST",
+                        "KISA CENTRAL"
+                    ]
+                },
+                {
+                    "name": "SHINYALU",
+                    "wards": [
+                        "ISUKHA NORTH",
+                        "MURHANDA",
+                        "ISUKHA CENTRAL",
+                        "ISUKHA SOUTH",
+                        "ISUKHA EAST",
+                        "ISUKHA WEST"
+                    ]
+                },
+                {
+                    "name": "IKOLOMANI",
+                    "wards": [
+                        "IDAKHO SOUTH",
+                        "IDAKHO EAST",
+                        "IDAKHO NORTH",
+                        "IDAKHO CENTRAL"
+                    ]
+                }
+            ]
+        },
+        {
+            "county_name": "VIHIGA",
+            "county_code": "038",
+            "subcounties": [
+                {
+                    "name": "VIHIGA",
+                    "wards": [
+                        "LUGAGA-WAMULUMA",
+                        "SOUTH MARAGOLI",
+                        "CENTRAL MARAGOLI",
+                        "MUNGOMA"
+                    ]
+                },
+                {
+                    "name": "SABATIA",
+                    "wards": [
+                        "LYADUYWA\/IZAVA",
+                        "WEST SABATIA",
+                        "CHAVAKALI",
+                        "NORTH MARAGOLI",
+                        "WODANGA",
+                        "BUSALI"
+                    ]
+                },
+                {
+                    "name": "HAMISI",
+                    "wards": [
+                        "SHIRU",
+                        "GISAMBAI",
+                        "SHAMAKHOKHO",
+                        "BANJA",
+                        "MUHUDU",
+                        "TAMBUA",
+                        "JEPKOYAI"
+                    ]
+                },
+                {
+                    "name": "LUANDA",
+                    "wards": [
+                        "LUANDA TOWNSHIP",
+                        "WEMILABI",
+                        "MWIBONA",
+                        "LUANDA SOUTH",
+                        "EMABUNGO"
+                    ]
+                },
+                {
+                    "name": "EMUHAYA",
+                    "wards": [
+                        "NORTH EAST BUNYORE",
+                        "CENTRAL BUNYORE",
+                        "WEST BUNYORE"
+                    ]
+                }
+            ]
+        },
+        {
+            "county_name": "BUNGOMA",
+            "county_code": "039",
+            "subcounties": [
+                {
+                    "name": "MT. ELGON",
+                    "wards": [
+                        "CHEPTAIS",
+                        "CHESIKAKI",
+                        "CHEPYUK",
+                        "KAPKATENY",
+                        "KAPTAMA",
+                        "ELGON"
+                    ]
+                },
+                {
+                    "name": "SIRISIA",
+                    "wards": [
+                        "NAMWELA",
+                        "MALAKISI\/SOUTH KULISIRU",
+                        "LWANDANYI"
+                    ]
+                },
+                {
+                    "name": "KABUCHAI",
+                    "wards": [
+                        "KABUCHAI\/CHWELE",
+                        "WEST NALONDO",
+                        "BWAKE\/LUUYA",
+                        "MUKUYUNI"
+                    ]
+                },
+                {
+                    "name": "BUMULA",
+                    "wards": [
+                        "SOUTH BUKUSU",
+                        "BUMULA",
+                        "KHASOKO",
+                        "KABULA",
+                        "KIMAETI",
+                        "WEST BUKUSU",
+                        "SIBOTI"
+                    ]
+                },
+                {
+                    "name": "KANDUYI",
+                    "wards": [
+                        "BUKEMBE WEST",
+                        "BUKEMBE EAST",
+                        "TOWNSHIP",
+                        "KHALABA",
+                        "MUSIKOMA",
+                        "EAST SANG'ALO",
+                        "MARAKARU\/TUUTI",
+                        "WEST SANG'ALO"
+                    ]
+                },
+                {
+                    "name": "WEBUYE EAST",
+                    "wards": [
+                        "MIHUU",
+                        "NDIVISI",
+                        "MARAKA"
+                    ]
+                },
+                {
+                    "name": "WEBUYE WEST",
+                    "wards": [
+                        "MISIKHU",
+                        "SITIKHO",
+                        "MATULO",
+                        "BOKOLI"
+                    ]
+                },
+                {
+                    "name": "KIMILILI",
+                    "wards": [
+                        "KIBINGEI",
+                        "KIMILILI",
+                        "MAENI",
+                        "KAMUKUYWA"
+                    ]
+                },
+                {
+                    "name": "TONGAREN",
+                    "wards": [
+                        "MBAKALO",
+                        "NAITIRI\/KABUYEFWE",
+                        "MILIMA",
+                        "NDALU\/ TABANI",
+                        "TONGAREN",
+                        "SOYSAMBU\/ MITUA"
+                    ]
+                }
+            ]
+        },
+        {
+            "county_name": "BUSIA",
+            "county_code": "040",
+            "subcounties": [
+                {
+                    "name": "TESO NORTH",
+                    "wards": [
+                        "MALABA CENTRAL",
+                        "MALABA NORTH",
+                        "ANG'URAI SOUTH",
+                        "ANG'URAI NORTH",
+                        "ANG'URAI EAST",
+                        "MALABA SOUTH"
+                    ]
+                },
+                {
+                    "name": "TESO SOUTH",
+                    "wards": [
+                        "ANG'OROM",
+                        "CHAKOL SOUTH",
+                        "CHAKOL NORTH",
+                        "AMUKURA WEST",
+                        "AMUKURA EAST",
+                        "AMUKURA CENTRAL"
+                    ]
+                },
+                {
+                    "name": "NAMBALE",
+                    "wards": [
+                        "NAMBALE TOWNSHIP",
+                        "BUKHAYO NORTH\/WALTSI",
+                        "BUKHAYO EAST",
+                        "BUKHAYO CENTRAL"
+                    ]
+                },
+                {
+                    "name": "MATAYOS",
+                    "wards": [
+                        "BUKHAYO WEST",
+                        "MAYENJE",
+                        "MATAYOS SOUTH",
+                        "BUSIBWABO",
+                        "BURUMBA"
+                    ]
+                },
+                {
+                    "name": "BUTULA",
+                    "wards": [
+                        "MARACHI WEST",
+                        "KINGANDOLE",
+                        "MARACHI CENTRAL",
+                        "MARACHI EAST",
+                        "MARACHI NORTH",
+                        "ELUGULU"
+                    ]
+                },
+                {
+                    "name": "FUNYULA",
+                    "wards": [
+                        "NAMBOBOTO NAMBUKU",
+                        "NANGINA",
+                        "AGENG'A NANGUBA",
+                        "BWIRI"
+                    ]
+                },
+                {
+                    "name": "BUDALANGI",
+                    "wards": [
+                        "BUNYALA CENTRAL",
+                        "BUNYALA NORTH",
+                        "BUNYALA WEST",
+                        "BUNYALA SOUTH"
+                    ]
+                }
+            ]
+        },
+        {
+            "county_name": "SIAYA",
+            "county_code": "041",
+            "subcounties": [
+                {
+                    "name": "UGENYA",
+                    "wards": [
+                        "WEST UGENYA",
+                        "UKWALA",
+                        "NORTH UGENYA",
+                        "EAST UGENYA"
+                    ]
+                },
+                {
+                    "name": "UGUNJA",
+                    "wards": [
+                        "SIDINDI",
+                        "SIGOMERE",
+                        "UGUNJA"
+                    ]
+                },
+                {
+                    "name": "ALEGO USONGA",
+                    "wards": [
+                        "USONGA",
+                        "WEST ALEGO",
+                        "CENTRAL ALEGO",
+                        "SIAYA TOWNSHIP",
+                        "NORTH ALEGO",
+                        "SOUTH EAST ALEGO"
+                    ]
+                },
+                {
+                    "name": "GEM",
+                    "wards": [
+                        "NORTH GEM",
+                        "WEST GEM",
+                        "CENTRAL GEM",
+                        "YALA TOWNSHIP",
+                        "EAST GEM",
+                        "SOUTH GEM"
+                    ]
+                },
+                {
+                    "name": "BONDO",
+                    "wards": [
+                        "WEST YIMBO",
+                        "CENTRAL SAKWA",
+                        "SOUTH SAKWA",
+                        "YIMBO EAST",
+                        "WEST SAKWA",
+                        "NORTH SAKWA"
+                    ]
+                },
+                {
+                    "name": "RARIEDA",
+                    "wards": [
+                        "EAST ASEMBO",
+                        "WEST ASEMBO",
+                        "NORTH UYOMA",
+                        "SOUTH UYOMA",
+                        "WEST UYOMA"
+                    ]
+                }
+            ]
+        },
+        {
+            "county_name": "KISUMU",
+            "county_code": "042",
+            "subcounties": [
+                {
+                    "name": "KISUMU EAST",
+                    "wards": [
+                        "KAJULU",
+                        "KOLWA EAST",
+                        "MANYATTA 'B'",
+                        "NYALENDA 'A'",
+                        "KOLWA CENTRAL"
+                    ]
+                },
+                {
+                    "name": "KISUMU WEST",
+                    "wards": [
+                        "SOUTH WEST KISUMU",
+                        "CENTRAL KISUMU",
+                        "KISUMU NORTH",
+                        "WEST KISUMU",
+                        "NORTH WEST KISUMU"
+                    ]
+                },
+                {
+                    "name": "KISUMU CENTRAL",
+                    "wards": [
+                        "RAILWAYS",
+                        "MIGOSI",
+                        "SHAURIMOYO KALOLENI",
+                        "MARKET MILIMANI",
+                        "KONDELE",
+                        "NYALENDA B"
+                    ]
+                },
+                {
+                    "name": "SEME",
+                    "wards": [
+                        "WEST SEME",
+                        "CENTRAL SEME",
+                        "EAST SEME",
+                        "NORTH SEME"
+                    ]
+                },
+                {
+                    "name": "NYANDO",
+                    "wards": [
+                        "EAST KANO\/WAWIDHI",
+                        "AWASI\/ONJIKO",
+                        "AHERO",
+                        "KABONYO\/KANYAGWAL",
+                        "KOBURA"
+                    ]
+                },
+                {
+                    "name": "MUHORONI",
+                    "wards": [
+                        "MIWANI",
+                        "OMBEYI",
+                        "MASOGO\/NYANG'OMA",
+                        "CHEMELIL",
+                        "MUHORONI\/KORU"
+                    ]
+                },
+                {
+                    "name": "NYAKACH",
+                    "wards": [
+                        "SOUTH WEST NYAKACH",
+                        "NORTH NYAKACH",
+                        "CENTRAL NYAKACH",
+                        "WEST NYAKACH",
+                        "SOUTH EAST NYAKACH"
+                    ]
+                }
+            ]
+        },
+        {
+            "county_name": "HOMA BAY",
+            "county_code": "043",
+            "subcounties": [
+                {
+                    "name": "KASIPUL",
+                    "wards": [
+                        "WEST KASIPUL",
+                        "SOUTH KASIPUL",
+                        "CENTRAL KASIPUL",
+                        "EAST KAMAGAK",
+                        "WEST KAMAGAK"
+                    ]
+                },
+                {
+                    "name": "KABONDO KASIPUL",
+                    "wards": [
+                        "KABONDO EAST",
+                        "KABONDO WEST",
+                        "KOKWANYO\/KAKELO",
+                        "KOJWACH"
+                    ]
+                },
+                {
+                    "name": "KARACHUONYO",
+                    "wards": [
+                        "WEST KARACHUONYO",
+                        "NORTH KARACHUONYO",
+                        "CENTRAL",
+                        "KANYALUO",
+                        "KIBIRI",
+                        "WANGCHIENG",
+                        "KENDU BAY TOWN"
+                    ]
+                },
+                {
+                    "name": "RANGWE",
+                    "wards": [
+                        "WEST GEM",
+                        "EAST GEM",
+                        "KAGAN",
+                        "KOCHIA"
+                    ]
+                },
+                {
+                    "name": "HOMA BAY TOWN",
+                    "wards": [
+                        "HOMA BAY CENTRAL",
+                        "HOMA BAY ARUJO",
+                        "HOMA BAY WEST",
+                        "HOMA BAY EAST"
+                    ]
+                },
+                {
+                    "name": "NDHIWA",
+                    "wards": [
+                        "KWABWAI",
+                        "KANYADOTO",
+                        "KANYIKELA",
+                        "KABUOCH NORTH",
+                        "KABUOCH SOUTH\/PALA",
+                        "KANYAMWA KOLOGI",
+                        "KANYAMWA KOSEWE"
+                    ]
+                },
+                {
+                    "name": "SUBA NORTH",
+                    "wards": [
+                        "MFANGANO ISLAND",
+                        "RUSINGA ISLAND",
+                        "KASGUNGA",
+                        "GEMBE",
+                        "LAMBWE"
+                    ]
+                },
+                {
+                    "name": "SUBA SOUTH",
+                    "wards": [
+                        "GWASSI SOUTH",
+                        "GWASSI NORTH",
+                        "KAKSINGRI WEST",
+                        "RUMA-KAKSINGRI"
+                    ]
+                }
+            ]
+        },
+        {
+            "county_name": "MIGORI",
+            "county_code": "044",
+            "subcounties": [
+                {
+                    "name": "RONGO",
+                    "wards": [
+                        "NORTH KAMAGAMBO",
+                        "CENTRAL KAMAGAMBO",
+                        "EAST KAMAGAMBO",
+                        "SOUTH KAMAGAMBO"
+                    ]
+                },
+                {
+                    "name": "AWENDO",
+                    "wards": [
+                        "NORTH SAKWA",
+                        "SOUTH SAKWA",
+                        "WEST SAKWA",
+                        "CENTRAL SAKWA"
+                    ]
+                },
+                {
+                    "name": "SUNA EAST",
+                    "wards": [
+                        "GOD JOPE",
+                        "SUNA CENTRAL",
+                        "KAKRAO",
+                        "KWA"
+                    ]
+                },
+                {
+                    "name": "SUNA WEST",
+                    "wards": [
+                        "WIGA",
+                        "WASWETA II",
+                        "RAGANA-ORUBA",
+                        "WASIMBETE"
+                    ]
+                },
+                {
+                    "name": "URIRI",
+                    "wards": [
+                        "WEST KANYAMKAGO",
+                        "NORTH KANYAMKAGO",
+                        "CENTRAL KANYAMKAGO",
+                        "SOUTH KANYAMKAGO",
+                        "EAST KANYAMKAGO"
+                    ]
+                },
+                {
+                    "name": "NYATIKE",
+                    "wards": [
+                        "KACHIEN'G",
+                        "KANYASA",
+                        "NORTH KADEM",
+                        "MACALDER\/KANYARWANDA",
+                        "KALER",
+                        "GOT KACHOLA",
+                        "MUHURU"
+                    ]
+                },
+                {
+                    "name": "KURIA WEST",
+                    "wards": [
+                        "BUKIRA EAST",
+                        "BUKIRA CENTRL\/IKEREGE",
+                        "ISIBANIA",
+                        "MAKERERO",
+                        "MASABA",
+                        "TAGARE",
+                        "NYAMOSENSE\/KOMOSOKO"
+                    ]
+                },
+                {
+                    "name": "KURIA EAST",
+                    "wards": [
+                        "GOKEHARAKA\/GETAMBWEGA",
+                        "NTIMARU WEST",
+                        "NTIMARU EAST",
+                        "NYABASI EAST",
+                        "NYABASI WEST"
+                    ]
+                }
+            ]
+        },
+        {
+            "county_name": "KISII",
+            "county_code": "045",
+            "subcounties": [
+                {
+                    "name": "BONCHARI",
+                    "wards": [
+                        "BOMARIBA",
+                        "BOGIAKUMU",
+                        "BOMORENDA",
+                        "RIANA"
+                    ]
+                },
+                {
+                    "name": "SOUTH MUGIRANGO",
+                    "wards": [
+                        "TABAKA",
+                        "BOIKANG'A",
+                        "BOGETENGA",
+                        "BORABU \/ CHITAGO",
+                        "MOTICHO",
+                        "GETENGA"
+                    ]
+                },
+                {
+                    "name": "BOMACHOGE BORABU",
+                    "wards": [
+                        "BOMBABA BORABU",
+                        "BOOCHI BORABU",
+                        "BOKIMONGE",
+                        "MAGENCHE"
+                    ]
+                },
+                {
+                    "name": "BOBASI",
+                    "wards": [
+                        "MASIGE WEST",
+                        "MASIGE EAST",
+                        "BASI CENTRAL",
+                        "NYACHEKI",
+                        "BASI BOGETAORIO",
+                        "BOBASI CHACHE",
+                        "SAMETA\/MOKWERERO",
+                        "BOBASI BOITANGARE"
+                    ]
+                },
+                {
+                    "name": "BOMACHOGE CHACHE",
+                    "wards": [
+                        "MAJOGE BASI",
+                        "BOOCHI\/TENDERE",
+                        "BOSOTI\/SENGERA"
+                    ]
+                },
+                {
+                    "name": "NYARIBARI MASABA",
+                    "wards": [
+                        "ICHUNI",
+                        "NYAMASIBI",
+                        "MASIMBA",
+                        "GESUSU",
+                        "KIAMOKAMA"
+                    ]
+                },
+                {
+                    "name": "NYARIBARI CHACHE",
+                    "wards": [
+                        "BOBARACHO",
+                        "KISII CENTRAL",
+                        "KEUMBU",
+                        "KIOGORO",
+                        "BIRONGO",
+                        "IBENO"
+                    ]
+                },
+                {
+                    "name": "KITUTU CHACHE NORTH",
+                    "wards": [
+                        "MONYERERO",
+                        "SENSI",
+                        "MARANI",
+                        "KEGOGI"
+                    ]
+                },
+                {
+                    "name": "KITUTU CHACHE SOUTH",
+                    "wards": [
+                        "BOGUSERO",
+                        "BOGEKA",
+                        "NYAKOE",
+                        "KITUTU CENTRAL",
+                        "NYATIEKO"
+                    ]
+                }
+            ]
+        },
+        {
+            "county_name": "NYAMIRA",
+            "county_code": "046",
+            "subcounties": [
+                {
+                    "name": "KITUTU MASABA",
+                    "wards": [
+                        "RIGOMA",
+                        "GACHUBA",
+                        "KEMERA",
+                        "MAGOMBO",
+                        "MANGA",
+                        "GESIMA"
+                    ]
+                },
+                {
+                    "name": "WEST MUGIRANGO",
+                    "wards": [
+                        "NYAMAIYA",
+                        "BOGICHORA",
+                        "BOSAMARO",
+                        "BONYAMATUTA",
+                        "TOWNSHIP"
+                    ]
+                },
+                {
+                    "name": "NORTH MUGIRANGO",
+                    "wards": [
+                        "ITIBO",
+                        "BOMWAGAMO",
+                        "BOKEIRA",
+                        "MAGWAGWA",
+                        "EKERENYO"
+                    ]
+                },
+                {
+                    "name": "BORABU",
+                    "wards": [
+                        "MEKENENE",
+                        "KIABONYORU",
+                        "NYANSIONGO",
+                        "ESISE"
+                    ]
+                }
+            ]
+        },
+        {
+            "county_name": "NAIROBI CITY",
+            "county_code": "047",
+            "subcounties": [
+                {
+                    "name": "WESTLANDS",
+                    "wards": [
+                        "KITISURU",
+                        "PARKLANDS\/HIGHRIDGE",
+                        "KARURA",
+                        "KANGEMI",
+                        "MOUNTAIN VIEW"
+                    ]
+                },
+                {
+                    "name": "DAGORETTI NORTH",
+                    "wards": [
+                        "KILIMANI",
+                        "KAWANGWARE",
+                        "GATINA",
+                        "KILELESHWA",
+                        "KABIRO"
+                    ]
+                },
+                {
+                    "name": "DAGORETTI SOUTH",
+                    "wards": [
+                        "MUTU-INI",
+                        "NGANDO",
+                        "RIRUTA",
+                        "UTHIRU\/RUTHIMITU",
+                        "WAITHAKA"
+                    ]
+                },
+                {
+                    "name": "LANGATA",
+                    "wards": [
+                        "KAREN",
+                        "NAIROBI WEST",
+                        "MUGUMU-INI",
+                        "SOUTH C",
+                        "NYAYO HIGHRISE"
+                    ]
+                },
+                {
+                    "name": "KIBRA",
+                    "wards": [
+                        "LAINI SABA",
+                        "LINDI",
+                        "MAKINA",
+                        "WOODLEY\/KENYATTA GOLF COUR",
+                        "SARANGOMBE"
+                    ]
+                },
+                {
+                    "name": "ROYSAMBU",
+                    "wards": [
+                        "GITHURAI",
+                        "KAHAWA WEST",
+                        "ZIMMERMAN",
+                        "ROYSAMBU",
+                        "KAHAWA"
+                    ]
+                },
+                {
+                    "name": "KASARANI",
+                    "wards": [
+                        "CLAY CITY",
+                        "MWIKI",
+                        "KASARANI",
+                        "NJIRU",
+                        "RUAI"
+                    ]
+                },
+                {
+                    "name": "RUARAKA",
+                    "wards": [
+                        "BABA DOGO",
+                        "UTALII",
+                        "MATHARE NORTH",
+                        "LUCKY SUMMER",
+                        "KOROGOCHO"
+                    ]
+                },
+                {
+                    "name": "EMBAKASI SOUTH",
+                    "wards": [
+                        "IMARA DAIMA",
+                        "KWA NJENGA",
+                        "KWA REUBEN",
+                        "PIPELINE",
+                        "KWARE"
+                    ]
+                },
+                {
+                    "name": "EMBAKASI NORTH",
+                    "wards": [
+                        "KARIOBANGI NORTH",
+                        "DANDORA AREA I",
+                        "DANDORA AREA II",
+                        "DANDORA AREA III",
+                        "DANDORA AREA IV"
+                    ]
+                },
+                {
+                    "name": "EMBAKASI CENTRAL",
+                    "wards": [
+                        "KAYOLE NORTH",
+                        "KAYOLE CENTRAL",
+                        "KAYOLE SOUTH",
+                        "KOMAROCK",
+                        "MATOPENI\/SPRING VALLEY"
+                    ]
+                },
+                {
+                    "name": "EMBAKASI EAST",
+                    "wards": [
+                        "UPPER SAVANNAH",
+                        "LOWER SAVANNAH",
+                        "EMBAKASI",
+                        "UTAWALA",
+                        "MIHANGO"
+                    ]
+                },
+                {
+                    "name": "EMBAKASI WEST",
+                    "wards": [
+                        "UMOJA I",
+                        "UMOJA II",
+                        "MOWLEM",
+                        "KARIOBANGI SOUTH"
+                    ]
+                },
+                {
+                    "name": "MAKADARA",
+                    "wards": [
+                        "MARINGO\/HAMZA",
+                        "VIWANDANI",
+                        "HARAMBEE",
+                        "MAKONGENI"
+                    ]
+                },
+                {
+                    "name": "KAMUKUNJI",
+                    "wards": [
+                        "PUMWANI",
+                        "EASTLEIGH NORTH",
+                        "EASTLEIGH SOUTH",
+                        "AIRBASE",
+                        "CALIFORNIA"
+                    ]
+                },
+                {
+                    "name": "STAREHE",
+                    "wards": [
+                        "NAIROBI CENTRAL",
+                        "NGARA",
+                        "PANGANI",
+                        "ZIWANI\/KARIOKOR",
+                        "LANDIMAWE",
+                        "NAIROBI SOUTH"
+                    ]
+                },
+                {
+                    "name": "MATHARE",
+                    "wards": [
+                        "HOSPITAL",
+                        "MABATINI",
+                        "HURUMA",
+                        "NGEI",
+                        "MLANGO KUBWA",
+                        "KIAMAIKO"
+                    ]
+                }
+            ]
+        },
+        {
+            "county_name": "DIASPORA",
+            "county_code": "048",
+            "subcounties": [
+                {
+                    "name": "DIASPORA",
+                    "wards": [
+                        "TANZANIA",
+                        "UGANDA",
+                        "RWANDA",
+                        "BURUNDI",
+                        "SOUTH AFRICA",
+                        "SOUTH SUDAN",
+                        "GERMANY",
+                        "UNITED KINGDOM",
+                        "QATAR",
+                        "UNITED ARAB EMIRATES",
+                        "CANADA",
+                        "UNITED STATES OF AMERICA"
+                    ]
+                }
+            ]
+        },
+        {
+            "county_name": "PRISONS",
+            "county_code": "049",
+            "subcounties": [
+                {
+                    "name": "PRISONS",
+                    "wards": [
+                        "PRISONS"
+                    ]
+                }
+            ]
+        }
+    ]
+}

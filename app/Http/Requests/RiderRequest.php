@@ -2,6 +2,8 @@
 
 namespace App\Http\Requests;
 
+use App\Models\Subcounty;
+use App\Models\Ward;
 use App\Models\VerifyManage;
 use App\Rules\EmailRule;
 use Illuminate\Foundation\Http\FormRequest;
@@ -36,6 +38,8 @@ class RiderRequest extends FormRequest
             $required = 'nullable';
             $userId = $this->routeIs('admin.rider.update') ? $this->user->id : auth()->user()->id;
         }
+        $isRegister = ! $this->routeIs('rider.profile.update', 'admin.rider.update');
+        $locationRequired = $isRegister ? 'required' : 'nullable';
 
         $verifyManage = Cache::rememberForever('verify_manage', function () {
             return VerifyManage::first();
@@ -66,7 +70,33 @@ class RiderRequest extends FormRequest
             'date_of_birth' => 'nullable|date',
             'driving_lience' => 'nullable|string',
             'vehicle_type' => 'required|string',
+            'county_id' => [$locationRequired, 'exists:counties,id'],
+            'subcounty_id' => [$locationRequired, 'exists:subcounties,id'],
+            'ward_id' => ['nullable', 'exists:wards,id'],
         ];
+    }
+
+    public function withValidator($validator)
+    {
+        $validator->after(function ($validator) {
+            $countyId = $this->input('county_id');
+            $subcountyId = $this->input('subcounty_id');
+            $wardId = $this->input('ward_id');
+
+            if ($countyId && $subcountyId) {
+                $subcounty = Subcounty::find($subcountyId);
+                if ($subcounty && $subcounty->county_id != $countyId) {
+                    $validator->errors()->add('subcounty_id', __('The selected sub-county does not belong to the selected county.'));
+                }
+            }
+
+            if ($subcountyId && $wardId) {
+                $ward = Ward::find($wardId);
+                if ($ward && $ward->subcounty_id != $subcountyId) {
+                    $validator->errors()->add('ward_id', __('The selected ward does not belong to the selected sub-county.'));
+                }
+            }
+        });
     }
 
     public function messages()

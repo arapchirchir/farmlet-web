@@ -31,33 +31,33 @@ jobs:
             git clean -fd
             echo "Removed untracked files and directories!"
 
-            rm -rf node_modules
-            echo "Removed node_modules!"
+            # rm -rf node_modules
+            # echo "Removed node_modules!"
 
-            rm -rf package-lock.json
-            echo "Removed package-lock.json!"
+            # rm -rf package-lock.json
+            # echo "Removed package-lock.json!"
 
-            php artisan optimize:clear
-            echo "Optimization Clear Completed!"
+            # php artisan optimize:clear
+            # echo "Optimization Clear Completed!"
 
 
-            composer install --no-interaction --no-dev --prefer-dist
-            echo "Composer Install/Update Completed!"
+            # composer install --no-interaction --no-dev --prefer-dist
+            # echo "Composer Install/Update Completed!"
 
-            composer dump-autoload -o
-            echo "Composer Dump Autoload Completed!"
+            # composer dump-autoload -o
+            # echo "Composer Dump Autoload Completed!"
 
             # php artisan migrate:rollback --force
 
-            cp .env.example .env
+            # cp .env.example .env
 
             # php artisan migrate:rollback --force
             # echo "Migration Rollback Completed!"
 
             php artisan migrate --force
 
-            # php artisan db:seed --class=SuperadminStaffSeeder --force
-            # echo "Migrations Completed!"
+            php artisan db:seed --class=CountyHierarchySeeder --force
+            echo "Migrations Completed!"
 
             # Sync AllGroups records (COMPLETED - Groups synced successfully on 2026-01-05)
             # php artisan groups:sync-all
@@ -69,8 +69,8 @@ jobs:
             php artisan optimize
             echo "Optimization Completed!"
 
-            rm -rf node_modules
-            echo "Removed node_modules!"
+            # rm -rf node_modules
+            # echo "Removed node_modules!"
 
             # Restart Server
             php artisan up

@@ -13,7 +13,7 @@ class RolePermissionController extends Controller
 {
     public function index()
     {
-        $notNeedRoles = ['shop', 'customer', 'driver'];
+        $notNeedRoles = ['shop', 'farmer', 'customer', 'driver'];
 
         $roles = Role::whereNotIn('name', $notNeedRoles)->with('permissions')->get();
 
@@ -122,7 +122,7 @@ class RolePermissionController extends Controller
             }
         }
 
-        $notNeedRoles = ['shop', 'customer', 'driver'];
+        $notNeedRoles = ['shop', 'farmer', 'customer', 'driver'];
         $rolesQuery = Role::whereNotIn('name', $notNeedRoles)->with('permissions');
 
         $firstItem = request('fst');

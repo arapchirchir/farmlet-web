@@ -5,7 +5,16 @@
             @if($required) <span class="text-danger">*</span> @endif
         </label>
     @endif
-    <select @if ($placeholder) data-placeholder="{{ $placeholder }}" @endif name="{{ $name }}" id="{{ $id ?? $name }}" class="form-control select2 @error($name) is-invalid @enderror" @if ($multiselect) multiple @endif style="width: 100%;">
+    <select
+        @if ($placeholder) data-placeholder="{{ $placeholder }}" @endif
+        {{ $attributes->merge([
+            'name' => $name,
+            'id' => $id ?? $name,
+            'class' => 'form-control select2 ' . ($errors->has($name) ? 'is-invalid' : ''),
+            'style' => 'width: 100%;',
+        ]) }}
+        @if ($multiselect) multiple @endif
+    >
         {{ $slot }}
     </select>
     @error($name)

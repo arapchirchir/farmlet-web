@@ -19,7 +19,7 @@ class EmployeeManageController extends Controller
 {
     public function index()
     {
-        $notNeedRoles = ['shop', 'customer', 'driver'];
+        $notNeedRoles = ['shop', 'farmer', 'customer', 'driver'];
 
         $users = User::whereHas('roles', function ($q) use ($notNeedRoles) {
             $q->whereNotIn('name', $notNeedRoles);
@@ -30,7 +30,7 @@ class EmployeeManageController extends Controller
 
     public function create()
     {
-        $notNeedRoles = ['shop', 'customer', 'driver'];
+        $notNeedRoles = ['shop', 'farmer', 'customer', 'driver'];
 
         $roles = Role::whereNotIn('name', $notNeedRoles)->get();
 

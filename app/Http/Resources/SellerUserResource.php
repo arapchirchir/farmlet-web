@@ -52,6 +52,12 @@ class SellerUserResource extends JsonResource
             'shop' => [
                 'id' => $shop->id,
                 'name' => $shop->name,
+                'seller_type' => $shop->seller_type,
+                'processing_supported' => (bool) $shop->processing_supported,
+                'approval_status' => $shop->approval_status,
+                'county_id' => $shop->county_id,
+                'subcounty_id' => $shop->subcounty_id,
+                'ward_id' => $shop->ward_id,
                 'logo' => $shop->logo,
                 'banner' => $shop->banner,
                 'address' => $shop->address,

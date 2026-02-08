@@ -84,6 +84,21 @@ class Order extends Model
         return $this->belongsTo(Shop::class, 'shop_id');
     }
 
+    public function county(): BelongsTo
+    {
+        return $this->belongsTo(County::class);
+    }
+
+    public function subcounty(): BelongsTo
+    {
+        return $this->belongsTo(Subcounty::class);
+    }
+
+    public function ward(): BelongsTo
+    {
+        return $this->belongsTo(Ward::class);
+    }
+
     /**
      * Get the coupon for the Order.
      */

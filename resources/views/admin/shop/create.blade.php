@@ -132,6 +132,72 @@
                         <x-input type="text" name="address" label="Address" placeholder="Enter Address" />
                     </div>
 
+                    <div class="col-md-4 mt-3 mt-md-0">
+                        <x-select label="{{ __('Seller Type') }}" name="seller_type" required="true">
+                            <option value="vendor" {{ old('seller_type') == 'vendor' ? 'selected' : '' }}>
+                                {{ __('Vendor') }}
+                            </option>
+                            <option value="farmer" {{ old('seller_type') == 'farmer' ? 'selected' : '' }}>
+                                {{ __('Farmer') }}
+                            </option>
+                        </x-select>
+                    </div>
+
+                    <div class="col-md-4 mt-3">
+                        <x-select label="{{ __('Processing Supported') }}" name="processing_supported">
+                            <option value="0" {{ old('processing_supported') == '0' ? 'selected' : '' }}>
+                                {{ __('No') }}
+                            </option>
+                            <option value="1" {{ old('processing_supported') == '1' ? 'selected' : '' }}>
+                                {{ __('Yes') }}
+                            </option>
+                        </x-select>
+                    </div>
+
+                    <div class="col-md-4 mt-3">
+                        <x-select
+                            label="{{ __('County') }}"
+                            name="county_id"
+                            required="true"
+                            data-location="county"
+                            data-subcounties-url="{{ route('admin.locations.subcounties') }}"
+                            data-wards-url="{{ route('admin.locations.wards') }}"
+                        >
+                            <option value="">{{ __('Select County') }}</option>
+                            @foreach ($counties as $county)
+                                <option value="{{ $county->id }}" {{ old('county_id') == $county->id ? 'selected' : '' }}>
+                                    {{ $county->name }}
+                                </option>
+                            @endforeach
+                        </x-select>
+                    </div>
+
+                    <div class="col-md-4 mt-3">
+                        <x-select
+                            label="{{ __('Sub-County') }}"
+                            name="subcounty_id"
+                            required="true"
+                            data-location="subcounty"
+                            data-default-option="{{ __('Select Sub-County') }}"
+                            data-selected="{{ old('subcounty_id') }}"
+                        >
+                            <option value="">{{ __('Select Sub-County') }}</option>
+                        </x-select>
+                    </div>
+
+                    <div class="col-md-4 mt-3">
+                        <x-select
+                            label="{{ __('Ward') }}"
+                            name="ward_id"
+                            required="true"
+                            data-location="ward"
+                            data-default-option="{{ __('Select Ward') }}"
+                            data-selected="{{ old('ward_id') }}"
+                        >
+                            <option value="">{{ __('Select Ward') }}</option>
+                        </x-select>
+                    </div>
+
                     <div class="col-md-6 mt-4">
                         <div>
                             <h5>
@@ -184,6 +250,7 @@
     </form>
 @endsection
 @push('scripts')
+    @include('partials.location-dependent')
     <script>
         function checkDescription() {
             var errDescription = document.getElementById('errorDescription');

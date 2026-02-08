@@ -25,6 +25,7 @@ class DatabaseSeeder extends Seeder
         $this->call(PageSeeder::class);
         $this->call(MenuSeeder::class);
         $this->call(CountrySeeder::class);
+        $this->call(CountyHierarchySeeder::class);
         $this->call(FooterSeeder::class);
         $this->call(HomeScreenSeeder::class);
         $this->call(UserSeeder::class);

@@ -18,6 +18,7 @@ use App\Http\Controllers\Shop\ProfileController;
 use App\Http\Controllers\Shop\SubscriptionController;
 use App\Http\Controllers\Shop\VoucherController;
 use App\Http\Controllers\Shop\WithdrawController;
+use App\Http\Controllers\LocationController;
 use Illuminate\Support\Facades\Route;
 use Twilio\Rest\Chat;
 
@@ -29,6 +30,9 @@ use Twilio\Rest\Chat;
 */
 
 Route::name('shop.')->group(function () {
+
+    Route::get('/locations/subcounties', [LocationController::class, 'subcounties'])->name('locations.subcounties');
+    Route::get('/locations/wards', [LocationController::class, 'wards'])->name('locations.wards');
 
     Route::controller(OrderController::class)->group(function () {
         Route::get('/download-invoice/{id}', 'downloadInvoice')->name('download-invoice');

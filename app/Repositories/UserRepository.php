@@ -136,6 +136,9 @@ class UserRepository extends Repository
             'date_of_birth' => $request->date_of_birth ?? null,
             'country' => $request->country,
             'phone_code' => $request->phone_code,
+            'county_id' => $request->county_id,
+            'subcounty_id' => $request->subcounty_id,
+            'ward_id' => $request->ward_id,
             'is_active' => true,
         ]);
     }
@@ -164,6 +167,9 @@ class UserRepository extends Repository
             'vehicle_type' => $request->vehicle_type,
             'country' => $request->country,
             'phone_code' => $request->phone_code,
+            'county_id' => $request->county_id,
+            'subcounty_id' => $request->subcounty_id,
+            'ward_id' => $request->ward_id,
             'is_active' => $request->is_active ? true : false,
             'shop_id' => $request->shop_id ?? null,
         ]);
@@ -209,6 +215,9 @@ class UserRepository extends Repository
             'vehicle_type' => $request->vehicle_type,
             'country' => $request->country ?? $user->country,
             'phone_code' => $request->phone_code ?? $user->phone_code,
+            'county_id' => $request->county_id ?? $user->county_id,
+            'subcounty_id' => $request->subcounty_id ?? $user->subcounty_id,
+            'ward_id' => $request->ward_id ?? $user->ward_id,
         ]);
 
         return $user;

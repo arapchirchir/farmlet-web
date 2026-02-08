@@ -10,6 +10,8 @@ enum Roles: string
     case CUSTOMER = 'customer';
     case VISITOR = 'visitor';
     case DRIVER = 'driver';
+    case FARMER = 'farmer';
+    case PROCESSING_MANAGER = 'processing_manager';
     case SUPPLIER = 'supplier';
     case MODERATOR = 'moderator';
 }

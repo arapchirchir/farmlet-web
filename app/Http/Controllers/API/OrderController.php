@@ -9,6 +9,10 @@ use App\Models\Customer;
 use App\Models\SMSConfig;
 use App\Enums\OrderStatus;
 use App\Enums\PaymentMethod;
+use App\Models\Address;
+use App\Models\Shop;
+use App\Models\Subcounty;
+use App\Models\Ward;
 use App\Models\VerifyManage;
 use Illuminate\Http\Request;
 use App\Services\TwilioService;
@@ -87,11 +91,30 @@ class OrderController extends Controller
         $tokens = cartAccessToken(request());
         $customer =Customer::firstWhere('id', $tokens['customer_id']) ?? null;
 
+        $address = null;
         if (!$request->address_id) {
             $validated = Validator::make(
                 $request->all(),
                 (new AddressRequest())->rules()
             )->validate();
+
+            $countyId = $validated['county_id'] ?? null;
+            $subcountyId = $validated['subcounty_id'] ?? null;
+            $wardId = $validated['ward_id'] ?? null;
+
+            if ($countyId && $subcountyId) {
+                $subcounty = Subcounty::find($subcountyId);
+                if ($subcounty && $subcounty->county_id != $countyId) {
+                    return $this->json('Selected sub-county does not belong to the selected county', [], 422);
+                }
+            }
+
+            if ($subcountyId && $wardId) {
+                $ward = Ward::find($wardId);
+                if ($ward && $ward->subcounty_id != $subcountyId) {
+                    return $this->json('Selected ward does not belong to the selected sub-county', [], 422);
+                }
+            }
             $validatedRequest = new Request($validated);
 
             $address = AddressRepository::storeByGuestUser($validatedRequest);
@@ -100,6 +123,8 @@ class OrderController extends Controller
                 'customer_id' => $address->customer_id,
             ]);
             $customer =Customer::firstWhere('id', $address->customer_id) ?? null;
+        } else {
+            $address = Address::find($request->address_id);
         }
         $isBuyNow = $request->is_buy_now ?? false;
 
@@ -109,6 +134,40 @@ class OrderController extends Controller
 
         if (! $user) {
             return $this->json('User not found', [], 422);
+        }
+
+        if (! $address) {
+            return $this->json('Address not found', [], 422);
+        }
+
+        if (! $address->subcounty_id) {
+            return $this->json('Address must be linked to a sub-county', [], 422);
+        }
+
+        $shops = Shop::query()
+            ->whereIn('id', $request->shop_ids)
+            ->get(['id', 'county_id', 'subcounty_id']);
+
+        if ($shops->whereNull('subcounty_id')->count() > 0) {
+            return $this->json('Selected shop(s) are missing sub-county assignment', [], 422);
+        }
+
+        $shopSubcounties = $shops->pluck('subcounty_id')->filter()->unique();
+        if ($shopSubcounties->count() !== 1) {
+            return $this->json('Cross-sub-county orders are not allowed', [], 422);
+        }
+
+        if ($shopSubcounties->first() !== $address->subcounty_id) {
+            return $this->json('Selected shop(s) are not in the same sub-county as the delivery address', [], 422);
+        }
+
+        if ($address->county_id && $shops->whereNull('county_id')->count() > 0) {
+            return $this->json('Selected shop(s) are missing county assignment', [], 422);
+        }
+
+        $shopCounties = $shops->pluck('county_id')->filter()->unique();
+        if ($address->county_id && $shopCounties->count() === 1 && $shopCounties->first() !== $address->county_id) {
+            return $this->json('Selected shop(s) are not in the same county as the delivery address', [], 422);
         }
         // $user = auth()->user();
 

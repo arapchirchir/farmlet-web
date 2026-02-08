@@ -8,6 +8,7 @@ use App\Http\Requests\AdminLoginRequest;
 use App\Http\Requests\ShopCreateRequest;
 use App\Models\GoogleReCaptcha;
 use App\Models\User;
+use App\Models\County;
 use App\Repositories\ShopRepository;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -104,7 +105,9 @@ class LoginController extends Controller
 
     public function create()
     {
-        return view('shop.auth.create');
+        $counties = County::query()->orderBy('name')->get();
+
+        return view('shop.auth.create', compact('counties'));
     }
 
     public function store(ShopCreateRequest $request)

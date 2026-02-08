@@ -50,6 +50,7 @@ use App\Http\Controllers\Admin\CategoryAttributeController;
 use App\Http\Controllers\Admin\MailConfigurationController;
 use App\Http\Controllers\Admin\CustomerNotificationController;
 use App\Http\Controllers\Admin\MarketController;
+use App\Http\Controllers\LocationController;
 
 /*
 |--------------------------------------------------------------------------
@@ -71,6 +72,8 @@ Route::name('admin.')->group(function () {
 
 
     Route::middleware(['auth', 'checkPermission'])->group(function () {
+        Route::get('/locations/subcounties', [LocationController::class, 'subcounties'])->name('locations.subcounties');
+        Route::get('/locations/wards', [LocationController::class, 'wards'])->name('locations.wards');
         // Dashboard
         Route::get('/', [DashboardController::class, 'index'])->name('dashboard.index');
         Route::post('/statistics', [DashboardController::class, 'orderStatistics'])->name('dashboard.statistics');
@@ -156,7 +159,7 @@ Route::name('admin.')->group(function () {
             Route::post('/store', 'store')->name('categoryAttribute.store');
             Route::post('/update/{categoryAttribute}', 'update')->name('categoryAttribute.update');
             Route::get('/show', 'show')->name('categoryAttribute.show');
-            Route::post('/menu-update', 'menuUpdate')->name('categoryAttribute.menu.update');
+            Route::post('/menu-update', 'menuUpdate')->name('category.menu.update');
             Route::delete('/{categoryAttribute}/destroy', 'destroy')->name('categoryAttribute.destroy');
              Route::get('/category-attribute/{category}/add', 'getCategoryAttribute')->name('getCategoryAttribute');
         });

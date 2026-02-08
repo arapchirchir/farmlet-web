@@ -10,6 +10,7 @@ use App\Http\Requests\RiderRequest;
 use App\Models\Driver;
 use App\Models\Order;
 use App\Models\User;
+use App\Models\County;
 use App\Repositories\DriverRepository;
 use App\Repositories\UserRepository;
 use Illuminate\Http\Request;
@@ -37,7 +38,9 @@ class RiderController extends Controller
      */
     public function create()
     {
-        return view('admin.rider.create');
+        $counties = County::query()->orderBy('name')->get();
+
+        return view('admin.rider.create', compact('counties'));
     }
 
     /**
@@ -83,7 +86,9 @@ class RiderController extends Controller
      */
     public function edit(User $user)
     {
-        return view('admin.rider.edit', compact('user'));
+        $counties = County::query()->orderBy('name')->get();
+
+        return view('admin.rider.edit', compact('user', 'counties'));
     }
 
     /**

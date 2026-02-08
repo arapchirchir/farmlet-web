@@ -88,6 +88,21 @@ class User extends Authenticatable
         return $this->belongsTo(Customer::class, 'id', 'user_id');
     }
 
+    public function county(): BelongsTo
+    {
+        return $this->belongsTo(County::class);
+    }
+
+    public function subcounty(): BelongsTo
+    {
+        return $this->belongsTo(Subcounty::class);
+    }
+
+    public function ward(): BelongsTo
+    {
+        return $this->belongsTo(Ward::class);
+    }
+
     /**
      * get coupons model for this user.
      * */

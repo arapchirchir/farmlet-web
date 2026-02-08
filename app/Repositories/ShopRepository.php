@@ -6,6 +6,7 @@ use Carbon\Carbon;
 use App\Models\Shop;
 use App\Models\Media;
 use App\Models\Banner;
+use App\Enums\Roles;
 use App\Repositories\MediaRepository;
 use App\Http\Requests\ShopCreateRequest;
 use Abedin\Maker\Repositories\Repository;
@@ -31,10 +32,15 @@ class ShopRepository extends Repository
         $user = UserRepository::registerNewUser($request);
 
         // assign role
-        $user->assignRole('shop');
+        $sellerType = $request->seller_type ?? 'vendor';
+        $role = $sellerType === 'farmer' ? Roles::FARMER->value : Roles::SHOP->value;
+        $user->assignRole($role);
 
         // create wallet
         WalletRepository::storeByRequest($user);
+
+        $isApi = $request->is('api/*');
+        $approvalStatus = $request->approval_status ?? ($isApi ? 'pending_approval' : 'approved');
 
         // create new shop and return
         return self::create([
@@ -45,6 +51,12 @@ class ShopRepository extends Repository
             'delivery_charge' => $request->delivery_charge ?? 0,
             'address' => $request->address,
             'description' => $request->description,
+            'seller_type' => $sellerType,
+            'processing_supported' => (bool) $request->processing_supported,
+            'approval_status' => $approvalStatus,
+            'county_id' => $request->county_id,
+            'subcounty_id' => $request->subcounty_id,
+            'ward_id' => $request->ward_id,
             'status' => true,
         ]);
     }
@@ -70,6 +82,12 @@ class ShopRepository extends Repository
             'opening_time' => $request->opening_time ?? $shop->opening_time,
             'closing_time' => $request->closing_time ?? $shop->closing_time,
             'estimated_delivery_time' => $request->estimated_delivery_time ?? $shop->estimated_delivery_time,
+            'seller_type' => $request->seller_type ?? $shop->seller_type,
+            'processing_supported' => $request->processing_supported ?? $shop->processing_supported,
+            'approval_status' => $request->approval_status ?? $shop->approval_status,
+            'county_id' => $request->county_id ?? $shop->county_id,
+            'subcounty_id' => $request->subcounty_id ?? $shop->subcounty_id,
+            'ward_id' => $request->ward_id ?? $shop->ward_id,
         ]);
 
         return $shop;

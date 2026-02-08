@@ -2,6 +2,8 @@
 
 namespace App\Http\Requests;
 
+use App\Models\Subcounty;
+use App\Models\Ward;
 use App\Models\VerifyManage;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Support\Facades\Cache;
@@ -40,6 +42,9 @@ class AddressRequest extends FormRequest
         return [
             'name' => 'required|string|max:255',
             'phone' => 'required|numeric|min_digits:'.$min.'|max_digits:'.$max,
+            'county_id' => 'required|exists:counties,id',
+            'subcounty_id' => 'required|exists:subcounties,id',
+            'ward_id' => 'required|exists:wards,id',
             'area' => 'nullable|string|max:255',
             'flat_no' => 'nullable|string|max:255',
             'post_code' => 'nullable|string|max:255',
@@ -51,6 +56,29 @@ class AddressRequest extends FormRequest
             'latitude' => 'nullable|numeric|max:255',
             'email'=>[$email,'email','max:150']
         ];
+    }
+
+    public function withValidator($validator)
+    {
+        $validator->after(function ($validator) {
+            $countyId = $this->input('county_id');
+            $subcountyId = $this->input('subcounty_id');
+            $wardId = $this->input('ward_id');
+
+            if ($countyId && $subcountyId) {
+                $subcounty = Subcounty::find($subcountyId);
+                if ($subcounty && $subcounty->county_id != $countyId) {
+                    $validator->errors()->add('subcounty_id', __('The selected sub-county does not belong to the selected county.'));
+                }
+            }
+
+            if ($subcountyId && $wardId) {
+                $ward = Ward::find($wardId);
+                if ($ward && $ward->subcounty_id != $subcountyId) {
+                    $validator->errors()->add('ward_id', __('The selected ward does not belong to the selected sub-county.'));
+                }
+            }
+        });
     }
 
     public function messages(): array

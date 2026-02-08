@@ -21,6 +21,21 @@ class Address extends Model
         return $this->belongsTo(Customer::class);
     }
 
+    public function county(): BelongsTo
+    {
+        return $this->belongsTo(County::class);
+    }
+
+    public function subcounty(): BelongsTo
+    {
+        return $this->belongsTo(Subcounty::class);
+    }
+
+    public function ward(): BelongsTo
+    {
+        return $this->belongsTo(Ward::class);
+    }
+
     /**
      * Get all of the orders.
      */

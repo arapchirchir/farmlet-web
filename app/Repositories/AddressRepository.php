@@ -42,6 +42,9 @@ class AddressRepository extends Repository
             'customer_id' => auth()->user()->customer->id,
             'name' => $request->name,
             'phone' => $request->phone,
+            'county_id' => $request->county_id,
+            'subcounty_id' => $request->subcounty_id,
+            'ward_id' => $request->ward_id,
             'area' => $request->area,
             'flat_no' => $request->flat_no,
             'post_code' => $request->post_code,
@@ -49,7 +52,7 @@ class AddressRepository extends Repository
             'address_line2' => $request->address_line2,
             'address_type' => $request->address_type,
             'is_default' => $customer->addresses ? $isDefault : true,
-            'latitude' => $request->longitude,
+            'latitude' => $request->latitude,
             'longitude' => $request->longitude,
         ]);
     }
@@ -73,6 +76,9 @@ class AddressRepository extends Repository
         $address->update([
             'name' => $request->name,
             'phone' => $request->phone,
+            'county_id' => $request->county_id,
+            'subcounty_id' => $request->subcounty_id,
+            'ward_id' => $request->ward_id,
             'area' => $request->area,
             'flat_no' => $request->flat_no,
             'post_code' => $request->post_code,
@@ -115,7 +121,10 @@ class AddressRepository extends Repository
                     'address_line2' => $request->address_line2,
                     'address_type' => $request->address_type,
                     'is_default' => true,
-                    'latitude' => $request->longitude,
+                    'county_id' => $request->county_id,
+                    'subcounty_id' => $request->subcounty_id,
+                    'ward_id' => $request->ward_id,
+                    'latitude' => $request->latitude,
                     'longitude' => $request->longitude,
                 ]
             );
@@ -141,6 +150,9 @@ class AddressRepository extends Repository
             'customer_id' => $user->customer->id,
             'name' => $request->name,
             'phone' => $request->phone,
+            'county_id' => $request->county_id,
+            'subcounty_id' => $request->subcounty_id,
+            'ward_id' => $request->ward_id,
             'area' => $request->area,
             'flat_no' => $request->flat_no,
             'post_code' => $request->post_code,
@@ -148,7 +160,7 @@ class AddressRepository extends Repository
             'address_line2' => $request->address_line2,
             'address_type' => $request->address_type,
             'is_default' => true,
-            'latitude' => $request->longitude,
+            'latitude' => $request->latitude,
             'longitude' => $request->longitude,
         ]);
     }

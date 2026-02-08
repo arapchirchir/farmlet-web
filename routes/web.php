@@ -73,8 +73,8 @@ Route::controller(PaymentGatewayController::class)->group(function () {
     Route::get('/payment/{payment}/callback-cancel', 'cancel')->name('payment.cancel');
 
     // success and cancel routes for callback
-    Route::post('/payment/{payment}/callback-success', 'success')->name('payment.success.post');
-    Route::post('/payment/{payment}/callback-cancel', 'cancel')->name('payment.cancel.post');
+    Route::post('/payment/{payment}/callback-success', 'success')->name('payment.success');
+    Route::post('/payment/{payment}/callback-cancel', 'cancel')->name('payment.cancel');
 });
 
 //Paypal Payment success

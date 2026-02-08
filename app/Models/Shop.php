@@ -28,6 +28,21 @@ class Shop extends Model
         return $this->belongsTo(User::class);
     }
 
+    public function county(): BelongsTo
+    {
+        return $this->belongsTo(County::class);
+    }
+
+    public function subcounty(): BelongsTo
+    {
+        return $this->belongsTo(Subcounty::class);
+    }
+
+    public function ward(): BelongsTo
+    {
+        return $this->belongsTo(Ward::class);
+    }
+
     public function subscriptions(): HasMany
     {
         return $this->hasMany(ShopSubscription::class);

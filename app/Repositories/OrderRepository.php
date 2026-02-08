@@ -5,6 +5,7 @@ namespace App\Repositories;
 use App\Models\Shop;
 use App\Models\Order;
 use App\Models\Payment;
+use App\Models\Address;
 use App\Models\Currency;
 use App\Models\Customer;
 use App\Enums\OrderStatus;
@@ -151,8 +152,12 @@ class OrderRepository extends Repository
 
         $currency = Currency::where('id', $request->currencyData['id'])->first();
         $tokens = cartAccessToken(request());
+        $address = Address::find($request->address_id);
         $order = self::create([
             'shop_id' => $shop->id,
+            'county_id' => $address?->county_id,
+            'subcounty_id' => $address?->subcounty_id,
+            'ward_id' => $address?->ward_id,
             'order_code' => str_pad($lastOrderId + 1, 6, '0', STR_PAD_LEFT),
             'prefix' => $shop->prefix ?? 'RG',
             'customer_id' => $tokens['customer_id'] ?? null,

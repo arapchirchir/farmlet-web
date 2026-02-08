@@ -18,6 +18,9 @@ class AddressResource extends JsonResource
             'id' => $this->id,
             'name' => $this->name,
             'phone' => $this->phone,
+            'county_id' => $this->county_id,
+            'subcounty_id' => $this->subcounty_id,
+            'ward_id' => $this->ward_id,
             'area' => $this->area,
             'flat_no' => $this->flat_no,
             'address_type' => $this->address_type,
@@ -26,7 +29,7 @@ class AddressResource extends JsonResource
             'post_code' => $this->post_code,
             'is_default' => (bool) $this->is_default,
             'latitude' => $this->latitude,
-            'latitude' => $this->latitude,
+            'longitude' => $this->longitude,
         ];
     }
 }

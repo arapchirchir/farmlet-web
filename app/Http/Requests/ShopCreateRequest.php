@@ -2,6 +2,8 @@
 
 namespace App\Http\Requests;
 
+use App\Models\Subcounty;
+use App\Models\Ward;
 use App\Models\VerifyManage;
 use App\Rules\EmailRule;
 use Illuminate\Foundation\Http\FormRequest;
@@ -30,6 +32,9 @@ class ShopCreateRequest extends FormRequest
             $user = $this->shop?->user;
             $required = 'nullable';
         }
+        $isSellerRegister = $this->routeIs('seller.register', 'admin.shop.store', 'shop.register.submit');
+        $locationRequired = $isSellerRegister ? 'required' : 'nullable';
+        $sellerTypeRequired = $isSellerRegister ? 'required' : 'nullable';
 
         $verifyManage = Cache::rememberForever('verify_manage', function () {
             return VerifyManage::first();
@@ -58,7 +63,35 @@ class ShopCreateRequest extends FormRequest
             'shop_logo' => [$required, 'max:10240'],
             'shop_banner' => [$required, 'max:10240'],
             'description' => ['nullable', 'string', 'max:200'],
+            'seller_type' => [$sellerTypeRequired, 'in:vendor,farmer'],
+            'processing_supported' => ['nullable', 'boolean'],
+            'county_id' => [$locationRequired, 'exists:counties,id'],
+            'subcounty_id' => [$locationRequired, 'exists:subcounties,id'],
+            'ward_id' => [$locationRequired, 'exists:wards,id'],
         ];
+    }
+
+    public function withValidator($validator)
+    {
+        $validator->after(function ($validator) {
+            $countyId = $this->input('county_id');
+            $subcountyId = $this->input('subcounty_id');
+            $wardId = $this->input('ward_id');
+
+            if ($countyId && $subcountyId) {
+                $subcounty = Subcounty::find($subcountyId);
+                if ($subcounty && $subcounty->county_id != $countyId) {
+                    $validator->errors()->add('subcounty_id', __('The selected sub-county does not belong to the selected county.'));
+                }
+            }
+
+            if ($subcountyId && $wardId) {
+                $ward = Ward::find($wardId);
+                if ($ward && $ward->subcounty_id != $subcountyId) {
+                    $validator->errors()->add('ward_id', __('The selected ward does not belong to the selected sub-county.'));
+                }
+            }
+        });
     }
 
     public function messages(): array

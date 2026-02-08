@@ -8,6 +8,7 @@ use App\Http\Requests\ShopPasswordResetRequest;
 use App\Models\Notification;
 use App\Models\Review;
 use App\Models\Shop;
+use App\Models\County;
 use App\Repositories\ShopRepository;
 use Illuminate\Support\Facades\Hash;
 
@@ -28,7 +29,9 @@ class ShopController extends Controller
      */
     public function create()
     {
-        return view('admin.shop.create');
+        $counties = County::query()->orderBy('name')->get();
+
+        return view('admin.shop.create', compact('counties'));
     }
 
     /**
@@ -57,7 +60,9 @@ class ShopController extends Controller
      */
     public function edit(Shop $shop)
     {
-        return view('admin.shop.edit', compact('shop'));
+        $counties = County::query()->orderBy('name')->get();
+
+        return view('admin.shop.edit', compact('shop', 'counties'));
     }
 
     /**
