@@ -70,7 +70,19 @@ class DashboardController extends Controller
 
         $flashSale = FlashSaleRepository::getIncoming()->first();
 
-        return view('admin.dashboard', compact('totalShop', 'totalOrder', 'totalCustomer', 'totalProduct', 'orderStatuses', 'topCustomers', 'topSellingProducts', 'topReviewProducts', 'topShops', 'latestOrders', 'topFavorites', 'pendingWithdraw', 'alreadyWithdraw', 'deniedWithdraw', 'totalCommission', 'totalCategories', 'flashSale', 'totalRider'));
+        // Generate status counts dynamically for all order statuses
+        $statusCounts = [];
+        foreach ($orderStatuses as $status) {
+            $camelCase = \Str::camel($status->value);
+            $statusCounts[$camelCase] = Order::when($shop, function ($query) use ($shop) {
+                return $query->where('shop_id', $shop?->id);
+            })->where('order_status', $status->value)->count();
+        }
+
+        return view('admin.dashboard', array_merge(
+            compact('totalShop', 'totalOrder', 'totalCustomer', 'totalProduct', 'orderStatuses', 'topCustomers', 'topSellingProducts', 'topReviewProducts', 'topShops', 'latestOrders', 'topFavorites', 'pendingWithdraw', 'alreadyWithdraw', 'deniedWithdraw', 'totalCommission', 'totalCategories', 'flashSale', 'totalRider'),
+            $statusCounts
+        ));
     }
 
     public function orderStatistics()

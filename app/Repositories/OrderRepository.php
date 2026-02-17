@@ -20,6 +20,8 @@ use App\Models\CartAccessToken;
 use App\Models\GeneraleSetting;
 use App\Http\Requests\OrderRequest;
 use App\Repositories\CurrencyRepository;
+use App\Repositories\EscrowLedgerRepository;
+use App\Repositories\DriverRepository;
 use Abedin\Maker\Repositories\Repository;
 
 class OrderRepository extends Repository
@@ -140,6 +142,8 @@ class OrderRepository extends Repository
                 } catch (\Throwable $th) {
                 }
             }
+
+            self::createEscrowEntries($order);
         }
 
         $payment->update([
@@ -398,6 +402,8 @@ class OrderRepository extends Repository
             }
         }
 
+        self::createEscrowEntries($newOrder);
+
         return $newOrder;
     }
 
@@ -617,6 +623,15 @@ class OrderRepository extends Repository
             }
         }
 
+        // Release Escrow
+        $ledgers = EscrowLedgerRepository::query()->where('order_id', $order->id)->where('status', 'held')->get();
+        
+        foreach ($ledgers as $ledger) {
+            EscrowLedgerRepository::release($ledger);
+        }
+
+        // --- Original Settlement Logic (Credits Wallets) ---
+
         $order->update([
             'delivery_date' => $order->delivery_date ?? now(),
             'delivered_at' => $order->delivered_at ?? now(),
@@ -642,5 +657,94 @@ class OrderRepository extends Repository
         $driverOrder->update(['is_completed' => true]);
 
         return true;
+    }
+
+    public static function createEscrowEntries(Order $order): void
+    {
+        $generaleSetting = GeneraleSetting::first();
+
+        // 1. Admin Commission
+        $commission = 0;
+        if ($generaleSetting?->business_based_on == 'commission' && $generaleSetting?->commission_charge != 'monthly') {
+            if ($generaleSetting?->commission_type != 'fixed') {
+                $commission = $order->total_amount * $generaleSetting->commission / 100;
+            } else {
+                $commission = $generaleSetting->commission ?? 0;
+            }
+        }
+
+        if ($commission > 0) {
+            $adminWallet = WalletRepository::getAdminWallet();
+            EscrowLedgerRepository::store(
+                order: $order,
+                actorId: $adminWallet->user_id,
+                actorType: 'admin',
+                amount: $commission,
+                type: 'commission',
+                description: 'Admin commission',
+                walletId: $adminWallet->id
+            );
+        }
+
+        // 2. Vendor Amount (Total - Commission)
+        // Note: Total amount usually includes product price. Logic here simplifies "Order Total" as vendor's share.
+        // In a real split, we'd subtract commission from this, but the original logic credits "total_amount" to vendor 
+        // and then debits "commission". We will mirror that for "Held" state but split if needed.
+        // Consistent with release logic: Credit Total, Debit Commission.
+        
+        $vendorWallet = $order->shop->user->wallet;
+        if (!$vendorWallet) {
+             $vendorWallet = WalletRepository::storeByRequest($order->shop->user);
+        }
+
+        EscrowLedgerRepository::store(
+            order: $order,
+            actorId: $order->shop->user_id,
+            actorType: 'vendor',
+            amount: $order->total_amount,
+            type: 'item_price',
+            description: 'Order item total',
+            walletId: $vendorWallet->id
+        );
+
+        // 3. Driver Fee
+        // Current logic: Driver fee is `delivery_charge`.
+        // At creation, driver might be null. 
+        if ($order->delivery_charge > 0) {
+             // If driver is assigned later, we might need to update this or create it then.
+             // For now, we create it with null actor/wallet if driver not assigned.
+             $driverId = $order->driver_id ? $order->driver->user_id : null;
+             $driverWalletId = null;
+             
+             if ($order->driver_id) {
+                 $driverWallet = DriverRepository::getWallet($order->driver);
+                 $driverWalletId = $driverWallet->id;
+             }
+             
+             EscrowLedgerRepository::store(
+                order: $order,
+                actorId: $driverId, 
+                actorType: 'driver',
+                amount: $order->delivery_charge,
+                type: 'delivery_fee',
+                description: 'Delivery fee',
+                walletId: $driverWalletId
+            );
+        }
+
+        // 4. VAT/Tax
+        foreach ($order->vatTaxes as $vatTax) {
+             // Assuming VAT goes to Admin or specific Tax Authority wallet (Admin for now)
+             $adminWallet = WalletRepository::getAdminWallet();
+             EscrowLedgerRepository::store(
+                order: $order,
+                actorId: $adminWallet->user_id, 
+                actorType: 'admin',
+                amount: $vatTax->amount,
+                type: 'vat',
+                description: $vatTax->name,
+                walletId: $adminWallet->id
+            );
+        }
     }
 }

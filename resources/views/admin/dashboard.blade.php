@@ -125,7 +125,11 @@
                     $icons = [
                         'pending' => asset('assets/icons-admin/clock.svg'),
                         'confirm' => asset('assets/icons-admin/shopping-cart-check.svg'),
+                        'vendorPreparing' => asset('assets/icons-admin/rotate-circle.svg'),
+                        'pickupForProcessing' => asset('assets/icons-admin/delivery-cart-arrow-up.svg'),
+                        'atProcessingRoom' => asset('assets/icons-admin/rotate-circle.svg'),
                         'processing' => asset('assets/icons-admin/rotate-circle.svg'),
+                        'readyForDelivery' => asset('assets/icons-admin/box-check.svg'),
                         'pickup' => asset('assets/icons-admin/delivery-cart-arrow-up.svg'),
                         'delivered' => asset('assets/icons-admin/box-check.svg'),
                         'onTheWay' => asset('assets/icons-admin/truck.svg'),

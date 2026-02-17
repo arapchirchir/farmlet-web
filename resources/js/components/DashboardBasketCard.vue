@@ -118,14 +118,20 @@ watch(route, () => {
 });
 
 const processToCheckout = () => {
-    if (BasketStore.selectedShopIds.length === 0) {
-        toast.error('Please select at least one shop', {
+    // Automatically gather all shop IDs from cart items
+    const shopIds = [...new Set(BasketStore.products.map(product => product.shop_id))];
+    BasketStore.selectedShopIds = shopIds;
+
+    if (shopIds.length === 0) {
+        toast.error('Your cart is empty', {
             position: master.langDirection === 'rtl' ? "bottom-right" : "bottom-left",
         });
         return;
     }
-    showCardCanvas()
-    router.push('/checkout')
+    
+    showCardCanvas();
+    router.push('/checkout');
 }
+
 
 </script>

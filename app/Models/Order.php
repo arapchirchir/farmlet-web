@@ -153,6 +153,11 @@ class Order extends Model
         return $this->belongsTo(DriverOrder::class, 'id', 'order_id');
     }
 
+    public function escrowLedgers(): HasMany
+    {
+        return $this->hasMany(EscrowLedger::class);
+    }
+
     /**
      * apply global scope
      */
