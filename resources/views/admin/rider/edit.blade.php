@@ -106,6 +106,18 @@
                                     <x-input type="text" name="driving_lience" label="Driving License"
                                         placeholder="Enter License" :value="$user?->driving_lience" />
                                 </div>
+
+                                <div class="mt-3">
+                                    <x-input type="file" name="driving_license_proof" label="License / ID Proof" />
+                                    <small class="text-muted d-block">
+                                        {{ __('Supported formats: jpg, jpeg, png, pdf (max 4 MB)') }}
+                                    </small>
+                                    @if ($user?->driving_license_proof)
+                                        <a href="{{ $user->driving_license_proof }}" target="_blank" class="d-inline-block mt-2">
+                                            {{ __('View current proof') }}
+                                        </a>
+                                    @endif
+                                </div>
                             </div>
                             <div class="col-lg-5">
 

@@ -79,15 +79,24 @@ class OrderController extends Controller
         })->when($orderStatus == 'pending', function ($query) {
             return $query->where('order_status', OrderStatus::PENDING->value);
         })->when($orderStatus == 'confirm', function ($query) {
-            return $query->where('order_status', OrderStatus::CONFIRM->value);
+            return $query->whereIn('order_status', [
+                OrderStatus::CONFIRM->value,
+                OrderStatus::VENDOR_PREPARING->value,
+            ]);
         })->when($orderStatus == 'to_pickup', function ($query) {
-            return $query->whereHas('driverOrder')->where(function ($query) {
-                $query->where('order_status', OrderStatus::CONFIRM->value)->orWhere('order_status', OrderStatus::PROCESSING->value);
-            });
+            return $query->whereHas('driverOrder')->whereIn('order_status', [
+                OrderStatus::CONFIRM->value,
+                OrderStatus::VENDOR_PREPARING->value,
+                OrderStatus::PICKUP_FOR_PROCESSING->value,
+                OrderStatus::AT_PROCESSING_ROOM->value,
+                OrderStatus::PROCESSING->value,
+            ]);
         })->when($orderStatus == 'to_delivery', function ($query) {
-            return $query->where(function ($query) {
-                $query->where('order_status', OrderStatus::ON_THE_WAY->value)->orWhere('order_status', OrderStatus::PICKUP->value);
-            });
+            return $query->whereIn('order_status', [
+                OrderStatus::READY_FOR_DELIVERY->value,
+                OrderStatus::PICKUP->value,
+                OrderStatus::ON_THE_WAY->value,
+            ]);
         })->when($orderStatus == 'delivered', function ($query) {
             return $query->where('order_status', OrderStatus::DELIVERED->value);
         });
@@ -114,30 +123,39 @@ class OrderController extends Controller
         //     return $query->where('order_status', OrderStatus::DELIVERED->value);
         // })->count();
 
-        $statuses = $shop->orders()
-            ->selectRaw('
-                COUNT(CASE WHEN order_status = ? THEN 1 END) as pending,
-                COUNT(CASE WHEN order_status = ? THEN 1 END) as confirm,
-                COUNT(CASE WHEN order_status IN (?, ?) AND EXISTS (
-                    SELECT 1 FROM driver_orders WHERE driver_orders.order_id = orders.id
-                ) THEN 1 END) as toPickup,
-                COUNT(CASE WHEN order_status IN (?, ?) THEN 1 END) as toDelivery,
-                COUNT(CASE WHEN order_status = ? THEN 1 END) as delivered
-            ', [
-                OrderStatus::PENDING->value,
+        $pending = $shop->orders()
+            ->where('order_status', OrderStatus::PENDING->value)
+            ->count();
+
+        $confirm = $shop->orders()
+            ->whereIn('order_status', [
                 OrderStatus::CONFIRM->value,
+                OrderStatus::VENDOR_PREPARING->value,
+            ])
+            ->count();
+
+        $toPickup = $shop->orders()
+            ->whereHas('driverOrder')
+            ->whereIn('order_status', [
                 OrderStatus::CONFIRM->value,
+                OrderStatus::VENDOR_PREPARING->value,
+                OrderStatus::PICKUP_FOR_PROCESSING->value,
+                OrderStatus::AT_PROCESSING_ROOM->value,
                 OrderStatus::PROCESSING->value,
+            ])
+            ->count();
+
+        $toDelivery = $shop->orders()
+            ->whereIn('order_status', [
+                OrderStatus::READY_FOR_DELIVERY->value,
                 OrderStatus::PICKUP->value,
                 OrderStatus::ON_THE_WAY->value,
-                OrderStatus::DELIVERED->value,
-            ])->first();
+            ])
+            ->count();
 
-        $pending = $statuses->pending;
-        $confirm = $statuses->confirm;
-        $toPickup = $statuses->toPickup;
-        $toDelivery = $statuses->toDelivery;
-        $delivered = $statuses->delivered;
+        $delivered = $shop->orders()
+            ->where('order_status', OrderStatus::DELIVERED->value)
+            ->count();
 
         $totalOrders = $shop->orders->count();
 
@@ -200,14 +218,19 @@ class OrderController extends Controller
             return $this->json('Sorry, this order is not found', [], 422);
         }
 
-        $orderStatus = $request->order_status == 'cancel' ? OrderStatus::CANCELLED->value : OrderStatus::CONFIRM->value;
+        $orderStatus = OrderStatus::CONFIRM->value;
+        if ($request->order_status == 'cancel') {
+            $orderStatus = OrderStatus::CANCELLED->value;
+        } elseif (($order->order_type ?? 'raw') === 'processed') {
+            $orderStatus = OrderStatus::VENDOR_PREPARING->value;
+        }
 
         $order->update([
             'order_status' => $orderStatus,
         ]);
 
         $title = 'Order status updated';
-        $message = 'Your order status updated to '.$request->status.' order code: '.$order->prefix.$order->order_code;
+        $message = 'Your order status updated to '.$orderStatus.' order code: '.$order->prefix.$order->order_code;
         $deviceKeys = $order->customer->user->devices->pluck('key')->toArray();
 
         try {

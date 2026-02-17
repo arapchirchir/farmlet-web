@@ -94,6 +94,7 @@ class UserRepository extends Repository
             'auth_type' => $provider,
             'auth_id' => $request['id'],
             'gender' => $request['gender'],
+            'country' => self::supportedCountry(),
             'is_active' => true,
             'password' => Hash::make('password'),
             'media_id' => $media ? $media->id : null,
@@ -134,7 +135,7 @@ class UserRepository extends Repository
             'media_id' => $thumbnail ? $thumbnail->id : null,
             'gender' => $request->gender,
             'date_of_birth' => $request->date_of_birth ?? null,
-            'country' => $request->country,
+            'country' => self::supportedCountry(),
             'phone_code' => $request->phone_code,
             'county_id' => $request->county_id,
             'subcounty_id' => $request->subcounty_id,
@@ -146,11 +147,19 @@ class UserRepository extends Repository
     public static function storeByRequest($request): User
     {
         $thumbnail = null;
+        $drivingLicenseMedia = null;
         if ($request->hasFile('profile_photo')) {
             $thumbnail = MediaRepository::storeByRequest(
                 $request->profile_photo,
                 'users/profile',
                 'image'
+            );
+        }
+
+        if ($request->hasFile('driving_license_proof')) {
+            $drivingLicenseMedia = MediaRepository::storeByRequest(
+                $request->file('driving_license_proof'),
+                'users/driving-license'
             );
         }
 
@@ -163,9 +172,10 @@ class UserRepository extends Repository
             'password' => Hash::make($request->password ?? $request->phone),
             'media_id' => $thumbnail ? $thumbnail->id : null,
             'driving_lience' => $request->driving_lience,
+            'driving_license_media_id' => $drivingLicenseMedia?->id,
             'date_of_birth' => $request->date_of_birth,
             'vehicle_type' => $request->vehicle_type,
-            'country' => $request->country,
+            'country' => self::supportedCountry(),
             'phone_code' => $request->phone_code,
             'county_id' => $request->county_id,
             'subcounty_id' => $request->subcounty_id,
@@ -202,6 +212,7 @@ class UserRepository extends Repository
     public static function updateByRequest($request, $user): User
     {
         $thumbnail = self::updateProfilePhoto($request, $user);
+        $drivingLicenseMedia = self::updateDrivingLicenseProof($request, $user);
         $name = $request->name ?? $request->first_name;
         $user->update([
             'name' => $name,
@@ -212,8 +223,9 @@ class UserRepository extends Repository
             'gender' => $request->gender,
             'date_of_birth' => $request->date_of_birth ? Carbon::parse($request->date_of_birth)->format('Y-m-d') : $user->date_of_birth,
             'driving_lience' => $request->driving_lience,
+            'driving_license_media_id' => $drivingLicenseMedia?->id ?? $user->driving_license_media_id,
             'vehicle_type' => $request->vehicle_type,
-            'country' => $request->country ?? $user->country,
+            'country' => self::supportedCountry(),
             'phone_code' => $request->phone_code ?? $user->phone_code,
             'county_id' => $request->county_id ?? $user->county_id,
             'subcounty_id' => $request->subcounty_id ?? $user->subcounty_id,
@@ -249,6 +261,21 @@ class UserRepository extends Repository
         return $thumbnail;
     }
 
+    private static function updateDrivingLicenseProof($request, $user)
+    {
+        $drivingLicenseMedia = $user->drivingLicenseMedia;
+        if (! $request->hasFile('driving_license_proof')) {
+            return $drivingLicenseMedia;
+        }
+
+        return MediaRepository::updateByRequest(
+            $request->file('driving_license_proof'),
+            'users/driving-license',
+            null,
+            $drivingLicenseMedia
+        );
+    }
+
 
      public static function registerGuestUser(Request $request ,User $user)
     {
@@ -260,11 +287,16 @@ class UserRepository extends Repository
             'password' => Hash::make($request->password),
             'gender' => $request->gender,
             'date_of_birth' => $request->date_of_birth ?? null,
-            'country' => $request->country,
+            'country' => self::supportedCountry(),
             'phone_code' => $request->phone_code,
             'is_active' => true,
         ]);
         return $user;
+    }
+
+    private static function supportedCountry(): string
+    {
+        return (string) config('farmlet.supported_country', 'Kenya');
     }
 
 }

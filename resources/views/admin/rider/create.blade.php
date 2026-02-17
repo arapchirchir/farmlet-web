@@ -102,6 +102,14 @@
                                         placeholder="Enter License" />
                                 </div>
 
+                                <div class="mt-3">
+                                    <x-input type="file" name="driving_license_proof" label="License / ID Proof"
+                                        required="true" />
+                                    <small class="text-muted d-block">
+                                        {{ __('Supported formats: jpg, jpeg, png, pdf (max 4 MB)') }}
+                                    </small>
+                                </div>
+
                                 <div class="row">
                                     <div class="col-md-6 mt-3">
                                         <x-input type="text" name="password" label="Password"

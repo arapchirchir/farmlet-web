@@ -6,6 +6,7 @@ use App\Enums\PaymentMethod;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\RiderRequest;
 use App\Http\Resources\RiderUserResource;
+use App\Repositories\DriverRepository;
 use App\Repositories\UserRepository;
 
 class UserController extends Controller
@@ -16,13 +17,14 @@ class UserController extends Controller
     public function show()
     {
         $user = auth()->user();
+        $driver = DriverRepository::ensureDriverAccess($user);
 
-        $currentMonthDelivered = $user->driver->driverOrders()
+        $currentMonthDelivered = $driver->driverOrders()
             ->whereYear('created_at', date('Y'))
             ->whereMonth('created_at', date('m'))
             ->where('is_completed', true)->count();
 
-        $currentMonthCashCollected = $user->driver->driverOrders()
+        $currentMonthCashCollected = $driver->driverOrders()
             ->whereYear('created_at', date('Y'))
             ->whereMonth('created_at', date('m'))
             ->where('is_completed', true)

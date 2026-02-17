@@ -72,7 +72,7 @@ class OrderController extends Controller
         $order->update(['order_status' => $request->status]);
 
         if ($request->status == OrderStatus::DELIVERED->value) {
-            $this->updateWalletAndTransaction($order);
+            OrderRepository::releaseSettlementIfEligible($order);
         }
 
         if ($request->status == OrderStatus::CANCELLED->value) {

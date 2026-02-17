@@ -29,7 +29,13 @@ class AuthController extends Controller
         // Create a new user
         $oldUser = UserRepository::query()->where('phone', $request->phone)->orWhere('email', $request->email)->first();
         if ($oldUser) {
-           $user = UserRepository::registerGuestUser($request, $oldUser);
+            $user = UserRepository::registerGuestUser($request, $oldUser);
+            $this->ensureCustomerAccess($user);
+
+            if ($request->device_key) {
+                DeviceKeyRepository::storeByRequest($user, $request);
+            }
+
             return $this->json('Registration successfully complete', [
                 'user' => new UserResource($user),
                 'access' => UserRepository::getAccessToken($user),
@@ -42,12 +48,7 @@ class AuthController extends Controller
         }
 
         // Create a new customer
-        CustomerRepository::storeByRequest($user);
-
-        // create wallet
-        WalletRepository::storeByRequest($user);
-
-        $user->assignRole(Roles::CUSTOMER->value);
+        $this->ensureCustomerAccess($user);
 
         return $this->json('Registration successfully complete', [
             'user' => new UserResource($user),
@@ -117,4 +118,19 @@ class AuthController extends Controller
     }
 
     public function callback(Request $request) {}
+
+    private function ensureCustomerAccess(User $user): void
+    {
+        if (! $user->customer) {
+            CustomerRepository::storeByRequest($user);
+        }
+
+        if (! $user->wallet) {
+            WalletRepository::storeByRequest($user);
+        }
+
+        if (! $user->hasRole(Roles::CUSTOMER->value)) {
+            $user->assignRole(Roles::CUSTOMER->value);
+        }
+    }
 }

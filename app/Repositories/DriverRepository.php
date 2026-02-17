@@ -3,9 +3,11 @@
 namespace App\Repositories;
 
 use Abedin\Maker\Repositories\Repository;
+use App\Enums\Roles;
 use App\Models\Driver;
 use App\Models\Order;
 use App\Models\User;
+use App\Services\ActorUniqueIdService;
 use App\Services\NotificationServices;
 
 class DriverRepository extends Repository
@@ -17,9 +19,26 @@ class DriverRepository extends Repository
 
     public static function storeByUser(User $user)
     {
-        $driver = self::create([
-            'user_id' => $user->id,
-        ]);
+        return self::ensureDriverAccess($user);
+    }
+
+    public static function ensureDriverAccess(User $user): Driver
+    {
+        if (! $user->hasRole(Roles::DRIVER->value)) {
+            $user->assignRole(Roles::DRIVER->value);
+        }
+
+        $driver = self::query()->withTrashed()->firstWhere('user_id', $user->id);
+
+        if (! $driver) {
+            $driver = self::create([
+                'user_id' => $user->id,
+            ]);
+        } elseif ($driver->trashed()) {
+            $driver->restore();
+        }
+
+        ActorUniqueIdService::assign($user, ActorUniqueIdService::ROLE_DRIVER, $user->county_id);
 
         self::getWallet($driver);
 
@@ -56,6 +75,10 @@ class DriverRepository extends Repository
 
     public static function assignOrder(Order $order, Driver $driver): Driver
     {
+        $order->update([
+            'driver_id' => $driver->id,
+        ]);
+
         $driver->driverOrders()->create([
             'order_id' => $order->id,
             'driver_id' => $driver->id,

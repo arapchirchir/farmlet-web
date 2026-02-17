@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests;
 
+use App\Enums\Roles;
 use App\Models\GoogleReCaptcha;
 use App\Models\User;
 use App\Rules\CaptchaValidate;
@@ -35,7 +36,13 @@ class AdminLoginRequest extends FormRequest
         if ($reCaptcha && $reCaptcha->is_active) {
 
             $user = User::where('email', $this->email)->first();
-            $isAdmin = ($user && $user->hasRole('root')) ? true : false;
+            $isAdmin = (bool) ($user && $user->hasAnyRole([
+                Roles::ROOT->value,
+                Roles::ADMIN->value,
+                Roles::PROCESSING_MANAGER->value,
+                Roles::SUPPLIER->value,
+                Roles::MODERATOR->value,
+            ]));
 
             if (! $isAdmin) {
                 $rules['g-recaptcha-response'] = ['required', new CaptchaValidate];

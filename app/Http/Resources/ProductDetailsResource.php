@@ -28,7 +28,8 @@ class ProductDetailsResource extends JsonResource
             $favorite = $user->customer->favorites()->where('product_id', $this->id)->exists();
         }
 
-        $discountPercentage = $this->getDiscountPercentage($this->price, $this->discount_price);
+        $rawBasePrice = $this->raw_price ?? $this->price;
+        $discountPercentage = $this->getDiscountPercentage($rawBasePrice, $this->discount_price);
         $totalSold = $this->orders->sum('pivot.quantity');
 
         $flashSale = $this->flashSales?->first();
@@ -49,10 +50,11 @@ class ProductDetailsResource extends JsonResource
             }
         }
 
-        $price = $this->price * $request->currencyData['rate'];
+        $price = $rawBasePrice * $request->currencyData['rate'];
         $discountPrice = $flashSaleProduct ? $flashSaleProduct->pivot?->price : $this->discount_price;
         $discountCurrencyPrice = $discountPrice  * $request->currencyData['rate'];
         $discountCurrencyPercentage = $discountPercentage  * $request->currencyData['rate'];
+        $processedPrice = $this->processed_price ? ($this->processed_price * $request->currencyData['rate']) : null;
 
         $translation = $this->translations()?->where('lang', $lang)->first();
         $name = $translation?->name ?? $this->name;
@@ -88,6 +90,9 @@ class ProductDetailsResource extends JsonResource
             'price' => (float) number_format($price, 2, '.', ''),
             'discount_price' => (float) number_format($discountCurrencyPrice, 2, '.', ''),
             'discount_percentage' => (float) number_format($discountCurrencyPercentage, 2, '.', ''),
+            'processing_available' => (bool) $this->processing_available,
+            'raw_price' => (float) number_format($price, 2, '.', ''),
+            'processed_price' => $processedPrice !== null ? (float) number_format($processedPrice, 2, '.', '') : null,
             'rating' => (float) $this->averageRating ?? 0.0,
             'total_reviews' => (string) Number::abbreviate($this->reviews?->count(), maxPrecision: 2),
             'total_sold' => (string) number_format($totalSold, 0, '.', ','),

@@ -25,6 +25,7 @@ use App\Http\Controllers\API\SocialAuthController;
 use App\Http\Controllers\API\SupportTicketController;
 use App\Http\Controllers\Admin\WhatsAppChatController;
 use App\Http\Controllers\API\TicketIssueTypeController;
+use App\Http\Controllers\API\ProcessingManager\OrderController as ProcessingManagerOrderController;
 use App\Http\Controllers\API\Auth\ForgotPasswordController;
 use App\Http\Controllers\API\SupportTicketMessageController;
 
@@ -142,6 +143,8 @@ Route::controller(CartController::class)->group(function () {
 });
  // order route
 Route::controller(OrderController::class)->group(function () {
+    Route::get('/eligible-sellers', 'eligibleSellers');
+    Route::get('/eligible-drivers', 'eligibleDrivers');
     Route::post('/place-order', 'store');
     Route::get('/order-payment/{order}/{paymentMethod?}', 'payment');
 });
@@ -174,6 +177,7 @@ Route::middleware(['auth:sanctum', 'role:customer'])->group(function () {
         Route::get('/orders', 'index');
         Route::get('/order-details', 'show');
         Route::post('/orders/cancel', 'cancel');
+        Route::post('/orders/confirm-delivery', 'confirmDelivery');
         Route::post('/place-order/again', 'reOrder');
     });
 
@@ -242,6 +246,14 @@ Route::middleware(['auth:sanctum', 'role:customer'])->group(function () {
         return response()->noContent();
     });
 });
+
+Route::middleware(['auth:sanctum', 'role:processing_manager'])
+    ->prefix('/processing-manager')
+    ->controller(ProcessingManagerOrderController::class)
+    ->group(function () {
+        Route::post('/orders/confirm-receipt', 'confirmReceipt');
+        Route::post('/orders/ready-for-delivery', 'readyForDelivery');
+    });
 
 
 Route::get('/unread-messages', [ChatController::class, 'unreadMessages']);

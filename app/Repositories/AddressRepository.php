@@ -38,7 +38,7 @@ class AddressRepository extends Repository
             $customer->addresses()->update(['is_default' => false]);
         }
 
-        return self::create([
+        $address = self::create([
             'customer_id' => auth()->user()->customer->id,
             'name' => $request->name,
             'phone' => $request->phone,
@@ -51,10 +51,16 @@ class AddressRepository extends Repository
             'address_line' => $request->address_line,
             'address_line2' => $request->address_line2,
             'address_type' => $request->address_type,
-            'is_default' => $customer->addresses ? $isDefault : true,
+            'is_default' => $customer->addresses && $customer->addresses->count() > 0 ? $isDefault : true,
             'latitude' => $request->latitude,
             'longitude' => $request->longitude,
         ]);
+
+        if ($address->is_default) {
+            self::syncUserLocation(auth()->user(), $request->county_id, $request->subcounty_id, $request->ward_id);
+        }
+
+        return $address;
     }
 
     /**
@@ -88,6 +94,10 @@ class AddressRepository extends Repository
             'is_default' => $isDefault,
         ]);
 
+        if ($address->is_default) {
+            self::syncUserLocation(auth()->user(), $request->county_id, $request->subcounty_id, $request->ward_id);
+        }
+
         return $address;
     }
 
@@ -97,6 +107,18 @@ class AddressRepository extends Repository
         $user = UserRepository::query()->where('phone', $request->phone)->orWhere('email', $request->email)->first();
         $tokens = cartAccessToken(request());
         if ($user) {
+            if (! $user->customer) {
+                CustomerRepository::storeByRequest($user);
+            }
+
+            if (! $user->wallet) {
+                WalletRepository::storeByRequest($user);
+            }
+
+            if (! $user->hasRole(Roles::CUSTOMER->value)) {
+                $user->assignRole(Roles::CUSTOMER->value);
+            }
+
             if ($user->customer?->addresses()->count() > 0) {
                 $user->customer?->addresses()->update(['is_default' => false]);
             }
@@ -105,9 +127,12 @@ class AddressRepository extends Repository
                 'name' => $request->name,
                 'phone' => $request->phone,
                 'email' => $request->email,
+                'county_id' => $request->county_id,
+                'subcounty_id' => $request->subcounty_id,
+                'ward_id' => $request->ward_id,
             ]);
 
-            return Address::updateOrCreate(
+            $address = Address::updateOrCreate(
                 [
                     'customer_id' => $user->customer->id,
                     'phone' => $request->phone,
@@ -128,6 +153,12 @@ class AddressRepository extends Repository
                     'longitude' => $request->longitude,
                 ]
             );
+
+            if ($address->is_default) {
+                self::syncUserLocation($user, $request->county_id, $request->subcounty_id, $request->ward_id);
+            }
+
+            return $address;
         }
 
         // Create a new user
@@ -143,6 +174,8 @@ class AddressRepository extends Repository
         WalletRepository::storeByRequest($user);
 
         $user->assignRole(Roles::CUSTOMER->value);
+
+        self::syncUserLocation($user, $request->county_id, $request->subcounty_id, $request->ward_id);
 
         CartAccessToken::where('access_token', $tokens['access_token'])->update(['customer_id' => $user->customer->id]);
 
@@ -162,6 +195,15 @@ class AddressRepository extends Repository
             'is_default' => true,
             'latitude' => $request->latitude,
             'longitude' => $request->longitude,
+        ]);
+    }
+
+    private static function syncUserLocation($user, ?int $countyId, ?int $subcountyId, ?int $wardId): void
+    {
+        $user->update([
+            'county_id' => $countyId,
+            'subcounty_id' => $subcountyId,
+            'ward_id' => $wardId,
         ]);
     }
 }

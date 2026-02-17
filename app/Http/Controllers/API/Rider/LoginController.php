@@ -53,6 +53,8 @@ class LoginController extends Controller
                 return $this->json('Your account is not active. please contact the admin', [], Response::HTTP_BAD_REQUEST);
             }
 
+            DriverRepository::ensureDriverAccess($user);
+
             if ($request->device_key && ! $this->findByKey($request->device_key, $user)) {
                 DeviceKey::create([
                     'user_id' => $user->id,
@@ -79,9 +81,7 @@ class LoginController extends Controller
     public function register(RiderRequest $request)
     {
         $user = UserRepository::storeByRequest($request);
-        $user->assignRole(Roles::DRIVER->value);
-
-        DriverRepository::storeByUser($user);
+        DriverRepository::ensureDriverAccess($user);
 
         $user->update(['is_active' => false]);
 
@@ -106,7 +106,7 @@ class LoginController extends Controller
     private function authenticate($request)
     {
         $user = UserRepository::findByContact($request->phone);
-        if (! is_null($user) && $user->driver) {
+        if (! is_null($user) && ($user->driver || $user->hasRole(Roles::DRIVER->value))) {
             if (Hash::check($request->password, $user->password)) {
                 return $user;
             }

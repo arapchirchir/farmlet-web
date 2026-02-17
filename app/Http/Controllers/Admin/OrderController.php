@@ -56,9 +56,20 @@ class OrderController extends Controller
     {
         $orderStatus = OrderStatus::cases();
 
-        $riders = Driver::whereHas('user', function ($query) {
-            return $query->where('is_active', true);
-        })->get();
+        $riders = Driver::query()
+            ->where('status', 'available')
+            ->whereHas('user', function ($query) use ($order) {
+                $query->where('is_active', true);
+
+                if ($order->subcounty_id) {
+                    $query->where('subcounty_id', $order->subcounty_id);
+                }
+
+                if ($order->county_id) {
+                    $query->where('county_id', $order->county_id);
+                }
+            })
+            ->get();
 
         return view('admin.order.show', compact('order', 'orderStatus', 'riders'));
     }
@@ -87,10 +98,47 @@ class OrderController extends Controller
     {
         $request->validate(['status' => 'required']);
 
-        $order->update(['order_status' => $request->status]);
+        $status = $request->status;
+        $authUser = auth()->user();
+        $skipManualNotification = false;
+
+        if ($authUser?->hasRole(Roles::PROCESSING_MANAGER->value)) {
+            if (($order->order_type ?? 'raw') !== 'processed') {
+                return back()->with('error', __('Processing managers can only update processed orders.'));
+            }
+
+            if (! $authUser->county_id || ! $authUser->subcounty_id) {
+                return back()->with('error', __('Processing manager account must be bound to county and sub-county.'));
+            }
+
+            if (
+                (int) $authUser->county_id !== (int) $order->county_id
+                || (int) $authUser->subcounty_id !== (int) $order->subcounty_id
+            ) {
+                return back()->with('error', __('This order is outside your assigned location.'));
+            }
+
+            $allowedStatuses = [
+                OrderStatus::PROCESSING->value,
+                OrderStatus::READY_FOR_DELIVERY->value,
+            ];
+
+            if (! in_array($status, $allowedStatuses, true)) {
+                return back()->with('error', __('You can only confirm receipt or ready-for-delivery stages.'));
+            }
+
+            try {
+                OrderRepository::OrderStatusUpdateFromProcessingManager($order, $status);
+                $skipManualNotification = true;
+            } catch (\RuntimeException $exception) {
+                return back()->with('error', __($exception->getMessage()));
+            }
+        } else {
+            $order->update(['order_status' => $status]);
+        }
 
         $title = 'Order status updated';
-        $message = 'Your order status updated to ' . $request->status;
+        $message = 'Your order status updated to ' . $status;
         $deviceKeys = $order->customer->user->devices->pluck('key')->toArray();
 
         // Fetch Twilio config
@@ -112,7 +160,7 @@ class OrderController extends Controller
         }
 
 
-        if ($request->status == OrderStatus::CANCELLED->value) {
+        if ($status == OrderStatus::CANCELLED->value) {
             foreach ($order->products as $product) {
 
                 $qty = $product->pivot->quantity;
@@ -140,19 +188,21 @@ class OrderController extends Controller
             }
         }
 
-        try {
-            NotificationServices::sendNotification($message, $deviceKeys, $title);
-        } catch (\Throwable $th) {
+        if (! $skipManualNotification) {
+            try {
+                NotificationServices::sendNotification($message, $deviceKeys, $title);
+            } catch (\Throwable $th) {
+            }
+
+            $notify = (object) [
+                'title' => $title,
+                'content' => $message,
+                'user_id' => $order->customer->user_id,
+                'type' => 'order',
+            ];
+
+            NotificationRepository::storeByRequest($notify);
         }
-
-        $notify = (object) [
-            'title' => $title,
-            'content' => $message,
-            'user_id' => $order->customer->user_id,
-            'type' => 'order',
-        ];
-
-        NotificationRepository::storeByRequest($notify);
 
         return back()->with('success', __('Order status updated successfully.'));
     }

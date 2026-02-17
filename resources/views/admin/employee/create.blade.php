@@ -90,6 +90,48 @@
                                         @endforeach
                                     </x-select>
                                 </div>
+
+                                <div class="mt-3">
+                                    <x-select
+                                        label="{{ __('County') }}"
+                                        name="county_id"
+                                        data-location="county"
+                                        data-subcounties-url="{{ route('admin.locations.subcounties') }}"
+                                        data-wards-url="{{ route('admin.locations.wards') }}"
+                                    >
+                                        <option value="">{{ __('Select County') }}</option>
+                                        @foreach ($counties as $county)
+                                            <option value="{{ $county->id }}" {{ old('county_id') == $county->id ? 'selected' : '' }}>
+                                                {{ $county->name }}
+                                            </option>
+                                        @endforeach
+                                    </x-select>
+                                    <small class="text-muted">{{ __('Required when role is processing_manager.') }}</small>
+                                </div>
+
+                                <div class="mt-3">
+                                    <x-select
+                                        label="{{ __('Sub-County') }}"
+                                        name="subcounty_id"
+                                        data-location="subcounty"
+                                        data-default-option="{{ __('Select Sub-County') }}"
+                                        data-selected="{{ old('subcounty_id') }}"
+                                    >
+                                        <option value="">{{ __('Select Sub-County') }}</option>
+                                    </x-select>
+                                </div>
+
+                                <div class="mt-3">
+                                    <x-select
+                                        label="{{ __('Ward') }}"
+                                        name="ward_id"
+                                        data-location="ward"
+                                        data-default-option="{{ __('Select Ward') }}"
+                                        data-selected="{{ old('ward_id') }}"
+                                    >
+                                        <option value="">{{ __('Select Ward') }}</option>
+                                    </x-select>
+                                </div>
                             </div>
 
                             <div class="col-lg-6 mt-3">
@@ -114,3 +156,7 @@
         </div>
     </div>
 @endsection
+
+@push('scripts')
+    @include('partials.location-dependent')
+@endpush

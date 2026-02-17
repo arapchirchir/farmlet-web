@@ -349,7 +349,7 @@
             }
 
             // Update category model in database using AJAX
-            $.post("{{ route('admin.category.menu.update') }}", {
+            $.post("{{ route('admin.categoryAttribute.menu.update') }}", {
                 _token: "{{ csrf_token() }}",
                 category_id: draggedNode.data.id,
                 parent_id: newParent === "#" ? null : newParent,

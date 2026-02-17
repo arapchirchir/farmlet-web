@@ -7,6 +7,7 @@ use App\Models\Shop;
 use App\Models\Media;
 use App\Models\Banner;
 use App\Enums\Roles;
+use App\Services\ActorUniqueIdService;
 use App\Repositories\MediaRepository;
 use App\Http\Requests\ShopCreateRequest;
 use Abedin\Maker\Repositories\Repository;
@@ -39,11 +40,12 @@ class ShopRepository extends Repository
         // create wallet
         WalletRepository::storeByRequest($user);
 
-        $isApi = $request->is('api/*');
-        $approvalStatus = $request->approval_status ?? ($isApi ? 'pending_approval' : 'approved');
+        $isSelfOnboarding = $request->routeIs('seller.register', 'shop.register.submit');
+        $defaultApprovalStatus = $isSelfOnboarding ? 'pending_approval' : 'approved';
+        $approvalStatus = $request->approval_status ?? $defaultApprovalStatus;
 
-        // create new shop and return
-        return self::create([
+        // create new shop
+        $shop = self::create([
             'user_id' => $user->id,
             'name' => $request->shop_name,
             'shop_logo' => $request->shop_logo,
@@ -59,6 +61,14 @@ class ShopRepository extends Repository
             'ward_id' => $request->ward_id,
             'status' => true,
         ]);
+
+        ActorUniqueIdService::assign(
+            $user,
+            $sellerType === 'farmer' ? ActorUniqueIdService::ROLE_FARMER : ActorUniqueIdService::ROLE_VENDOR,
+            $shop->county_id
+        );
+
+        return $shop;
     }
 
     /**
@@ -66,8 +76,23 @@ class ShopRepository extends Repository
      */
     public static function updateByRequest($shop, $request): Shop
     {
+        $sellerType = $request->seller_type ?? $shop->seller_type;
+        $targetRole = $sellerType === 'farmer' ? Roles::FARMER->value : Roles::SHOP->value;
+
         // update shop user
         UserRepository::updateByRequest($request, $shop->user);
+
+        if (! $shop->user->hasRole('root')) {
+            foreach ([Roles::SHOP->value, Roles::FARMER->value] as $roleName) {
+                if ($roleName !== $targetRole && $shop->user->hasRole($roleName)) {
+                    $shop->user->removeRole($roleName);
+                }
+            }
+
+            if (! $shop->user->hasRole($targetRole)) {
+                $shop->user->assignRole($targetRole);
+            }
+        }
 
         // update shop
         self::update($shop, [
@@ -82,13 +107,22 @@ class ShopRepository extends Repository
             'opening_time' => $request->opening_time ?? $shop->opening_time,
             'closing_time' => $request->closing_time ?? $shop->closing_time,
             'estimated_delivery_time' => $request->estimated_delivery_time ?? $shop->estimated_delivery_time,
-            'seller_type' => $request->seller_type ?? $shop->seller_type,
+            'seller_type' => $sellerType,
             'processing_supported' => $request->processing_supported ?? $shop->processing_supported,
             'approval_status' => $request->approval_status ?? $shop->approval_status,
             'county_id' => $request->county_id ?? $shop->county_id,
             'subcounty_id' => $request->subcounty_id ?? $shop->subcounty_id,
             'ward_id' => $request->ward_id ?? $shop->ward_id,
         ]);
+
+        if (! $shop->user->hasRole('root')) {
+            $countyId = $shop->user->county_id ?? $shop->county_id;
+            $targetActorRole = $sellerType === 'farmer' ? ActorUniqueIdService::ROLE_FARMER : ActorUniqueIdService::ROLE_VENDOR;
+            $forceRegenerate = $shop->user->actor_unique_role !== $targetActorRole
+                || (int) $shop->user->county_id !== (int) $countyId;
+
+            ActorUniqueIdService::assign($shop->user, $targetActorRole, $countyId, $forceRegenerate);
+        }
 
         return $shop;
     }

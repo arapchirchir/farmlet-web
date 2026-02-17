@@ -49,9 +49,7 @@ class RiderController extends Controller
     public function store(RiderRequest $request)
     {
         $user = UserRepository::storeByRequest($request);
-        $user->assignRole(Roles::DRIVER->value);
-
-        DriverRepository::storeByUser($user);
+        DriverRepository::ensureDriverAccess($user);
 
         $user->update(['is_active' => true]);
 
@@ -97,6 +95,7 @@ class RiderController extends Controller
     public function update(RiderRequest $request, User $user)
     {
         UserRepository::updateByRequest($request, $user);
+        DriverRepository::ensureDriverAccess($user);
 
         return to_route('admin.rider.index')->withSuccess(__('Rider updated successfully'));
     }
@@ -118,11 +117,27 @@ class RiderController extends Controller
      */
     public function assignOrder(Order $order, Request $request)
     {
+        $request->validate([
+            'rider' => ['required', 'exists:drivers,id'],
+        ]);
 
         $driver = Driver::find($request->rider);
 
         if (! $driver) {
             return back()->withError(__('Rider not found, please try again'));
+        }
+
+        $driverUser = $driver->user;
+        if (! $driverUser?->county_id || ! $driverUser?->subcounty_id) {
+            return back()->withError(__('Selected rider is missing county or sub-county assignment'));
+        }
+
+        if (! $order->county_id || ! $order->subcounty_id) {
+            return back()->withError(__('Order is missing county or sub-county assignment'));
+        }
+
+        if ((int) $driverUser->county_id !== (int) $order->county_id || (int) $driverUser->subcounty_id !== (int) $order->subcounty_id) {
+            return back()->withError(__('Rider must be in the same county and sub-county as the order'));
         }
 
         DriverRepository::assignOrder($order, $driver);

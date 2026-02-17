@@ -133,6 +133,20 @@
                     </div>
 
                     <div class="col-md-4 mt-3">
+                        <x-select label="{{ __('Approval Status') }}" name="approval_status">
+                            <option value="pending_approval" {{ (old('approval_status') ?? $shop->approval_status) == 'pending_approval' ? 'selected' : '' }}>
+                                {{ __('Pending Approval') }}
+                            </option>
+                            <option value="approved" {{ (old('approval_status') ?? $shop->approval_status) == 'approved' ? 'selected' : '' }}>
+                                {{ __('Approved') }}
+                            </option>
+                            <option value="rejected" {{ (old('approval_status') ?? $shop->approval_status) == 'rejected' ? 'selected' : '' }}>
+                                {{ __('Rejected') }}
+                            </option>
+                        </x-select>
+                    </div>
+
+                    <div class="col-md-4 mt-3">
                         <x-select
                             label="{{ __('County') }}"
                             name="county_id"

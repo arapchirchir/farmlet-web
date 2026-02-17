@@ -27,6 +27,10 @@ class CartRepository extends Repository
             foreach ($products as $cart) {
 
                 $product = $cart->product;
+                $processingType = $cart->processing_type ?? 'raw';
+                $isProcessed = $processingType === 'processed'
+                    && (bool) $product?->processing_available
+                    && ! is_null($product?->processed_price);
 
                 if (! $product) {
                     $cart->delete();
@@ -36,11 +40,12 @@ class CartRepository extends Repository
 
                 $totalItems++;
 
-                $discountPercentage = $product->getDiscountPercentage($product->price, $product->discount_price);
+                $rawPrice = $product->raw_price ?? $product->price;
+                $discountPercentage = $product->getDiscountPercentage($rawPrice, $product->discount_price);
 
                 $totalSold = $product->orders->sum('pivot.quantity');
 
-                $flashSale = $product->flashSales?->first();
+                $flashSale = ! $isProcessed ? $product->flashSales?->first() : null;
                 $flashSaleProduct = null;
                 $quantity = null;
 
@@ -63,7 +68,11 @@ class CartRepository extends Repository
                     $discountPrice = $flashSaleProduct->pivot->price;
                 }
 
-                $mainPrice = $product->price;
+                $mainPrice = $isProcessed ? (float) $product->processed_price : $rawPrice;
+                if ($isProcessed) {
+                    $discountPrice = 0;
+                    $discountPercentage = 0;
+                }
 
                 // calculate vat taxes
                 $priceTaxAmount = 0;
@@ -99,6 +108,7 @@ class CartRepository extends Repository
                     'total_reviews' => (string) Number::abbreviate($product->reviews->count(), maxPrecision: 2),
                     'total_sold' => (string) number_format($totalSold, 0, '.', ','),
                     'unit' => $product->unit,
+                    'processing_type' => $processingType,
                 ];
             }
 
@@ -133,17 +143,23 @@ class CartRepository extends Repository
     public static function storeOrUpdateByRequest(CartRequest $request, Product $product): Cart
     {
         $unit = $request->unit ?? $product->unit;
+        $processingType = $request->processing_type ?? 'raw';
 
         $isBuyNow = $request->is_buy_now ?? false;
 
         $tokens = cartAccessToken(request());
 
-        $cart =userCart($request)->where('product_id', $product->id)->where('is_buy_now', $isBuyNow)->first();
+        $cart =userCart($request)
+            ->where('product_id', $product->id)
+            ->where('is_buy_now', $isBuyNow)
+            ->where('processing_type', $processingType)
+            ->first();
 
         if ($cart) {
             $cart->update([
                 'quantity' => $isBuyNow ? 1 : $cart->quantity + 1,
                 'unit' => $request->unit ?? $product->unit,
+                'processing_type' => $processingType,
                 // 'customer_id' => $tokens['customer_id'] ?? '',
             ]);
 
@@ -158,6 +174,7 @@ class CartRepository extends Repository
             'customer_id' => $tokens['customer_id'] ?? null,
             'quantity' => $request->quantity ?? 1,
             'unit' => $unit,
+            'processing_type' => $processingType,
             'access_token'=>$tokens['access_token'] ?? ''
         ]);
     }
@@ -182,13 +199,20 @@ class CartRepository extends Repository
             }
 
             $product = $cart->product;
+            $processingType = $cart->processing_type ?? 'raw';
+            $isProcessed = $processingType === 'processed'
+                && (bool) $product->processing_available
+                && ! is_null($product->processed_price);
             $flashSale = $product->flashSales?->first();
             $flashSaleProduct = null;
             $quantity = null;
 
-            $price = $product->discount_price > 0 ? $product->discount_price : $product->price;
+            $rawPrice = $product->raw_price ?? $product->price;
+            $price = $isProcessed
+                ? (float) $product->processed_price
+                : ($product->discount_price > 0 ? $product->discount_price : $rawPrice);
 
-            if ($flashSale) {
+            if ($flashSale && ! $isProcessed) {
                 $flashSaleProduct = $flashSale?->products()->where('id', $product->id)->first();
 
                 $quantity = $flashSaleProduct?->pivot->quantity - $flashSaleProduct->pivot->sale_quantity;

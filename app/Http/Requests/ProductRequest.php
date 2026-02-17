@@ -42,6 +42,9 @@ class ProductRequest extends FormRequest
             'buy_price' => 'nullable|numeric|min:0',
             'price' => 'required|numeric|min:0',
             'discount_price' => 'nullable|numeric|min:0|max:'.$this->price,
+            'processing_available' => 'nullable|boolean',
+            'raw_price' => 'nullable|numeric|min:0',
+            'processed_price' => 'nullable|numeric|min:0',
             'quantity' => 'required|integer|min:0',
             'min_order_quantity' => 'nullable|integer|min:0',
             'meta_title' => 'nullable|string|max:191',
@@ -83,6 +86,10 @@ class ProductRequest extends FormRequest
             'discount_price.numeric' => __('The discount price must be a number.'),
             'discount_price.min' => __('The discount price must be at least 0.'),
             'discount_price.max' => __('The discount price must be less than price.'),
+            'raw_price.numeric' => __('The raw price must be a number.'),
+            'raw_price.min' => __('The raw price must be at least 0.'),
+            'processed_price.numeric' => __('The processed price must be a number.'),
+            'processed_price.min' => __('The processed price must be at least 0.'),
             'quantity.required' => __('The quantity field is required.'),
             'quantity.integer' => __('The quantity must be an integer.'),
             'quantity.min' => __('The quantity must be at least 0.'),
@@ -98,5 +105,27 @@ class ProductRequest extends FormRequest
             'additionThumbnail.mimes' => __('The addition thumbnail must be a file of type: png, jpg, jpeg, webp.'),
             'additionThumbnail.max' => __('The addition thumbnail may not be greater than 2048 kilobytes.'),
         ];
+    }
+
+    public function withValidator($validator)
+    {
+        $validator->after(function ($validator) {
+            $processingAvailable = filter_var($this->input('processing_available', false), FILTER_VALIDATE_BOOLEAN);
+            $rawPrice = $this->filled('raw_price') ? (float) $this->input('raw_price') : (float) $this->input('price');
+            $processedPrice = $this->filled('processed_price') ? (float) $this->input('processed_price') : null;
+
+            if (! $processingAvailable) {
+                return;
+            }
+
+            if ($processedPrice === null) {
+                $validator->errors()->add('processed_price', __('Processed price is required when processing is available.'));
+                return;
+            }
+
+            if ($processedPrice <= $rawPrice) {
+                $validator->errors()->add('processed_price', __('Processed price must be greater than raw price.'));
+            }
+        });
     }
 }

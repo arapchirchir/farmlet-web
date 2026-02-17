@@ -25,6 +25,7 @@ class CheckoutRequest extends FormRequest
         return [
             'shop_ids' => 'nullable|array',
             'shop_ids.*' => 'nullable|exists:shops,id',
+            'address_id' => 'nullable|exists:addresses,id',
             'coupon_code' => 'nullable|string|max:50',
         ];
     }

@@ -3,9 +3,11 @@
 namespace App\Providers;
 
 use App\Events\OrderMailEvent;
+use App\Events\OrderNotificationEvent;
 use App\Events\SendOTPMail;
 use App\Events\SendTestMailEvent;
 use App\Listeners\OrderMailListener;
+use App\Listeners\OrderNotificationListener;
 use App\Listeners\SendOTPMailNotification;
 use App\Listeners\TestMailListener;
 use Illuminate\Auth\Events\Registered;
@@ -30,6 +32,10 @@ class EventServiceProvider extends ServiceProvider
 
         OrderMailEvent::class => [
             OrderMailListener::class,
+        ],
+
+        OrderNotificationEvent::class => [
+            OrderNotificationListener::class,
         ],
 
         SendTestMailEvent::class => [

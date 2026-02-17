@@ -5,6 +5,7 @@ namespace App\Http\Requests;
 use App\Models\Subcounty;
 use App\Models\Ward;
 use App\Models\VerifyManage;
+use App\Rules\KenyaMpesaPhoneRule;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Support\Facades\Cache;
 
@@ -41,7 +42,7 @@ class AddressRequest extends FormRequest
 
         return [
             'name' => 'required|string|max:255',
-            'phone' => 'required|numeric|min_digits:'.$min.'|max_digits:'.$max,
+            'phone' => ['required', 'numeric', 'min_digits:'.$min, 'max_digits:'.$max, new KenyaMpesaPhoneRule],
             'county_id' => 'required|exists:counties,id',
             'subcounty_id' => 'required|exists:subcounties,id',
             'ward_id' => 'required|exists:wards,id',

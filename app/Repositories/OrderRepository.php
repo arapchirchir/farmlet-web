@@ -8,6 +8,7 @@ use App\Models\Payment;
 use App\Models\Address;
 use App\Models\Currency;
 use App\Models\Customer;
+use App\Models\ProcessingRoom;
 use App\Enums\OrderStatus;
 use App\Enums\DiscountType;
 use App\Models\AdminCoupon;
@@ -18,7 +19,6 @@ use App\Events\OrderMailEvent;
 use App\Models\CartAccessToken;
 use App\Models\GeneraleSetting;
 use App\Http\Requests\OrderRequest;
-use App\Services\NotificationServices;
 use App\Repositories\CurrencyRepository;
 use Abedin\Maker\Repositories\Repository;
 
@@ -71,7 +71,14 @@ class OrderRepository extends Repository
                 $cart->product->decrement('quantity', $cart->quantity);
 
                 $product = $cart->product;
-                $price = $product->discount_price > 0 ? $product->discount_price : $product->price;
+                $processingType = $cart->processing_type ?? 'raw';
+                $isProcessed = $processingType === 'processed'
+                    && (bool) $product->processing_available
+                    && ! is_null($product->processed_price);
+                $rawPrice = $product->raw_price ?? $product->price;
+                $price = $isProcessed
+                    ? (float) $product->processed_price
+                    : ($product->discount_price > 0 ? $product->discount_price : $rawPrice);
 
                 $flashSale = $product->flashSales?->first();
                 $flashSaleProduct = null;
@@ -79,7 +86,7 @@ class OrderRepository extends Repository
 
                 $saleQty = $cart->quantity;
 
-                if ($flashSale) {
+                if ($flashSale && ! $isProcessed) {
                     $flashSaleProduct = $flashSale?->products()->where('id', $product->id)->first();
 
                     $quantity = $flashSaleProduct?->pivot->quantity - $flashSaleProduct->pivot->sale_quantity;
@@ -100,6 +107,7 @@ class OrderRepository extends Repository
                     'quantity' => $cart->quantity,
                     'unit' => $cart->unit,
                     'price' => $price,
+                    'processing_type' => $processingType,
                     'buying_price' => $product->buyingPrice() ?? 0,
                     'created_at' => now(),
                     'updated_at' => now(),
@@ -153,14 +161,21 @@ class OrderRepository extends Repository
         $currency = Currency::where('id', $request->currencyData['id'])->first();
         $tokens = cartAccessToken(request());
         $address = Address::find($request->address_id);
+        $orderType = $getCartAmounts['orderType'] ?? 'raw';
+        $processingRoomId = self::resolveProcessingRoomId($orderType, $address);
+
         $order = self::create([
             'shop_id' => $shop->id,
+            'order_type' => $orderType,
             'county_id' => $address?->county_id,
             'subcounty_id' => $address?->subcounty_id,
             'ward_id' => $address?->ward_id,
             'order_code' => str_pad($lastOrderId + 1, 6, '0', STR_PAD_LEFT),
             'prefix' => $shop->prefix ?? 'RG',
             'customer_id' => $tokens['customer_id'] ?? null,
+            'vendor_id' => $shop->user_id,
+            'driver_id' => null,
+            'processing_room_id' => $processingRoomId,
             'coupon_id' => $getCartAmounts['coupon'],
             'delivery_charge' => $getCartAmounts['deliveryCharge'],
             'payable_amount' => $getCartAmounts['payableAmount'],
@@ -191,12 +206,39 @@ class OrderRepository extends Repository
         return $order;
     }
 
+    private static function resolveProcessingRoomId(string $orderType, ?Address $address): ?int
+    {
+        if ($orderType !== 'processed') {
+            return null;
+        }
+
+        if (! $address?->subcounty_id) {
+            throw new \RuntimeException('Processed orders require a delivery address with sub-county.');
+        }
+
+        $processingRoom = ProcessingRoom::query()
+            ->where('is_active', true)
+            ->where('subcounty_id', $address->subcounty_id)
+            ->when($address->county_id, function ($query) use ($address) {
+                $query->where('county_id', $address->county_id);
+            })
+            ->orderBy('id')
+            ->first();
+
+        if (! $processingRoom) {
+            throw new \RuntimeException('No processing room is available for the selected sub-county.');
+        }
+
+        return (int) $processingRoom->id;
+    }
+
     private static function getCartWiseAmounts(Shop $shop, $carts, $couponCode = null): array
     {
         $totalAmount = 0;
         $discount = 0;
         $coupon = null;
         $totalTaxAmount = 0;
+        $orderType = 'raw';
 
         $orderQty = $carts->sum('quantity');
         $deliveryCharge = getDeliveryCharge($orderQty);
@@ -210,13 +252,23 @@ class OrderRepository extends Repository
             }
 
             $product = $cart->product;
-            $price = $product->discount_price > 0 ? $product->discount_price : $product->price;
+            $processingType = $cart->processing_type ?? 'raw';
+            $isProcessed = $processingType === 'processed'
+                && (bool) $product->processing_available
+                && ! is_null($product->processed_price);
+            if ($isProcessed) {
+                $orderType = 'processed';
+            }
+            $rawPrice = $product->raw_price ?? $product->price;
+            $price = $isProcessed
+                ? (float) $product->processed_price
+                : ($product->discount_price > 0 ? $product->discount_price : $rawPrice);
 
             $flashSale = $product->flashSales?->first();
             $flashSaleProduct = null;
             $quantity = 0;
 
-            if ($flashSale) {
+            if ($flashSale && ! $isProcessed) {
                 $flashSaleProduct = $flashSale?->products()->where('id', $product->id)->first();
 
                 $quantity = $flashSaleProduct?->pivot->quantity - $flashSaleProduct->pivot->sale_quantity;
@@ -268,6 +320,7 @@ class OrderRepository extends Repository
             'discount' => $discount,
             'deliveryCharge' => $deliveryCharge,
             'coupon' => $coupon?->id,
+            'orderType' => $orderType,
             'allVatTaxes' => $allVatTaxes,
         ];
     }
@@ -285,9 +338,16 @@ class OrderRepository extends Repository
 
         $newOrder = self::create([
             'shop_id' => $order->shop_id,
+            'order_type' => $order->order_type ?? 'raw',
+            'county_id' => $order->county_id,
+            'subcounty_id' => $order->subcounty_id,
+            'ward_id' => $order->ward_id,
             'order_code' => str_pad($lastOrderId + 1, 6, '0', STR_PAD_LEFT),
             'prefix' => 'RG',
             'customer_id' => $order->customer_id,
+            'vendor_id' => $order->vendor_id ?? $order->shop?->user_id,
+            'driver_id' => null,
+            'processing_room_id' => $order->processing_room_id,
             'coupon_id' => $order->coupon_id ?? null,
             'delivery_charge' => $order->delivery_charge,
             'payable_amount' => $order->payable_amount,
@@ -311,6 +371,7 @@ class OrderRepository extends Repository
                 'quantity' => $product->pivot->quantity,
                 'unit' => $product->unit ?? null,
                 'price' => $product->pivot->price,
+                'processing_type' => $product->pivot->processing_type ?? 'raw',
                 'buying_price' => $product->buyingPrice() ?? 0,
                 'created_at' => now(),
                 'updated_at' => now(),
@@ -337,7 +398,7 @@ class OrderRepository extends Repository
             }
         }
 
-        return $order;
+        return $newOrder;
     }
 
     /**
@@ -439,105 +500,147 @@ class OrderRepository extends Repository
      */
     public static function OrderStatusUpdateFromRider(Order $order, $driverOrder, $orderStatus)
     {
-        if ($orderStatus == OrderStatus::PROCESSING->value) {
+        if (
+            $orderStatus == OrderStatus::PROCESSING->value
+            || $orderStatus == OrderStatus::PICKUP_FOR_PROCESSING->value
+        ) {
             $driverOrder->update(['is_accept' => true]);
         }
 
         $order->update([
-            'order_status' => ($orderStatus == 'deliveredAndPaid') ? OrderStatus::DELIVERED->value : $orderStatus,
+            'order_status' => $orderStatus,
         ]);
 
-        if ($orderStatus == OrderStatus::PICKUP->value) {
+        if ($orderStatus == OrderStatus::ON_THE_WAY->value) {
             $order->update([
                 'pick_date' => now(),
-                'order_status' => OrderStatus::ON_THE_WAY->value,
             ]);
+        }
+
+        if ($orderStatus == OrderStatus::DELIVERED->value && ! $order->driver_delivery_confirmed_at) {
+            $order->update([
+                'driver_delivery_confirmed_at' => now(),
+                'delivered_at' => $order->delivered_at ?? now(),
+            ]);
+        }
+
+        self::releaseSettlementIfEligible($order, $driverOrder);
+
+        $order->refresh();
+    }
+
+    public static function confirmCustomerDelivery(Order $order): void
+    {
+        if ($order->order_status->value !== OrderStatus::DELIVERED->value) {
+            throw new \RuntimeException('Delivery can only be confirmed after the order is marked delivered.');
+        }
+
+        if (! $order->customer_delivery_confirmed_at) {
+            $order->update([
+                'customer_delivery_confirmed_at' => now(),
+            ]);
+        }
+
+        self::releaseSettlementIfEligible($order);
+    }
+
+    public static function OrderStatusUpdateFromProcessingManager(Order $order, string $orderStatus): void
+    {
+        if (($order->order_type ?? 'raw') !== 'processed') {
+            throw new \RuntimeException('Only processed orders can be updated by a processing manager.');
+        }
+
+        $currentStatus = $order->order_status->value;
+
+        $allowedTransitions = [
+            OrderStatus::PICKUP_FOR_PROCESSING->value => OrderStatus::PROCESSING->value,
+            OrderStatus::AT_PROCESSING_ROOM->value => OrderStatus::PROCESSING->value,
+            OrderStatus::PROCESSING->value => OrderStatus::READY_FOR_DELIVERY->value,
+        ];
+
+        if (
+            ! isset($allowedTransitions[$currentStatus])
+            || $allowedTransitions[$currentStatus] !== $orderStatus
+        ) {
+            throw new \RuntimeException('Invalid processed-order transition requested.');
+        }
+
+        $order->update([
+            'order_status' => $orderStatus,
+        ]);
+
+        $order->refresh();
+    }
+
+    public static function releaseSettlementIfEligible(Order $order, $driverOrder = null): bool
+    {
+        if (config('farmlet.escrow_mode', 'simulation') !== 'simulation') {
+            throw new \RuntimeException('Only simulation escrow mode is supported.');
+        }
+
+        if ($order->settlement_released_at) {
+            return false;
+        }
+
+        if ($order->order_status->value !== OrderStatus::DELIVERED->value) {
+            return false;
+        }
+
+        if (! $order->driver_delivery_confirmed_at || ! $order->customer_delivery_confirmed_at) {
+            return false;
+        }
+
+        $driverOrder = $driverOrder ?: $order->driverOrder;
+        if (! $driverOrder) {
+            return false;
         }
 
         $paymentMethod = $order->payment_method->value;
 
-        $isDelivery = false;
-        if ($paymentMethod != PaymentMethod::CASH->value && $orderStatus == OrderStatus::DELIVERED->value) {
-            $isDelivery = true;
-        }
+        if ($paymentMethod == PaymentMethod::CASH->value && ! $driverOrder->cash_collect) {
+            $driverOrder->update(['cash_collect' => true]);
 
-        if (($orderStatus == 'deliveredAndPaid') || $isDelivery) {
-
-            $driverOrder->update(['is_completed' => true]);
-
-            if ($paymentMethod == PaymentMethod::CASH->value) {
-                $driverOrder->update(['cash_collect' => true]);
-
-                $totalCashCollected = $driverOrder->driver->total_cash_collected + $order->payable_amount;
-
-                $driverOrder->driver->update([
-                    'total_cash_collected' => $totalCashCollected,
-                ]);
-            }
-
-            $generaleSetting = GeneraleSetting::first();
-
-            $commission = 0;
-
-            if ($generaleSetting?->business_based_on == 'commission' && $generaleSetting?->commission_charge != 'monthly') {
-
-                if ($generaleSetting?->commission_type != 'fixed') {
-                    $commission = $order->total_amount * $generaleSetting->commission / 100;
-                } else {
-                    $commission = $generaleSetting->commission ?? 0;
-                }
-            }
-
-            $order->update([
-                'delivery_date' => now(),
-                'delivered_at' => now(),
-                'payment_status' => PaymentStatus::PAID->value,
-                'admin_commission' => $commission,
+            $totalCashCollected = $driverOrder->driver->total_cash_collected + $order->payable_amount;
+            $driverOrder->driver->update([
+                'total_cash_collected' => $totalCashCollected,
             ]);
-
-            $wallet = $order->shop->user->wallet;
-            if (!$wallet) {
-                $wallet =  WalletRepository::storeByRequest($order->shop->user);
-            }
-
-            WalletRepository::updateByRequest($wallet, $order->total_amount, 'credit');
-
-            if ($generaleSetting?->business_based_on == 'commission') {
-                TransactionRepository::storeByRequest($wallet, $commission, 'debit', true, true, 'admin commission added', 'order commission added in admin wallet');
-            }
-
-            $driverWallet = DriverRepository::getWallet($driverOrder->driver);
-
-            $deliveryCharge = $order->delivery_charge;
-
-            WalletRepository::updateByRequest($driverWallet, $deliveryCharge, 'credit');
         }
 
-        $user = $order->customer?->user;
+        $generaleSetting = GeneraleSetting::first();
 
-        $message = "Hello {$user?->name}. Your order status is {$orderStatus}. OrderID: {$order->prefix}{$order->order_code}";
-
-        $title = 'Order Status Update';
-
-        $devices = $user?->devices;
-
-        if (count($devices) > 0) {
-
-            $deviceKeys = $devices->pluck('key')->toArray();
-            try {
-                NotificationServices::sendNotification($message, $deviceKeys, $title);
-            } catch (\Throwable $th) {
+        $commission = 0;
+        if ($generaleSetting?->business_based_on == 'commission' && $generaleSetting?->commission_charge != 'monthly') {
+            if ($generaleSetting?->commission_type != 'fixed') {
+                $commission = $order->total_amount * $generaleSetting->commission / 100;
+            } else {
+                $commission = $generaleSetting->commission ?? 0;
             }
         }
 
-        NotificationRepository::storeByRequest((object) [
-            'title' => $title,
-            'content' => $message,
-            'user_id' => $user?->id,
-            'url' => $order->id,
-            'type' => 'order',
-            'icon' => null,
-            'is_read' => false,
+        $order->update([
+            'delivery_date' => $order->delivery_date ?? now(),
+            'delivered_at' => $order->delivered_at ?? now(),
+            'payment_status' => PaymentStatus::PAID->value,
+            'admin_commission' => $commission,
+            'settlement_released_at' => now(),
         ]);
+
+        $wallet = $order->shop->user->wallet;
+        if (! $wallet) {
+            $wallet = WalletRepository::storeByRequest($order->shop->user);
+        }
+
+        WalletRepository::updateByRequest($wallet, $order->total_amount, 'credit');
+
+        if ($generaleSetting?->business_based_on == 'commission') {
+            TransactionRepository::storeByRequest($wallet, $commission, 'debit', true, true, 'admin commission added', 'order commission added in admin wallet');
+        }
+
+        $driverWallet = DriverRepository::getWallet($driverOrder->driver);
+        WalletRepository::updateByRequest($driverWallet, $order->delivery_charge, 'credit');
+
+        $driverOrder->update(['is_completed' => true]);
+
+        return true;
     }
 }

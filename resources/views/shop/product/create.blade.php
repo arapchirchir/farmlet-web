@@ -168,6 +168,27 @@
                                     placeholder="Discount Price" onlyNumber="true" value="0" />
                             </div>
 
+                            <div class="col-lg-4 col-md-6 mt-3 mt-lg-0">
+                                <x-select label="{{ __('Processing Available') }}" name="processing_available">
+                                    <option value="0" {{ old('processing_available', '0') == '0' ? 'selected' : '' }}>
+                                        {{ __('No') }}
+                                    </option>
+                                    <option value="1" {{ old('processing_available') == '1' ? 'selected' : '' }}>
+                                        {{ __('Yes') }}
+                                    </option>
+                                </x-select>
+                            </div>
+
+                            <div class="col-lg-4 col-md-6 mt-3">
+                                <x-input type="text" name="raw_price" label="Raw Price"
+                                    placeholder="Raw Price" onlyNumber="true" :value="old('raw_price', old('price', 10))" />
+                            </div>
+
+                            <div class="col-lg-4 col-md-6 mt-3">
+                                <x-input type="text" name="processed_price" label="Processed Price"
+                                    placeholder="Processed Price" onlyNumber="true" :value="old('processed_price')" />
+                            </div>
+
                             <div class="col-lg-4 col-md-6 mt-3">
                                 <x-input type="text" name="quantity" label="Current Stock Quantity"
                                     placeholder="Current Stock Quantity" onlyNumber="true" />

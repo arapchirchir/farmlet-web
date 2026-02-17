@@ -8,7 +8,9 @@ use App\Http\Requests\OrderIdRequest;
 use App\Http\Requests\StatusUpdateRequest;
 use App\Http\Resources\RiderOrderDetailsResource;
 use App\Http\Resources\RiderOrderResource;
+use App\Models\Driver;
 use App\Repositories\DriverOrderRepository;
+use App\Repositories\DriverRepository;
 use App\Repositories\OrderRepository;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
@@ -17,7 +19,7 @@ class OrderController extends Controller
 {
     public function index(Request $request)
     {
-        $driver = auth()->user()->driver;
+        $driver = $this->authenticatedDriver();
 
         $page = $request->page ?? 1;
         $perPage = $request->per_page ?? 15;
@@ -43,7 +45,17 @@ class OrderController extends Controller
     // show order details
     public function show(OrderIdRequest $request)
     {
-        $order = OrderRepository::find($request->order_id);
+        $driver = $this->authenticatedDriver();
+        $driverOrder = DriverOrderRepository::query()
+            ->where('order_id', $request->order_id)
+            ->where('driver_id', $driver?->id)
+            ->first();
+
+        if (! $driverOrder) {
+            return $this->json('Sorry, this order is not assigned to you', [], 422);
+        }
+
+        $order = $driverOrder->order;
 
         return $this->json('Order details', [
             'order' => RiderOrderDetailsResource::make($order),
@@ -53,42 +65,26 @@ class OrderController extends Controller
     // status update
     public function statusUpdate(StatusUpdateRequest $request)
     {
-        $driverOrder = DriverOrderRepository::query()->where('order_id', $request->order_id)->first();
+        $driver = $this->authenticatedDriver();
+        $driverOrder = DriverOrderRepository::query()
+            ->where('order_id', $request->order_id)
+            ->where('driver_id', $driver?->id)
+            ->first();
 
         if (! $driverOrder) {
-            return $this->json('Sorry, this order is not found', [], 422);
+            return $this->json('Sorry, this order is not assigned to you', [], 422);
         } elseif ($driverOrder->is_completed) {
             return $this->json('Sorry, this order is already delivered', [], 422);
         }
 
         $order = $driverOrder->order;
 
-        $orderStatus = null;
+        $orderStatus = ($order->order_type ?? 'raw') === 'processed'
+            ? $this->getNextProcessedStatus($order->order_status->value)
+            : $this->getNextRawStatus($order->order_status->value);
 
-        switch ($order->order_status->value) {
-            case OrderStatus::CONFIRM->value:
-                $orderStatus = OrderStatus::PROCESSING->value;
-                break;
-
-            case OrderStatus::PROCESSING->value:
-                $orderStatus = OrderStatus::PICKUP->value;
-                break;
-
-            case OrderStatus::PICKUP->value:
-                $orderStatus = OrderStatus::ON_THE_WAY->value;
-                break;
-
-            case OrderStatus::ON_THE_WAY->value:
-                $orderStatus = OrderStatus::DELIVERED->value;
-                break;
-
-            case OrderStatus::DELIVERED->value:
-                $orderStatus = 'deliveredAndPaid';
-                break;
-
-            default:
-                $orderStatus = OrderStatus::CONFIRM->value;
-                break;
+        if (! $orderStatus) {
+            return $this->json('Order stage cannot be updated by rider at this time', [], 422);
         }
 
         OrderRepository::OrderStatusUpdateFromRider($order, $driverOrder, $orderStatus);
@@ -122,7 +118,7 @@ class OrderController extends Controller
 
         $orderStatus = $request->order_status ?? null;
 
-        $driver = auth()->user()->driver;
+        $driver = $this->authenticatedDriver();
 
         $driverOrdersObj = $driver->driverOrders();
 
@@ -187,5 +183,33 @@ class OrderController extends Controller
             'delivered' => $totalDelivered,
             'orders' => RiderOrderResource::collection($driverOrders),
         ]);
+    }
+
+    private function authenticatedDriver(): Driver
+    {
+        return DriverRepository::ensureDriverAccess(auth()->user());
+    }
+
+    private function getNextRawStatus(string $currentStatus): ?string
+    {
+        return match ($currentStatus) {
+            OrderStatus::CONFIRM->value => OrderStatus::PROCESSING->value,
+            OrderStatus::PROCESSING->value => OrderStatus::PICKUP->value,
+            OrderStatus::PICKUP->value => OrderStatus::ON_THE_WAY->value,
+            OrderStatus::ON_THE_WAY->value => OrderStatus::DELIVERED->value,
+            default => null,
+        };
+    }
+
+    private function getNextProcessedStatus(string $currentStatus): ?string
+    {
+        return match ($currentStatus) {
+            OrderStatus::CONFIRM->value,
+            OrderStatus::VENDOR_PREPARING->value => OrderStatus::PICKUP_FOR_PROCESSING->value,
+            OrderStatus::PICKUP_FOR_PROCESSING->value => OrderStatus::AT_PROCESSING_ROOM->value,
+            OrderStatus::READY_FOR_DELIVERY->value => OrderStatus::ON_THE_WAY->value,
+            OrderStatus::ON_THE_WAY->value => OrderStatus::DELIVERED->value,
+            default => null,
+        };
     }
 }

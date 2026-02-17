@@ -11,8 +11,13 @@ class CountryController extends Controller
 {
     public function index()
     {
-        $countries = Cache::rememberForever('countries', function () {
-            return Country::all();
+        $supportedCountry = (string) config('farmlet.supported_country', 'Kenya');
+        $cacheKey = 'countries.'.mb_strtolower($supportedCountry);
+
+        $countries = Cache::rememberForever($cacheKey, function () use ($supportedCountry) {
+            return Country::query()
+                ->whereRaw('LOWER(name) = ?', [mb_strtolower($supportedCountry)])
+                ->get();
         });
 
         return $this->json('all countries', [

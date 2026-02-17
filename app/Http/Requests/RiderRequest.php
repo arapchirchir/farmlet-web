@@ -6,6 +6,7 @@ use App\Models\Subcounty;
 use App\Models\Ward;
 use App\Models\VerifyManage;
 use App\Rules\EmailRule;
+use App\Rules\KenyaMpesaPhoneRule;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Support\Facades\Cache;
 
@@ -57,7 +58,7 @@ class RiderRequest extends FormRequest
         $min = $verifyManage?->phone_min_length ?? 9;
         $max = $verifyManage?->phone_max_length ?? 16;
 
-        $phoneValidate = [$phoneRequired, 'min_digits:'.$min, 'max_digits:'.$max, 'unique:users,phone,'.$userId];
+        $phoneValidate = [$phoneRequired, 'min_digits:'.$min, 'max_digits:'.$max, new KenyaMpesaPhoneRule, 'unique:users,phone,'.$userId];
 
         return [
             'first_name' => 'required|string',
@@ -69,6 +70,7 @@ class RiderRequest extends FormRequest
             'gender' => 'nullable|string',
             'date_of_birth' => 'nullable|date',
             'driving_lience' => 'nullable|string',
+            'driving_license_proof' => [$isRegister ? 'required' : 'nullable', 'file', 'mimes:jpg,jpeg,png,pdf', 'max:4096'],
             'vehicle_type' => 'required|string',
             'county_id' => [$locationRequired, 'exists:counties,id'],
             'subcounty_id' => [$locationRequired, 'exists:subcounties,id'],
@@ -79,20 +81,39 @@ class RiderRequest extends FormRequest
     public function withValidator($validator)
     {
         $validator->after(function ($validator) {
-            $countyId = $this->input('county_id');
-            $subcountyId = $this->input('subcounty_id');
-            $wardId = $this->input('ward_id');
+            $existingUser = null;
+            if ($this->routeIs('admin.rider.update')) {
+                $existingUser = $this->route('user');
+            } elseif ($this->routeIs('rider.profile.update')) {
+                $existingUser = auth()->user();
+            }
 
-            if ($countyId && $subcountyId) {
+            $countyId = $this->filled('county_id') ? $this->input('county_id') : $existingUser?->county_id;
+            $subcountyId = $this->filled('subcounty_id') ? $this->input('subcounty_id') : $existingUser?->subcounty_id;
+            $wardId = $this->filled('ward_id') ? $this->input('ward_id') : $existingUser?->ward_id;
+
+            if ($subcountyId && ! $countyId) {
+                $validator->errors()->add('county_id', __('County is required when sub-county is selected.'));
+            }
+
+            if ($wardId && ! $subcountyId) {
+                $validator->errors()->add('subcounty_id', __('Sub-county is required when ward is selected.'));
+            }
+
+            if ($subcountyId) {
                 $subcounty = Subcounty::find($subcountyId);
-                if ($subcounty && $subcounty->county_id != $countyId) {
+                if (! $subcounty) {
+                    $validator->errors()->add('subcounty_id', __('The selected sub-county is invalid.'));
+                } elseif ($countyId && (int) $subcounty->county_id !== (int) $countyId) {
                     $validator->errors()->add('subcounty_id', __('The selected sub-county does not belong to the selected county.'));
                 }
             }
 
-            if ($subcountyId && $wardId) {
+            if ($wardId) {
                 $ward = Ward::find($wardId);
-                if ($ward && $ward->subcounty_id != $subcountyId) {
+                if (! $ward) {
+                    $validator->errors()->add('ward_id', __('The selected ward is invalid.'));
+                } elseif ($subcountyId && (int) $ward->subcounty_id !== (int) $subcountyId) {
                     $validator->errors()->add('ward_id', __('The selected ward does not belong to the selected sub-county.'));
                 }
             }
@@ -120,6 +141,10 @@ class RiderRequest extends FormRequest
             'profile_photo.image' => __('The profile photo must be an image.'),
             'profile_photo.mimes' => __('The profile photo must be a file of type: jpg, jpeg, png, svg.'),
             'profile_photo.max' => __('The profile photo may not be greater than 2MB.'),
+            'driving_license_proof.required' => __('License or ID proof is required.'),
+            'driving_license_proof.file' => __('The license or ID proof must be a valid file.'),
+            'driving_license_proof.mimes' => __('The license or ID proof must be a file of type: jpg, jpeg, png, pdf.'),
+            'driving_license_proof.max' => __('The license or ID proof may not be greater than 4MB.'),
         ];
     }
 }

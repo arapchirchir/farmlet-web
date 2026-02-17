@@ -10,6 +10,7 @@ use App\Models\GoogleReCaptcha;
 use App\Models\User;
 use App\Models\County;
 use App\Repositories\ShopRepository;
+use App\Services\ActorUniqueIdService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Cache;
@@ -44,6 +45,13 @@ class LoginController extends Controller
 
         // check user is active
         if ($user && $user->is_active && ! in_array('customer', $roles)) {
+
+            if ($user->shop && ! $user->hasRole('root')) {
+                $sellerRole = $user->shop->seller_type === 'farmer'
+                    ? ActorUniqueIdService::ROLE_FARMER
+                    : ActorUniqueIdService::ROLE_VENDOR;
+                ActorUniqueIdService::assign($user, $sellerRole, $user->shop->county_id ?? $user->county_id);
+            }
 
             // login the user
             Auth::login($user);

@@ -4,6 +4,7 @@ namespace App\Http\Requests;
 
 use App\Models\VerifyManage;
 use App\Rules\EmailRule;
+use App\Rules\KenyaMpesaPhoneRule;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Support\Facades\Cache;
 
@@ -27,6 +28,7 @@ class RegistrationRequest extends FormRequest
         $verifyManage = Cache::rememberForever('verify_manage', function () {
             return VerifyManage::first();
         });
+        $supportedCountry = (string) config('farmlet.supported_country', 'Kenya');
 
         $emailRequired = 'required_if:phone,null';
 
@@ -40,7 +42,7 @@ class RegistrationRequest extends FormRequest
         $min = $verifyManage?->phone_min_length ?? 9;
         $max = $verifyManage?->phone_max_length ?? 16;
 
-        $phoneValidate = [$phoneRequired,  'min_digits:'.$min, 'max_digits:'.$max];
+        $phoneValidate = [$phoneRequired, 'min_digits:'.$min, 'max_digits:'.$max, new KenyaMpesaPhoneRule];
         $countryRequired = $this->routeIs('admin.customer.store') ? 'nullable' : 'required';
 
         return [
@@ -48,7 +50,20 @@ class RegistrationRequest extends FormRequest
             'phone' => $phoneValidate,
             'email' => [$emailRequired, 'email', 'max:150'],
             'password' => 'required|string|min:6',
-            'country' => [$countryRequired, 'string', 'max:100'],
+            'country' => [
+                $countryRequired,
+                'string',
+                'max:100',
+                function ($attribute, $value, $fail) use ($supportedCountry) {
+                    if (! $value) {
+                        return;
+                    }
+
+                    if (mb_strtolower(trim((string) $value)) !== mb_strtolower($supportedCountry)) {
+                        $fail(__('Only :country is supported at the moment.', ['country' => $supportedCountry]));
+                    }
+                },
+            ],
             'gender' => ['nullable', 'string'],
             'profile_photo' => ['nullable', 'image', 'mimes:jpg,jpeg,png,svg', 'max:2048'],
         ];

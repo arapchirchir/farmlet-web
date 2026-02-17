@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Enums\OrderStatus;
+use App\Events\OrderNotificationEvent;
 use Illuminate\Support\Str;
 use App\Enums\PaymentMethod;
 use App\Enums\PaymentStatus;
@@ -25,6 +26,9 @@ class Order extends Model
         'order_status' => OrderStatus::class,
         'payment_method' => PaymentMethod::class,
         'payment_status' => PaymentStatus::class,
+        'driver_delivery_confirmed_at' => 'datetime',
+        'customer_delivery_confirmed_at' => 'datetime',
+        'settlement_released_at' => 'datetime',
     ];
 
     /**
@@ -42,6 +46,9 @@ class Order extends Model
 
         if (Schema::hasColumn('order_products', 'sku')) {
             $pivotColumns[] = 'sku';
+        }
+        if (Schema::hasColumn('order_products', 'processing_type')) {
+            $pivotColumns[] = 'processing_type';
         }
         return $this->belongsToMany(Product::class, 'order_products')
             ->withPivot($pivotColumns)
@@ -82,6 +89,21 @@ class Order extends Model
     public function shop(): BelongsTo
     {
         return $this->belongsTo(Shop::class, 'shop_id');
+    }
+
+    public function vendor(): BelongsTo
+    {
+        return $this->belongsTo(User::class, 'vendor_id');
+    }
+
+    public function driver(): BelongsTo
+    {
+        return $this->belongsTo(Driver::class, 'driver_id');
+    }
+
+    public function processingRoom(): BelongsTo
+    {
+        return $this->belongsTo(ProcessingRoom::class, 'processing_room_id');
     }
 
     public function county(): BelongsTo
@@ -143,12 +165,20 @@ class Order extends Model
     {
         parent::boot();
 
-        static::created(function () {
+        static::created(function (Order $order) {
             self::clearOrderCache();
+            OrderNotificationEvent::dispatch($order, 'order_created');
         });
 
-        static::updated(function () {
+        static::updated(function (Order $order) {
             self::clearOrderCache();
+
+            if ($order->wasChanged('order_status')) {
+                $toStatus = $order->order_status?->value ?? (string) $order->order_status;
+                $fromStatus = $order->getOriginal('order_status');
+
+                OrderNotificationEvent::dispatch($order, 'order_status_updated', $fromStatus, $toStatus);
+            }
         });
 
         static::deleted(function () {

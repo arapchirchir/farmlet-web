@@ -159,7 +159,7 @@ Route::name('admin.')->group(function () {
             Route::post('/store', 'store')->name('categoryAttribute.store');
             Route::post('/update/{categoryAttribute}', 'update')->name('categoryAttribute.update');
             Route::get('/show', 'show')->name('categoryAttribute.show');
-            Route::post('/menu-update', 'menuUpdate')->name('category.menu.update');
+            Route::post('/menu-update', 'menuUpdate')->name('categoryAttribute.menu.update');
             Route::delete('/{categoryAttribute}/destroy', 'destroy')->name('categoryAttribute.destroy');
              Route::get('/category-attribute/{category}/add', 'getCategoryAttribute')->name('getCategoryAttribute');
         });

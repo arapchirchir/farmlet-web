@@ -150,6 +150,11 @@ class User extends Authenticatable
         return $this->belongsTo(Media::class);
     }
 
+    public function drivingLicenseMedia(): BelongsTo
+    {
+        return $this->belongsTo(Media::class, 'driving_license_media_id');
+    }
+
     /**
      * Generate a thumbnail for the media, if available, or use the default image.
      */
@@ -162,6 +167,18 @@ class User extends Authenticatable
 
         return Attribute::make(
             get: fn() => $thumbnail
+        );
+    }
+
+    public function drivingLicenseProof(): Attribute
+    {
+        $proof = null;
+        if ($this->drivingLicenseMedia && Storage::exists($this->drivingLicenseMedia->src)) {
+            $proof = Storage::url($this->drivingLicenseMedia->src);
+        }
+
+        return Attribute::make(
+            get: fn() => $proof
         );
     }
 

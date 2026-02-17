@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin\Auth;
 
 use App\Enums\OrderStatus;
+use App\Enums\Roles;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\AdminLoginRequest;
 use App\Models\GoogleReCaptcha;
@@ -40,7 +41,7 @@ class LoginController extends Controller
         }
 
         // check user is active
-        if ($user && $user->is_active && ! in_array('customer', $roles)) {
+        if ($user && $user->is_active && $this->isBackOfficeUser($roles)) {
 
             // login the user
             Auth::login($user);
@@ -95,6 +96,19 @@ class LoginController extends Controller
         }
 
         return false;
+    }
+
+    private function isBackOfficeUser(array $roles): bool
+    {
+        $allowedRoles = [
+            Roles::ROOT->value,
+            Roles::ADMIN->value,
+            Roles::PROCESSING_MANAGER->value,
+            Roles::SUPPLIER->value,
+            Roles::MODERATOR->value,
+        ];
+
+        return ! empty(array_intersect($roles, $allowedRoles));
     }
 
     /**

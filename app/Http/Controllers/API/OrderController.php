@@ -6,6 +6,7 @@ use App\Models\Order;
 use App\Models\Payment;
 use App\Models\Product;
 use App\Models\Customer;
+use App\Models\Driver;
 use App\Models\SMSConfig;
 use App\Enums\OrderStatus;
 use App\Enums\PaymentMethod;
@@ -16,6 +17,7 @@ use App\Models\Ward;
 use App\Models\VerifyManage;
 use Illuminate\Http\Request;
 use App\Services\TwilioService;
+use App\Http\Requests\OrderIdRequest;
 use App\Http\Requests\OrderRequest;
 use Illuminate\Support\Facades\Log;
 use App\Http\Controllers\Controller;
@@ -70,7 +72,11 @@ class OrderController extends Controller
                 'all' => $customer->orders()->count(),
                 'pending' => $statusWiseOrders[OrderStatus::PENDING->value],
                 'confirm' => $statusWiseOrders[OrderStatus::CONFIRM->value],
+                'vendor_preparing' => $statusWiseOrders[OrderStatus::VENDOR_PREPARING->value],
+                'pickup_for_processing' => $statusWiseOrders[OrderStatus::PICKUP_FOR_PROCESSING->value],
+                'at_processing_room' => $statusWiseOrders[OrderStatus::AT_PROCESSING_ROOM->value],
                 'processing' => $statusWiseOrders[OrderStatus::PROCESSING->value],
+                'ready_for_delivery' => $statusWiseOrders[OrderStatus::READY_FOR_DELIVERY->value],
                 'pickup' => $statusWiseOrders[OrderStatus::PICKUP->value],
                 'on_the_way' => $statusWiseOrders[OrderStatus::ON_THE_WAY->value],
                 'delivered' => $statusWiseOrders[OrderStatus::DELIVERED->value],
@@ -144,31 +150,56 @@ class OrderController extends Controller
             return $this->json('Address must be linked to a sub-county', [], 422);
         }
 
-        $shops = Shop::query()
-            ->whereIn('id', $request->shop_ids)
-            ->get(['id', 'county_id', 'subcounty_id']);
-
-        if ($shops->whereNull('subcounty_id')->count() > 0) {
-            return $this->json('Selected shop(s) are missing sub-county assignment', [], 422);
+        if ($address->subcounty_id && ! $address->county_id) {
+            return $this->json('Address county is required when sub-county is selected', [], 422);
         }
 
-        $shopSubcounties = $shops->pluck('subcounty_id')->filter()->unique();
-        if ($shopSubcounties->count() !== 1) {
-            return $this->json('Cross-sub-county orders are not allowed', [], 422);
+        if ($address->ward_id && ! $address->subcounty_id) {
+            return $this->json('Address sub-county is required when ward is selected', [], 422);
         }
 
-        if ($shopSubcounties->first() !== $address->subcounty_id) {
-            return $this->json('Selected shop(s) are not in the same sub-county as the delivery address', [], 422);
+        if ($address->county_id && $address->subcounty_id) {
+            $addressSubcounty = Subcounty::find($address->subcounty_id);
+            if (! $addressSubcounty || (int) $addressSubcounty->county_id !== (int) $address->county_id) {
+                return $this->json('Address sub-county does not belong to the selected county', [], 422);
+            }
         }
 
-        if ($address->county_id && $shops->whereNull('county_id')->count() > 0) {
-            return $this->json('Selected shop(s) are missing county assignment', [], 422);
+        if ($address->subcounty_id && $address->ward_id) {
+            $addressWard = Ward::find($address->ward_id);
+            if (! $addressWard || (int) $addressWard->subcounty_id !== (int) $address->subcounty_id) {
+                return $this->json('Address ward does not belong to the selected sub-county', [], 422);
+            }
         }
 
-        $shopCounties = $shops->pluck('county_id')->filter()->unique();
-        if ($address->county_id && $shopCounties->count() === 1 && $shopCounties->first() !== $address->county_id) {
-            return $this->json('Selected shop(s) are not in the same county as the delivery address', [], 422);
+        $requestedShopIds = collect($request->shop_ids ?? [])
+            ->filter()
+            ->map(fn($shopId) => (int) $shopId)
+            ->unique()
+            ->values();
+
+        if ($requestedShopIds->isEmpty()) {
+            return $this->json('No shops were selected for this order', [], 422);
         }
+
+        $eligibleShopQuery = Shop::query()
+            ->whereIn('id', $requestedShopIds)
+            ->whereNotNull('subcounty_id')
+            ->where('subcounty_id', $address->subcounty_id);
+
+        if ($address->county_id) {
+            $eligibleShopQuery->whereNotNull('county_id')->where('county_id', $address->county_id);
+        }
+
+        $eligibleShopIds = $eligibleShopQuery->pluck('id')->map(fn($id) => (int) $id)->values();
+
+        if ($eligibleShopIds->isEmpty()) {
+            return $this->json('No eligible sellers found in the selected sub-county', [], 422);
+        }
+
+        $request->merge([
+            'shop_ids' => $eligibleShopIds->all(),
+        ]);
         // $user = auth()->user();
 
         $verifyManage = Cache::rememberForever('verify_manage', function () {
@@ -186,7 +217,10 @@ class OrderController extends Controller
 
         // $carts = $user->customer?->carts()->whereIn('shop_id', $request->shop_ids)->where('is_buy_now', $isBuyNow)->get();
         // $carts = $customer?->carts()->whereIn('shop_id', $request->shop_ids)->where('is_buy_now', $isBuyNow)->get();
-        $carts = userCart(request())->whereIn('shop_id', $request->shop_ids)->where('is_buy_now', $isBuyNow)->get();
+        $carts = userCart(request())
+            ->whereIn('shop_id', $request->shop_ids)
+            ->where('is_buy_now', $isBuyNow)
+            ->get();
         // dd($carts);
         if ($carts->isEmpty()) {
             return $this->json('Sorry shop cart is empty', [], 422);
@@ -197,8 +231,12 @@ class OrderController extends Controller
 
         $paymentMethod = $paymentMethods[array_search($toUpper, array_column(PaymentMethod::cases(), 'name'))];
 
-        // Store the order
-        [$payment, $order] = OrderRepository::storeByRequestFromCart($request, $paymentMethod, $carts);
+        try {
+            // Store the order
+            [$payment, $order] = OrderRepository::storeByRequestFromCart($request, $paymentMethod, $carts);
+        } catch (\RuntimeException $e) {
+            return $this->json($e->getMessage(), [], 422);
+        }
 
         $paymentUrl = null;
         if ($paymentMethod->name != 'CASH') {
@@ -236,6 +274,83 @@ class OrderController extends Controller
 
         return $this->json('Order created successfully', [
             'order_payment_url' => $paymentUrl,
+            'eligible_shop_ids' => $request->shop_ids,
+        ]);
+    }
+
+    /**
+     * Eligible sellers/farmers by county + sub-county.
+     */
+    public function eligibleSellers(Request $request)
+    {
+        $location = $this->resolveLocationContext($request);
+        if (! $location['subcounty_id']) {
+            return $this->json('Sub-county is required to get eligible sellers', [], 422);
+        }
+
+        $shops = Shop::query()
+            ->where('subcounty_id', $location['subcounty_id'])
+            ->when($location['county_id'], function ($query) use ($location) {
+                $query->where('county_id', $location['county_id']);
+            })
+            ->whereHas('user', function ($query) {
+                $query->where('is_active', true);
+            })
+            ->get([
+                'id',
+                'name',
+                'seller_type',
+                'processing_supported',
+                'approval_status',
+                'county_id',
+                'subcounty_id',
+                'ward_id',
+            ]);
+
+        return $this->json('Eligible sellers', [
+            'county_id' => $location['county_id'],
+            'subcounty_id' => $location['subcounty_id'],
+            'sellers' => $shops,
+        ]);
+    }
+
+    /**
+     * Eligible drivers by county + sub-county.
+     */
+    public function eligibleDrivers(Request $request)
+    {
+        $location = $this->resolveLocationContext($request);
+        if (! $location['subcounty_id']) {
+            return $this->json('Sub-county is required to get eligible drivers', [], 422);
+        }
+
+        $drivers = Driver::query()
+            ->where('status', 'available')
+            ->whereHas('user', function ($query) use ($location) {
+                $query->where('is_active', true)
+                    ->where('subcounty_id', $location['subcounty_id']);
+                if ($location['county_id']) {
+                    $query->where('county_id', $location['county_id']);
+                }
+            })
+            ->with(['user:id,name,last_name,phone,county_id,subcounty_id,actor_unique_id'])
+            ->get();
+
+        return $this->json('Eligible drivers', [
+            'county_id' => $location['county_id'],
+            'subcounty_id' => $location['subcounty_id'],
+            'drivers' => $drivers->map(function ($driver) {
+                return [
+                    'id' => $driver->id,
+                    'status' => $driver->status,
+                    'user_id' => $driver->user_id,
+                    'name' => $driver->user?->fullName,
+                    'phone' => $driver->user?->phone,
+                    'actor_unique_id' => $driver->user?->actor_unique_id,
+                    'county_id' => $driver->user?->county_id,
+                    'subcounty_id' => $driver->user?->subcounty_id,
+                ];
+            })->values(),
         ]);
     }
 
@@ -282,6 +397,30 @@ class OrderController extends Controller
 
         // Find the order
         $order = Order::find($request->order_id);
+
+        if ((int) ($order?->customer?->user_id ?? 0) !== (int) $user->id) {
+            return $this->json('You are not allowed to reorder this order', [], 403);
+        }
+
+        $orderShop = $order?->shop;
+        $orderAddress = $order?->address;
+
+        if (! $orderShop || ! $orderAddress) {
+            return $this->json('Order is missing shop or address data', [], 422);
+        }
+
+        if (! $orderShop->subcounty_id || ! $orderAddress->subcounty_id) {
+            return $this->json('Cross-sub-county orders are not allowed', [], 422);
+        }
+
+        if ((int) $orderShop->subcounty_id !== (int) $orderAddress->subcounty_id) {
+            return $this->json('Cross-sub-county orders are not allowed', [], 422);
+        }
+
+        if ($orderShop->county_id && $orderAddress->county_id && (int) $orderShop->county_id !== (int) $orderAddress->county_id) {
+            return $this->json('Selected shop is not in the same county as the delivery address', [], 422);
+        }
+
         $subscription = null;
 
         if (! $order->shop->user->hasRole('root')) {
@@ -412,6 +551,34 @@ class OrderController extends Controller
         return $this->json('Sorry, order cannot be cancelled because it is not pending', [], 422);
     }
 
+    public function confirmDelivery(OrderIdRequest $request)
+    {
+        $user = auth()->user();
+
+        $order = Order::query()
+            ->whereKey($request->order_id)
+            ->whereHas('customer', function ($query) use ($user) {
+                $query->where('user_id', $user->id);
+            })
+            ->first();
+
+        if (! $order) {
+            return $this->json('Order not found for this customer', [], 422);
+        }
+
+        try {
+            OrderRepository::confirmCustomerDelivery($order);
+        } catch (\RuntimeException $exception) {
+            return $this->json($exception->getMessage(), [], 422);
+        }
+
+        $order->refresh();
+
+        return $this->json('Delivery confirmed successfully', [
+            'order' => OrderDetailsResource::make($order),
+        ]);
+    }
+
     public function payment(Order $order, $paymentMethod = null)
     {
         if ($paymentMethod != 'cash' && $paymentMethod != null) {
@@ -461,5 +628,21 @@ class OrderController extends Controller
         }
 
         return $this->json('Sorry, You can not  re-payment because payment is CASH', [], 422);
+    }
+
+    private function resolveLocationContext(Request $request): array
+    {
+        $address = null;
+        if ($request->filled('address_id')) {
+            $address = Address::query()->find($request->integer('address_id'));
+        }
+
+        $countyId = $request->integer('county_id') ?: $address?->county_id ?: auth()->user()?->county_id;
+        $subcountyId = $request->integer('subcounty_id') ?: $address?->subcounty_id ?: auth()->user()?->subcounty_id;
+
+        return [
+            'county_id' => $countyId ? (int) $countyId : null,
+            'subcounty_id' => $subcountyId ? (int) $subcountyId : null,
+        ];
     }
 }

@@ -25,6 +25,7 @@ class CartRequest extends FormRequest
             'product_id' => 'required|exists:products,id',
             'quantity' => 'nullable|integer',
             'unit' => 'nullable|string|max:200',
+            'processing_type' => 'nullable|in:raw,processed',
         ];
     }
 

@@ -10,6 +10,7 @@ use Illuminate\Http\Response;
 use App\Http\Controllers\Controller;
 use App\Repositories\ShopRepository;
 use App\Repositories\UserRepository;
+use App\Services\ActorUniqueIdService;
 use Illuminate\Support\Facades\Hash;
 use App\Events\AdminProductRequestEvent;
 use App\Http\Requests\ShopCreateRequest;
@@ -49,6 +50,13 @@ class LoginController extends Controller
         if ($user = $this->authenticate($request)) {
             if (! $user->is_active) {
                 return $this->json('Your account is not active. please contact the admin', [], Response::HTTP_BAD_REQUEST);
+            }
+
+            if (! $user->hasRole('root')) {
+                $sellerRole = $user->shop?->seller_type === 'farmer'
+                    ? ActorUniqueIdService::ROLE_FARMER
+                    : ActorUniqueIdService::ROLE_VENDOR;
+                ActorUniqueIdService::assign($user, $sellerRole, $user->shop?->county_id ?? $user->county_id);
             }
 
             if ($request->device_key) {

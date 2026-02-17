@@ -6,6 +6,7 @@ use App\Models\Subcounty;
 use App\Models\Ward;
 use App\Models\VerifyManage;
 use App\Rules\EmailRule;
+use App\Rules\KenyaMpesaPhoneRule;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Support\Facades\Cache;
 
@@ -46,7 +47,7 @@ class ShopCreateRequest extends FormRequest
         $min = $verifyManage?->phone_min_length ?? 9;
         $max = $verifyManage?->phone_max_length ?? 16;
 
-        $phoneValidate = [$phoneRequired, 'min_digits:'.$min, 'max_digits:'.$max, 'unique:users,phone,'.$user?->id];
+        $phoneValidate = [$phoneRequired, 'min_digits:'.$min, 'max_digits:'.$max, new KenyaMpesaPhoneRule, 'unique:users,phone,'.$user?->id];
 
         // validation rules
         return [
@@ -65,6 +66,7 @@ class ShopCreateRequest extends FormRequest
             'description' => ['nullable', 'string', 'max:200'],
             'seller_type' => [$sellerTypeRequired, 'in:vendor,farmer'],
             'processing_supported' => ['nullable', 'boolean'],
+            'approval_status' => ['nullable', 'in:pending_approval,approved,rejected'],
             'county_id' => [$locationRequired, 'exists:counties,id'],
             'subcounty_id' => [$locationRequired, 'exists:subcounties,id'],
             'ward_id' => [$locationRequired, 'exists:wards,id'],
@@ -74,20 +76,34 @@ class ShopCreateRequest extends FormRequest
     public function withValidator($validator)
     {
         $validator->after(function ($validator) {
-            $countyId = $this->input('county_id');
-            $subcountyId = $this->input('subcounty_id');
-            $wardId = $this->input('ward_id');
+            $shop = $this->route('shop');
 
-            if ($countyId && $subcountyId) {
+            $countyId = $this->filled('county_id') ? $this->input('county_id') : $shop?->county_id;
+            $subcountyId = $this->filled('subcounty_id') ? $this->input('subcounty_id') : $shop?->subcounty_id;
+            $wardId = $this->filled('ward_id') ? $this->input('ward_id') : $shop?->ward_id;
+
+            if ($subcountyId && ! $countyId) {
+                $validator->errors()->add('county_id', __('County is required when sub-county is selected.'));
+            }
+
+            if ($wardId && ! $subcountyId) {
+                $validator->errors()->add('subcounty_id', __('Sub-county is required when ward is selected.'));
+            }
+
+            if ($subcountyId) {
                 $subcounty = Subcounty::find($subcountyId);
-                if ($subcounty && $subcounty->county_id != $countyId) {
+                if (! $subcounty) {
+                    $validator->errors()->add('subcounty_id', __('The selected sub-county is invalid.'));
+                } elseif ($countyId && (int) $subcounty->county_id !== (int) $countyId) {
                     $validator->errors()->add('subcounty_id', __('The selected sub-county does not belong to the selected county.'));
                 }
             }
 
-            if ($subcountyId && $wardId) {
+            if ($wardId) {
                 $ward = Ward::find($wardId);
-                if ($ward && $ward->subcounty_id != $subcountyId) {
+                if (! $ward) {
+                    $validator->errors()->add('ward_id', __('The selected ward is invalid.'));
+                } elseif ($subcountyId && (int) $ward->subcounty_id !== (int) $subcountyId) {
                     $validator->errors()->add('ward_id', __('The selected ward does not belong to the selected sub-county.'));
                 }
             }

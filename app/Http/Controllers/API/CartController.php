@@ -3,6 +3,8 @@
 namespace App\Http\Controllers\API;
 
 use App\Models\Cart;
+use App\Models\Address;
+use App\Models\Shop;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use App\Models\CartAccessToken;
@@ -55,6 +57,7 @@ class CartController extends Controller
         }
 
         $isBuyNow = $request->is_buy_now ?? false;
+        $processingType = $request->processing_type ?? 'raw';
 
         $product = ProductRepository::find($request->product_id);
 
@@ -62,13 +65,27 @@ class CartController extends Controller
             return $this->json('Product not available now.', [], 422);
         }
 
+        if (
+            $processingType === 'processed'
+            && (! $product->processing_available || is_null($product->processed_price))
+        ) {
+            return $this->json('Processed option is not available for this product.', [], 422);
+        }
+
         $quantity = $request->quantity ?? 1;
-        $cart=userCart($request)->where('product_id', $product->id)->first();
+        $cart = userCart($request)
+            ->where('product_id', $product->id)
+            ->where('is_buy_now', $isBuyNow)
+            ->where('processing_type', $processingType)
+            ->first();
 
         if ($isBuyNow) {
             $buyNowCart =userCart($request)->where('is_buy_now', true)->first();
 
-            if ($buyNowCart && $buyNowCart->product_id != $request->product_id) {
+            if (
+                $buyNowCart
+                && ($buyNowCart->product_id != $request->product_id || $buyNowCart->processing_type !== $processingType)
+            ) {
                 $buyNowCart->delete();
             }
         }
@@ -97,13 +114,18 @@ class CartController extends Controller
     public function increment(CartRequest $request)
     {
         $isBuyNow = $request->is_buy_now ?? false;
+        $processingType = $request->processing_type ?? 'raw';
 
         $product = ProductRepository::find($request->product_id);
 
         if (! $product) {
             return $this->json('Product not available now.', [], 422);
         }
-        $cart=userCart($request)->where('product_id', $product->id)->where('is_buy_now', $isBuyNow)->first();
+        $cart = userCart($request)
+            ->where('product_id', $product->id)
+            ->where('is_buy_now', $isBuyNow)
+            ->where('processing_type', $processingType)
+            ->first();
 
         if (! $cart) {
             return $this->json('Sorry product not found in cart', [], 422);
@@ -149,13 +171,18 @@ class CartController extends Controller
     public function decrement(CartRequest $request)
     {
         $isBuyNow = $request->is_buy_now ?? false;
+        $processingType = $request->processing_type ?? 'raw';
 
         $product = ProductRepository::find($request->product_id);
 
         if (! $product) {
             return $this->json('Product not available now.', [], 422);
         }
-        $cart =userCart($request)->where('product_id', $product->id)->where('is_buy_now', $isBuyNow)->first();
+        $cart = userCart($request)
+            ->where('product_id', $product->id)
+            ->where('is_buy_now', $isBuyNow)
+            ->where('processing_type', $processingType)
+            ->first();
 
         if (! $cart) {
             return $this->json('Sorry product not found in cart', [], 422);
@@ -188,8 +215,22 @@ class CartController extends Controller
         $isBuyNow = $request->is_buy_now ?? false;
         $tokens = cartAccessToken(request());
 
-        $shopIds = $request->shop_ids ?? [];
-        $carts =userCart($request)->whereIn('shop_id', $shopIds)->where('is_buy_now', $isBuyNow)->get();
+        $shopIds = collect($request->shop_ids ?? [])
+            ->filter()
+            ->map(fn($shopId) => (int) $shopId)
+            ->unique()
+            ->values();
+
+        if ($shopIds->isEmpty()) {
+            $shopIds = userCart($request)->where('is_buy_now', $isBuyNow)->pluck('shop_id')->unique()->values();
+        }
+
+        $eligibleShopIds = $this->eligibleShopIdsForCheckout($request, $shopIds);
+
+        $carts = userCart($request)
+            ->whereIn('shop_id', $eligibleShopIds)
+            ->where('is_buy_now', $isBuyNow)
+            ->get();
 
         $checkout = CartRepository::checkoutByRequest($request, $carts);
 
@@ -210,6 +251,7 @@ class CartController extends Controller
         return $this->json($message, [
             'checkout' => $checkout,
             'apply_coupon' => $applyCoupon,
+            'eligible_shop_ids' => $eligibleShopIds->values(),
             'checkout_items' => $result['shop_wise_products'],
         ]);
     }
@@ -217,8 +259,12 @@ class CartController extends Controller
     public function destroy(CartRequest $request)
     {
         $isBuyNow = $request->is_buy_now ?? false;
+        $processingType = $request->processing_type ?? 'raw';
 
-        $carts =userCart($request)->where('product_id', $request->product_id)->get();
+        $carts = userCart($request)
+            ->where('product_id', $request->product_id)
+            ->where('processing_type', $processingType)
+            ->get();
 
         if ($carts->isEmpty()) {
             return $this->json('Sorry product not found in cart', [], 422);
@@ -236,5 +282,35 @@ class CartController extends Controller
             'cart_items' => $result['shop_wise_products'],
             'info' => $result['info'],
         ], 200);
+    }
+
+    private function eligibleShopIdsForCheckout(Request $request, $shopIds)
+    {
+        $shopIds = collect($shopIds)->filter()->map(fn($shopId) => (int) $shopId)->unique()->values();
+        if ($shopIds->isEmpty()) {
+            return $shopIds;
+        }
+
+        $address = null;
+        if ($request->filled('address_id')) {
+            $address = Address::query()->find($request->integer('address_id'));
+        }
+
+        $countyId = $request->integer('county_id') ?: $address?->county_id ?: auth()->user()?->county_id;
+        $subcountyId = $request->integer('subcounty_id') ?: $address?->subcounty_id ?: auth()->user()?->subcounty_id;
+
+        if (! $subcountyId) {
+            return $shopIds;
+        }
+
+        return Shop::query()
+            ->whereIn('id', $shopIds)
+            ->where('subcounty_id', $subcountyId)
+            ->when($countyId, function ($query) use ($countyId) {
+                $query->where('county_id', $countyId);
+            })
+            ->pluck('id')
+            ->map(fn($shopId) => (int) $shopId)
+            ->values();
     }
 }

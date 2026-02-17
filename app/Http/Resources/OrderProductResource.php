@@ -32,6 +32,7 @@ class OrderProductResource extends JsonResource
             'price' => (float) $currencyPrice,
             'discount_price' => (float) $currencyDiscount,
             'order_qty' => (int) $this->pivot->quantity,
+            'processing_type' => $this->pivot->processing_type ?? 'raw',
             'currency_symbol' => $this->currency_symbol ?? '$',
             'rating' => $review ? (float) $review->rating : null,
             'unit' => $this->pivot->unit ?? '',

@@ -20,11 +20,13 @@ class RiderUserResource extends JsonResource
             'last_name' => $this->last_name,
             'phone' => $this->phone,
             'email' => $this->email,
+            'actor_unique_id' => $this->actor_unique_id,
             'is_active' => (bool) $this->is_active,
             'profile_photo' => $this->thumbnail,
             'gender' => $this->gender,
             'date_of_birth' => $this->date_of_birth,
             'driving_lience' => $this->driving_lience,
+            'driving_license_proof' => $this->driving_license_proof,
             'vehicle_type' => $this->vehicle_type,
         ];
     }

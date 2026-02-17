@@ -20,6 +20,9 @@ class RiderOrderResource extends JsonResource
             'order_code' => (string) '#'.$this->order->prefix.''.$this->order->order_code,
             'amount' => (float) number_format($this->order->payable_amount, 2, '.', ''),
             'order_status' => $this->order->order_status->value,
+            'is_driver_delivery_confirmed' => (bool) $this->order->driver_delivery_confirmed_at,
+            'is_customer_delivery_confirmed' => (bool) $this->order->customer_delivery_confirmed_at,
+            'is_settlement_released' => (bool) $this->order->settlement_released_at,
             'payment_status' => $this->order->payment_status->value,
             'payment_method' => $this->order->payment_method->value == PaymentMethod::CASH->value ? 'Cash' : 'Online',
             'user' => [

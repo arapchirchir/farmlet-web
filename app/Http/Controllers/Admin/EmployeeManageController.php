@@ -2,9 +2,11 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Enums\Roles;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\ShopPasswordResetRequest;
 use App\Http\Requests\UserRequest;
+use App\Models\County;
 use App\Models\User;
 use App\Models\UserNonPermission;
 use App\Repositories\UserRepository;
@@ -30,15 +32,20 @@ class EmployeeManageController extends Controller
 
     public function create()
     {
-        $notNeedRoles = ['shop', 'farmer', 'customer', 'driver'];
+        $notNeedRoles = ['shop', 'farmer', 'customer', 'driver', 'root'];
 
         $roles = Role::whereNotIn('name', $notNeedRoles)->get();
+        $counties = County::query()->orderBy('name')->get();
 
-        return view('admin.employee.create', compact('roles'));
+        return view('admin.employee.create', compact('roles', 'counties'));
     }
 
     public function store(UserRequest $request)
     {
+        if ($request->role === Roles::ROOT->value) {
+            return back()->withError(__('Root role can not be assigned from employee management.'));
+        }
+
         $user = User::where('phone', $request->phone)->first();
         if ($user) {
             return back()->withError(__('Phone number already exists'));
@@ -47,15 +54,38 @@ class EmployeeManageController extends Controller
         $request['is_active'] = true;
         $user = UserRepository::storeByRequest($request);
 
-        $user->assignRole($request->role);
+        $user->syncRoles([$request->role]);
 
         WalletRepository::storeByRequest($user);
 
         return to_route('admin.employee.index')->withSuccess(__('Created successfully'));
     }
 
+    public function update(UserRequest $request, User $user)
+    {
+        if ($user->hasRole(Roles::ROOT->value)) {
+            return back()->withError(__('Root account can not be modified.'));
+        }
+
+        if ($request->role === Roles::ROOT->value) {
+            return back()->withError(__('Root role can not be assigned from employee management.'));
+        }
+
+        UserRepository::updateByRequest($request, $user);
+
+        if ($request->filled('role')) {
+            $user->syncRoles([$request->role]);
+        }
+
+        return to_route('admin.employee.index')->withSuccess(__('Updated successfully'));
+    }
+
     public function resetPassword(User $user, ShopPasswordResetRequest $request)
     {
+        if ($user->hasRole(Roles::ROOT->value)) {
+            return back()->withError(__('Root account can not be modified.'));
+        }
+
         // Update the user password
         $user->update([
             'password' => Hash::make($request->password),
@@ -66,6 +96,14 @@ class EmployeeManageController extends Controller
 
     public function destroy(User $user)
     {
+        if ($user->hasRole(Roles::ROOT->value)) {
+            return back()->withError(__('Root account can not be deleted.'));
+        }
+
+        if ((int) $user->id === (int) auth()->id()) {
+            return back()->withError(__('You can not delete your own account from this screen.'));
+        }
+
         $user->syncRoles([]);
         $user->syncPermissions([]);
 
@@ -87,6 +125,10 @@ class EmployeeManageController extends Controller
 
     public function permission(User $user)
     {
+        if ($user->hasRole(Roles::ROOT->value)) {
+            return back()->withError(__('Root account permissions can not be edited here.'));
+        }
+
         $generaleSetting = generaleSetting();
 
         $userRole = $user->getRoleNames()->toArray()[0];
@@ -137,6 +179,10 @@ class EmployeeManageController extends Controller
 
     public function updatePermission(User $user, Request $request)
     {
+        if ($user->hasRole(Roles::ROOT->value)) {
+            return back()->withError(__('Root account permissions can not be edited here.'));
+        }
+
         $permissions = $request->permissions ?? [];
 
         $role = Role::where('id', $request->role_id)->first();
